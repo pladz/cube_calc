@@ -123,17 +123,6 @@ const gearType = [
   { title: 'Secondary', type: 'WSE' },
 ];
 
-const xOptions = [
-  { value: 12 },
-  { value: 18 },
-  { value: 21 },
-  { value: 24 },
-  { value: 27 },
-  { value: 30 },
-  { value: 33 },
-  { value: 36 },
-];
-
 
 const gearOptions = gearType.map((option) => {
   const type = option.type;
@@ -423,11 +412,11 @@ export default function PotentialTable() {
     updateCurPercentages(lineOneRedPercentage, lineTwoRedPercentage, lineThreeRedPercentage, lineOneBlackPercentage, lineTwoBlackPercentage, lineThreeBlackPercentage);
     updateCurEqualityPercentages(lineOneEqualityPercentage, lineTwoEqualityPercentage, lineThreeEqualityPercentage);
     updateCurHexaPercentages(lineOneHexaPercentage, lineTwoHexaPercentage, lineThreeHexaPercentage);
-  }, [lineOneRedPercentage, lineTwoRedPercentage, lineThreeRedPercentage, 
-    lineOneBlackPercentage, lineTwoBlackPercentage, lineThreeBlackPercentage, 
-    lineOneEqualityPercentage, lineTwoEqualityPercentage, lineThreeEqualityPercentage, 
+  }, [lineOneRedPercentage, lineTwoRedPercentage, lineThreeRedPercentage,
+    lineOneBlackPercentage, lineTwoBlackPercentage, lineThreeBlackPercentage,
+    lineOneEqualityPercentage, lineTwoEqualityPercentage, lineThreeEqualityPercentage,
     lineOneHexaPercentage, lineTwoHexaPercentage, lineThreeHexaPercentage]);
-  
+
 
   return (
     <div>
@@ -485,11 +474,10 @@ export default function PotentialTable() {
                 renderInput={(params) => <TextField {...params} label="Gear" variant="outlined" />}
               />
 
-              <Typography padding="10px" align="left">
-                &nbsp;
-             {`Auto Stat Populator`}
-              </Typography>
+              <Typography padding="10px" align="center">
 
+                {`Auto Stat Populator`}
+              </Typography>
               <Autocomplete
                 id="Line"
                 inputValue={typeInputValue}
@@ -524,36 +512,37 @@ export default function PotentialTable() {
               </IconButton>
             </Paper>
             <Paper>
-              All equality cube lines shown here assume that they have the same rate as rolling the first prime line of a red cube
+              All equality cube lines shown here assume that they have the same rate as rolling the first prime line of a red cube,
+              while hexa cube lines assume that the first line is the first line of a red cube, second is a second line, and lines 3-6 are third lines
               <Grid container spacing={1}>
-                <Grid item xs={1}>
+                <Grid item xs={2}>
                   <Paper className={classes.paper}>AS = All Stats</Paper>
                 </Grid>
                 <Grid item xs={2}>
                   <Paper className={classes.paper}>SL = All Skill Levels +X</Paper>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                   <Paper className={classes.paper}>CID = Chance to ignore X% damage</Paper>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                   <Paper className={classes.paper}>CDR = Skill CD -X seconds</Paper>
                 </Grid>
                 <Grid item xs={2}>
                   <Paper className={classes.paper}>SKILL = Decent Skills</Paper>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                   <Paper className={classes.paper}>ER = x% Elemental Resistance</Paper>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                   <Paper className={classes.paper}>IT = Invincibility Time +Xs</Paper>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={4}>
                   <Paper className={classes.paper}>INV = X% chance to become invincible</Paper>
                 </Grid>
                 <Grid item xs={2}>
                   <Paper className={classes.paper}>CD = X% Crit Damage</Paper>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                   <Paper className={classes.paper}>MPC = -X% MP Consumption</Paper>
                 </Grid>
                 <Grid item xs={2}>
@@ -723,19 +712,19 @@ export default function PotentialTable() {
                 <TableCell align="center">Line 3</TableCell>
                 <TableCell align="center">
                   <img src={redCubeIcon} />
-                  Red(%)
+                  &nbsp;Red (%)
                   </TableCell>
                 <TableCell align="center">
                   <img src={blackCubeIcon} />
-                  Black(%)
+                  &nbsp;Black (%)
                   </TableCell>
                 <TableCell align="center">
                   <img src={equalityCubeIcon} />
-                  Equality(%)
+                  &nbsp;Equality (%)
                   </TableCell>
                 <TableCell align="center">
                   <img src={hexaCubeIcon} />
-                  Hexa(%)
+                  &nbsp;Hexa (%)
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -784,6 +773,24 @@ export default function PotentialTable() {
             </TableBody>
           </Table>
         </TableContainer>
+      </Paper>
+      <Paper>
+        <Typography>
+          Contact pladz#1984 on discord for bugs, or Note P1adz in-game MapleSEA 
+        </Typography>
+        <Typography>
+          <a href="http://tiny.cc/finalfinaldamage" rel="noreferrer">
+            IED Calculation aka "Final Final Damage" Doc
+        </a>
+        </Typography>
+        <Typography>
+          <a href="https://github.com/pladz/cube_calc/tree/master" rel="noreferrer">
+            Very scuffed source code
+        </a>
+        </Typography>
+        <Typography>
+            To Do List: Add Addpot lines
+        </Typography>
       </Paper>
     </div>
   );
