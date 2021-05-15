@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/cube_calc/static/css/main.9d5b29c0.chunk.css",
-    "main.js": "/cube_calc/static/js/main.a211be17.chunk.js",
-    "main.js.map": "/cube_calc/static/js/main.a211be17.chunk.js.map",
+    "main.js": "/cube_calc/static/js/main.ba1161dc.chunk.js",
+    "main.js.map": "/cube_calc/static/js/main.ba1161dc.chunk.js.map",
     "runtime-main.js": "/cube_calc/static/js/runtime-main.c735eb55.js",
     "runtime-main.js.map": "/cube_calc/static/js/runtime-main.c735eb55.js.map",
     "static/js/2.98b77254.chunk.js": "/cube_calc/static/js/2.98b77254.chunk.js",
@@ -12,12 +12,14 @@
     "index.html": "/cube_calc/index.html",
     "static/css/main.9d5b29c0.chunk.css.map": "/cube_calc/static/css/main.9d5b29c0.chunk.css.map",
     "static/js/2.98b77254.chunk.js.LICENSE.txt": "/cube_calc/static/js/2.98b77254.chunk.js.LICENSE.txt",
-    "static/media/logo.6ce24c58.svg": "/cube_calc/static/media/logo.6ce24c58.svg"
+    "static/media/blackCube.748e318e.webp": "/cube_calc/static/media/blackCube.748e318e.webp",
+    "static/media/logo.6ce24c58.svg": "/cube_calc/static/media/logo.6ce24c58.svg",
+    "static/media/redCube.0809460f.webp": "/cube_calc/static/media/redCube.0809460f.webp"
   },
   "entrypoints": [
     "static/js/runtime-main.c735eb55.js",
     "static/js/2.98b77254.chunk.js",
     "static/css/main.9d5b29c0.chunk.css",
-    "static/js/main.a211be17.chunk.js"
+    "static/js/main.ba1161dc.chunk.js"
   ]
 }
