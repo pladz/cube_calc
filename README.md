@@ -9,6 +9,11 @@ Assumptions:
 
 All rates in this simulation are taken from KMS rates
 
+Update 17/5/21,
+
+Fixed three line boss appearing, added multiple stats to select for
+
+
 As of 15/5/21,
 
 This simulation can:

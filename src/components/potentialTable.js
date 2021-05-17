@@ -15,6 +15,7 @@ import {
   TableBody,
   IconButton,
   Grid,
+  Box,
 
 } from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -140,8 +141,11 @@ export default function PotentialTable() {
   const [lineOneInputValue, setLineOneInputValue] = React.useState('');
   const [lineTwoInputValue, setLineTwoInputValue] = React.useState('');
   const [lineThreeInputValue, setLineThreeInputValue] = React.useState('');
-  const [xInputValue, setXInputValue] = React.useState(0);
-  const [typeInputValue, setTypeInputValue] = React.useState('');
+  const [xOneInputValue, setXOneInputValue] = React.useState(0);
+  const [typeOneInputValue, setTypeOneInputValue] = React.useState('');
+  const [xTwoInputValue, setXTwoInputValue] = React.useState(0);
+  const [typeTwoInputValue, setTypeTwoInputValue] = React.useState('');
+  const [showSecondInput, setShowSecondInput] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
   const [secondExpanded, setSecondExpanded] = React.useState(false);
   const [lineOptions, setLineOptions] = React.useState([]);
@@ -360,49 +364,62 @@ export default function PotentialTable() {
     setCurHexaPercentage(hex1 * hex2 * hex3);
   }
 
-  function moreThanStat(x, type) {
+  function moreThanStat(x, type, line1, line2, line3) {
     let sum = 0;
     let acceptAllStat = false;
     if (type === 'STR' || type === 'DEX' || type === 'INT' || type === 'LUK') {
       acceptAllStat = true;
     }
+
+    if (line1.type === 'BOSS' && line2.type === 'BOSS' && line3.type === 'BOSS') {
+      return false;
+    }
+
+    if (line1.type === type || (line1.type === 'AS' && acceptAllStat)) {
+      sum = sum + line1.value;
+    }
+    if (line2.type === type || (line2.type === 'AS' && acceptAllStat)) {
+      sum = sum + line2.value;
+    }
+    if (line3.type === type || (line3.type === 'AS' && acceptAllStat)) {
+      sum = sum + line3.value;
+    }
+
+    if (sum >= x) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function addIfMoreThanStat(x1, type1, x2, type2) {
+
     lineOptions.forEach((line1, i) => {
       subLineOptions.forEach((line2, j) => {
         subLineOptions.forEach((line3, k) => {
-          if (line1.type === type || (line1.type === 'AS' && acceptAllStat)) {
-            sum = sum + line1.value;
-          }
-          if (line2.type === type || (line2.type === 'AS' && acceptAllStat)) {
-            sum = sum + line2.value;
-          }
-          if (line3.type === type || (line3.type === 'AS' && acceptAllStat)) {
-            sum = sum + line3.value;
-          }
+          //First stat check
+          if (moreThanStat(x1, type1, line1, line2, line3)) {
+            if ((x2 === "" || type2 === "") || (x2 !== "" && type2 !== "" && moreThanStat(x2, type2, line1, line2, line3))) {
+              let redPercentage = line1.red1 * line2.red2 * line3.red3;
+              let blackPercentage = line1.black1 * line2.black2 * line3.black3;
+              let equalityPercentage = 0;
+              let hexaline1 = line1.red1;
+              let hexaline2 = 1 - ((1 - line2.red2) * Math.pow((1 - line2.red3), 4));
+              let hexaline3 = 1 - (Math.pow((1 - line3.red3), 4));
+              let hexaPercentage = hexaline1 * hexaline2 * hexaline3;
 
-          let redPercentage = line1.red1 * line2.red2 * line3.red3;
-          let blackPercentage = line1.black1 * line2.black2 * line3.black3;
-          let equalityPercentage = 0;
-          let hexaline1 = line1.red1;
-          let hexaline2 = 1 - ((1 - line2.red2) * Math.pow((1 - line2.red3), 4));
-          let hexaline3 = 1 - (Math.pow((1 - line3.red3), 4));
-          let hexaPercentage = hexaline1 * hexaline2 * hexaline3;
-
-          if (line2.red1 && line3.red1) {
-            console.log("enter");
-            equalityPercentage = line1.red1 * line2.red1 * line3.red1;
+              if (line2.red1 && line3.red1) {
+                equalityPercentage = line1.red1 * line2.red1 * line3.red1;
+              }
+              
+              addToRows(createRow(curRowId, line1.stat, line2.stat, line3.stat, redPercentage, blackPercentage, equalityPercentage, hexaPercentage));
+              setCurRowId(curRowId + 1);
+            }
           }
-
-          if (sum >= x) {
-            addToRows(createRow(curRowId, line1.stat, line2.stat, line3.stat, redPercentage, blackPercentage, equalityPercentage, hexaPercentage));
-            setCurRowId(curRowId + 1);
-          }
-
-          sum = 0;
         })
       })
     })
   }
-
 
   useEffect(() => {
     ((lineOneInputValue === "" || lineTwoInputValue === "" || lineThreeInputValue === "") ? setSecondExpanded(false) : setSecondExpanded(true));
@@ -475,14 +492,15 @@ export default function PotentialTable() {
               />
 
               <Typography padding="10px" align="center">
-
                 {`Auto Stat Populator`}
+                <p></p>
+                {`Stat 1`}
               </Typography>
               <Autocomplete
                 id="Line"
-                inputValue={typeInputValue}
+                inputValue={typeOneInputValue}
                 onInputChange={(event, newInputValue) => {
-                  setTypeInputValue(newInputValue);
+                  setTypeOneInputValue(newInputValue);
                   clearRows();
                 }}
                 options={typeOptions}
@@ -495,9 +513,9 @@ export default function PotentialTable() {
                 id="outlined-basic"
                 label=">= X%"
                 variant="outlined"
-                value={xInputValue}
+                value={xOneInputValue}
                 onChange={(e) => {
-                  setXInputValue(parseInt(e.target.value))
+                  setXOneInputValue(parseInt(e.target.value))
                   clearRows();
                 }}
                 style={{ width: 300, fullWidth: true }}
@@ -505,15 +523,44 @@ export default function PotentialTable() {
               <IconButton
                 onClick={() => {
                   clearRows();
-                  moreThanStat(xInputValue, typeInputValue);
+                  addIfMoreThanStat(xOneInputValue, typeOneInputValue, xTwoInputValue, typeTwoInputValue);
                 }}
                 color="primary" aria-label="Do the magic" align="right">
                 <DoubleArrow />
               </IconButton>
             </Paper>
-            <Paper>
-              All equality cube lines shown here assume that they have the same rate as rolling the first prime line of a red cube,
-              while hexa cube lines assume that the first line is the first line of a red cube, second is a second line, and lines 3-6 are third lines
+            <Paper style={{ position: 'absolute', bottom: 68, left: 326 }}>
+              <Box>
+                <Typography padding="10px" align="center">
+                  {`Stat 2 (Leave Blank if not required)`}
+                </Typography>
+                <Autocomplete
+                  id="Line"
+                  inputValue={typeTwoInputValue}
+                  onInputChange={(event, newInputValue) => {
+                    setTypeTwoInputValue(newInputValue);
+                    clearRows();
+                  }}
+                  options={typeOptions}
+                  getOptionLabel={(option) => option.type}
+                  style={{ width: 300, fullWidth: true }}
+                  renderInput={(params) => <TextField {...params} label="Type" variant="outlined" />}
+                />
+                <p></p>
+                <TextField
+                  id="outlined-basic"
+                  label=">= X%"
+                  variant="outlined"
+                  value={xTwoInputValue}
+                  onChange={(e) => {
+                    setXTwoInputValue(parseInt(e.target.value))
+                    clearRows();
+                  }}
+                  style={{ width: 300, fullWidth: true }}
+                />
+              </Box>
+            </Paper>
+            <Paper style={{ padding: 10 }}>
               <Grid container spacing={1}>
                 <Grid item xs={2}>
                   <Paper className={classes.paper}>AS = All Stats</Paper>
@@ -776,7 +823,12 @@ export default function PotentialTable() {
       </Paper>
       <Paper>
         <Typography>
-          Contact pladz#1984 on discord for bugs, or Note P1adz in-game MapleSEA 
+          All equality cube lines shown here assume that they have the same rate as rolling the first prime line of a red cube,
+          while hexa cube lines assume that the first line is the first line of a red cube, second is a second line, and lines 3-6 are third lines.
+          Hexacube numbers might be slightly off, so take with a pinch of salt.
+        </Typography>
+        <Typography>
+          Contact pladz#1984 on discord for bugs, or Note P1adz in-game MapleSEA
         </Typography>
         <Typography>
           <a href="http://tiny.cc/finalfinaldamage" rel="noreferrer">
@@ -789,7 +841,7 @@ export default function PotentialTable() {
         </a>
         </Typography>
         <Typography>
-            To Do List: Add Addpot lines
+          To Do List: Add Addpot lines
         </Typography>
       </Paper>
     </div>
