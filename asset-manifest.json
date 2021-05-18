@@ -1,26 +1,26 @@
 {
   "files": {
     "main.css": "/cube_calc/static/css/main.9d5b29c0.chunk.css",
-    "main.js": "/cube_calc/static/js/main.1a23dfd1.chunk.js",
-    "main.js.map": "/cube_calc/static/js/main.1a23dfd1.chunk.js.map",
-    "runtime-main.js": "/cube_calc/static/js/runtime-main.2bba841b.js",
-    "runtime-main.js.map": "/cube_calc/static/js/runtime-main.2bba841b.js.map",
-    "static/js/2.c7463b6c.chunk.js": "/cube_calc/static/js/2.c7463b6c.chunk.js",
-    "static/js/2.c7463b6c.chunk.js.map": "/cube_calc/static/js/2.c7463b6c.chunk.js.map",
-    "static/js/3.f71dc5c4.chunk.js": "/cube_calc/static/js/3.f71dc5c4.chunk.js",
-    "static/js/3.f71dc5c4.chunk.js.map": "/cube_calc/static/js/3.f71dc5c4.chunk.js.map",
+    "main.js": "/cube_calc/static/js/main.b77a0a9e.chunk.js",
+    "main.js.map": "/cube_calc/static/js/main.b77a0a9e.chunk.js.map",
+    "runtime-main.js": "/cube_calc/static/js/runtime-main.3c0f1a28.js",
+    "runtime-main.js.map": "/cube_calc/static/js/runtime-main.3c0f1a28.js.map",
+    "static/js/2.7bdded00.chunk.js": "/cube_calc/static/js/2.7bdded00.chunk.js",
+    "static/js/2.7bdded00.chunk.js.map": "/cube_calc/static/js/2.7bdded00.chunk.js.map",
+    "static/js/3.c5e99b03.chunk.js": "/cube_calc/static/js/3.c5e99b03.chunk.js",
+    "static/js/3.c5e99b03.chunk.js.map": "/cube_calc/static/js/3.c5e99b03.chunk.js.map",
     "index.html": "/cube_calc/index.html",
     "static/css/main.9d5b29c0.chunk.css.map": "/cube_calc/static/css/main.9d5b29c0.chunk.css.map",
-    "static/js/2.c7463b6c.chunk.js.LICENSE.txt": "/cube_calc/static/js/2.c7463b6c.chunk.js.LICENSE.txt",
+    "static/js/2.7bdded00.chunk.js.LICENSE.txt": "/cube_calc/static/js/2.7bdded00.chunk.js.LICENSE.txt",
     "static/media/blackCube.748e318e.webp": "/cube_calc/static/media/blackCube.748e318e.webp",
     "static/media/hexaCube.15daedb9.png": "/cube_calc/static/media/hexaCube.15daedb9.png",
     "static/media/logo.6ce24c58.svg": "/cube_calc/static/media/logo.6ce24c58.svg",
     "static/media/redCube.0809460f.webp": "/cube_calc/static/media/redCube.0809460f.webp"
   },
   "entrypoints": [
-    "static/js/runtime-main.2bba841b.js",
-    "static/js/2.c7463b6c.chunk.js",
+    "static/js/runtime-main.3c0f1a28.js",
+    "static/js/2.7bdded00.chunk.js",
     "static/css/main.9d5b29c0.chunk.css",
-    "static/js/main.1a23dfd1.chunk.js"
+    "static/js/main.b77a0a9e.chunk.js"
   ]
 }
