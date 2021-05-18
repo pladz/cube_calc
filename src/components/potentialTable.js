@@ -16,10 +16,14 @@ import {
   IconButton,
   Grid,
   Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Button,
 
 } from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { ExpandMore, Clear, Add, DoubleArrow } from "@material-ui/icons";
+import { ExpandMore, Clear, Add, DoubleArrow, HelpOutline } from "@material-ui/icons";
 import {
   hatLines,
   topLines,
@@ -141,11 +145,13 @@ export default function PotentialTable() {
   const [lineOneInputValue, setLineOneInputValue] = React.useState('');
   const [lineTwoInputValue, setLineTwoInputValue] = React.useState('');
   const [lineThreeInputValue, setLineThreeInputValue] = React.useState('');
+
   const [xOneInputValue, setXOneInputValue] = React.useState(0);
   const [typeOneInputValue, setTypeOneInputValue] = React.useState('');
   const [xTwoInputValue, setXTwoInputValue] = React.useState(0);
   const [typeTwoInputValue, setTypeTwoInputValue] = React.useState('');
-  const [showSecondInput, setShowSecondInput] = React.useState(false);
+  const [both, setBoth] = React.useState(false);
+
   const [expanded, setExpanded] = React.useState(false);
   const [secondExpanded, setSecondExpanded] = React.useState(false);
   const [lineOptions, setLineOptions] = React.useState([]);
@@ -173,6 +179,17 @@ export default function PotentialTable() {
   //table
   const [rows, setRows] = React.useState([]);
   const [curRowId, setCurRowId] = React.useState([]);
+
+  //readMe
+  const [helpOpen, setHelpOpen] = React.useState(false);
+  const handleHelpOpen = () => {
+    setHelpOpen(true);
+  };
+
+  const handleHelpClose = (value) => {
+    setHelpOpen(false);
+  };
+
 
   function updateLineOptions(title) {
     var curLines = [];
@@ -411,7 +428,7 @@ export default function PotentialTable() {
               if (line2.red1 && line3.red1) {
                 equalityPercentage = line1.red1 * line2.red1 * line3.red1;
               }
-              
+
               addToRows(createRow(curRowId, line1.stat, line2.stat, line3.stat, redPercentage, blackPercentage, equalityPercentage, hexaPercentage));
               setCurRowId(curRowId + 1);
             }
@@ -464,6 +481,32 @@ export default function PotentialTable() {
                 renderInput={(params) => <TextField {...params} label="Gear" variant="outlined" />}
               />
             </Paper>
+            <IconButton variant="contained" color="primary" onClick={handleHelpOpen}>
+              <HelpOutline />
+            </IconButton>
+            <Dialog onClose={handleHelpClose} aria-labelledby="simple-dialog-title" open={helpOpen}>
+              <DialogTitle id="simple-dialog-title">Wat Do?</DialogTitle>
+              <DialogContent dividers>
+                <Typography gutterBottom>
+                  1. Select piece of gear that you want to generate lines for (Top left hand corner)
+                </Typography>
+                <Typography gutterBottom>
+                  2a. Auto stat populator is for finding combinations that are more than or equal to the amount of stat listed.
+                </Typography>
+                <Typography gutterBottom>
+                  2b. To filter cube lines, key in the type of lines you are selecting for, and enter the value of the lines you require.
+                </Typography>
+                <Typography gutterBottom>
+                  2c. You can filter up to 2 stats at once. eg. BOSS 60 + ATK 9 outputs line combinations with more than or equal to 60% BOSS % 9 ATK
+                </Typography>
+                <Typography gutterBottom>
+                  3a. You can also search for individual lines using the line1/2/3 tool
+                </Typography>
+                <Typography gutterBottom>
+                  3b. This tool gives you the probability of getting that specific line
+                </Typography>
+              </DialogContent>
+            </Dialog>
           </AccordionSummary>
           :
           <AccordionSummary
@@ -529,37 +572,60 @@ export default function PotentialTable() {
                 <DoubleArrow />
               </IconButton>
             </Paper>
-            <Paper style={{ position: 'absolute', bottom: 68, left: 326 }}>
-              <Box>
-                <Typography padding="10px" align="center">
-                  {`Stat 2 (Leave Blank if not required)`}
-                </Typography>
-                <Autocomplete
-                  id="Line"
-                  inputValue={typeTwoInputValue}
-                  onInputChange={(event, newInputValue) => {
-                    setTypeTwoInputValue(newInputValue);
-                    clearRows();
-                  }}
-                  options={typeOptions}
-                  getOptionLabel={(option) => option.type}
-                  style={{ width: 300, fullWidth: true }}
-                  renderInput={(params) => <TextField {...params} label="Type" variant="outlined" />}
-                />
-                <p></p>
-                <TextField
-                  id="outlined-basic"
-                  label=">= X%"
-                  variant="outlined"
-                  value={xTwoInputValue}
-                  onChange={(e) => {
-                    setXTwoInputValue(parseInt(e.target.value))
-                    clearRows();
-                  }}
-                  style={{ width: 300, fullWidth: true }}
-                />
-              </Box>
-            </Paper>
+            {xOneInputValue === 0 || typeOneInputValue === "" ? [] :
+              <div>
+                <Paper style={{ position: 'absolute', bottom: 68, left: 330 }}>
+                  <Box>
+                    <Typography padding="10px" align="center">
+                      {`Stat 2 (Leave Blank if not required)`}
+                    </Typography>
+                    <Autocomplete
+                      id="Line"
+                      inputValue={typeTwoInputValue}
+                      onInputChange={(event, newInputValue) => {
+                        setTypeTwoInputValue(newInputValue);
+                        clearRows();
+                      }}
+                      options={typeOptions}
+                      getOptionLabel={(option) => option.type}
+                      style={{ width: 300, fullWidth: true }}
+                      renderInput={(params) => <TextField {...params} label="Type" variant="outlined" />}
+                    />
+                    <p></p>
+                    <TextField
+                      id="outlined-basic"
+                      label=">= X%"
+                      variant="outlined"
+                      value={xTwoInputValue}
+                      onChange={(e) => {
+                        setXTwoInputValue(parseInt(e.target.value))
+                        clearRows();
+                      }}
+                      style={{ width: 300, fullWidth: true }}
+                    />
+                  </Box>
+                </Paper>
+                <Paper style={{ position: 'absolute', bottom: 115, left: 330 }}>
+                  <Box>
+
+                    {/* {both ?
+                      <Button color="primary" onClick={() => setBoth(false)}>
+                        <Typography padding="10px" align="center">
+                          {'AND'}
+                        </Typography>
+                      </Button>
+                      :
+                      <Button color="primary" onClick={() => setBoth(true)}>
+                        <Typography padding="10px" align="center">
+                          {'OR'}
+                        </Typography>
+                      </Button>
+                    } */}
+
+                  </Box>
+                </Paper>
+              </div>
+            }
             <Paper style={{ padding: 10 }}>
               <Grid container spacing={1}>
                 <Grid item xs={2}>
@@ -597,6 +663,9 @@ export default function PotentialTable() {
                 </Grid>
                 <Grid item xs={2}>
                   <Paper className={classes.paper}>DR = X% Drop Rate</Paper>
+                </Grid>
+                <Grid item xs={4}>
+                  <Paper className={classes.paper}>(M)ATTTEN = X (M)ATT every 10 levels</Paper>
                 </Grid>
               </Grid>
             </Paper>
