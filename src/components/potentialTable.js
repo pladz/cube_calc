@@ -480,8 +480,7 @@ export default function PotentialTable() {
                 style={{ width: 300 }}
                 renderInput={(params) => <TextField {...params} label="Gear" variant="outlined" />}
               />
-            </Paper>
-            <IconButton variant="contained" color="primary" onClick={handleHelpOpen}>
+              <IconButton variant="contained" color="primary" onClick={handleHelpOpen}>
               <HelpOutline />
             </IconButton>
             <Dialog onClose={handleHelpClose} aria-labelledby="simple-dialog-title" open={helpOpen}>
@@ -499,14 +498,9 @@ export default function PotentialTable() {
                 <Typography gutterBottom>
                   2c. You can filter up to 2 stats at once. eg. BOSS 60 + ATK 9 outputs line combinations with more than or equal to 60% BOSS % 9 ATK
                 </Typography>
-                <Typography gutterBottom>
-                  3a. You can also search for individual lines using the line1/2/3 tool
-                </Typography>
-                <Typography gutterBottom>
-                  3b. This tool gives you the probability of getting that specific line
-                </Typography>
               </DialogContent>
             </Dialog>
+            </Paper>
           </AccordionSummary>
           :
           <AccordionSummary
@@ -672,8 +666,8 @@ export default function PotentialTable() {
           </AccordionSummary>
         }
 
-        <AccordionDetails>
-          <Accordion expanded={secondExpanded}>
+        {/*<AccordionDetails>
+           <Accordion expanded={secondExpanded}>
             <AccordionSummary
               aria-label="Expand"
               aria-controls="additional-actions1-content"
@@ -714,7 +708,7 @@ export default function PotentialTable() {
                       if (line2.prime === "Prime") {
                         setLineTwoEqualityPercentage(line2.red1);
                       }
-                      let hexaPercentage = 1 - ((1 - line2.red2) * Math.pow((1 - line2.red3), 4));
+                      let hexaPercentage = 1 - (Math.pow((1 - line2.red2), 2) * Math.pow((1 - line2.red3), 3));
                       setLineTwoHexaPercentage(hexaPercentage);
                     }
                   }}
@@ -736,7 +730,7 @@ export default function PotentialTable() {
                       if (line3.prime === "Prime") {
                         setLineThreeEqualityPercentage(line3.red1);
                       }
-                      let hexaPercentage = 1 - (Math.pow((1 - line3.red3), 4));
+                      let hexaPercentage = 1 - (Math.pow((1 - line3.red2), 1) * Math.pow((1 - line3.red3), 3));
                       setLineThreeHexaPercentage(hexaPercentage);
                     }
                   }}
@@ -809,10 +803,10 @@ export default function PotentialTable() {
               </div>
             </AccordionDetails>
           </Accordion>
-        </AccordionDetails>
+        </AccordionDetails> */}
       </Accordion>
 
-      <Paper elevation={2} className={classes.buffer}>
+      <Paper elevation={2} className='container'>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="spanning table">
             <TableHead>
@@ -897,7 +891,7 @@ export default function PotentialTable() {
           Hexacube numbers might be slightly off, so take with a pinch of salt.
         </Typography>
         <Typography>
-          Contact pladz#1984 on discord for bugs, or Note P1adz in-game MapleSEA
+          Contact pladz#1984 on discord for bugs, or Note Pladz in-game MapleSEA
         </Typography>
         <Typography>
           <a href="http://tiny.cc/finalfinaldamage" rel="noreferrer">
