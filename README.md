@@ -1,5 +1,7 @@
 Small project to get cubing rates since rates for RED and BLACK cubes are finally released to the public.
 
+Page can be found on https://pladz.github.io/cube_calc/
+
 Assumptions:
 1. Equality cubes assume that all 3 lines use the same rates as the first red cube lines
 2. Hexa cubes assume that 
