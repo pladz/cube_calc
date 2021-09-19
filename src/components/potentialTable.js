@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import {
   Paper,
   TextField,
@@ -50,6 +50,10 @@ import {
   emblemSubLines
 } from './subLines';
 
+import { useHistory } from "react-router-dom";
+
+
+import purpleCubeIcon from './icons/purpleCube.webp';
 import blackCubeIcon from './icons/blackCube.webp';
 import redCubeIcon from './icons/redCube.webp';
 import equalityCubeIcon from './icons/equalityCube.png';
@@ -91,6 +95,12 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "10px",
     marginLeft: "0px",
   },
+  textBuffer: {
+    marginTop: "0px",
+    marginRight: "0px",
+    marginBottom: "0px",
+    marginLeft: "15px",
+  },
   button: {
     width: 24, height: 24,
     padding: 0
@@ -106,6 +116,12 @@ const useStyles = makeStyles((theme) => ({
   },
 
 }));
+
+const WhiteTextTypography = withStyles({
+  root: {
+    color: "#FFFFFF"
+  }
+})(Typography);
 
 const gearType = [
   { title: 'Hat', type: 'Armor' },
@@ -140,6 +156,7 @@ const gearOptions = gearType.map((option) => {
 
 export default function PotentialTable() {
   const classes = useStyles();
+  const history = useHistory();
 
   const [inputValue, setInputValue] = React.useState('');
   const [lineOneInputValue, setLineOneInputValue] = React.useState('');
@@ -157,20 +174,24 @@ export default function PotentialTable() {
   const [lineOptions, setLineOptions] = React.useState([]);
   const [subLineOptions, setSubLineOptions] = React.useState([]);
   const [typeOptions, setTypeOptions] = React.useState([]);
+  const [typeOptionsTwo, setTypeOptionsTwo] = React.useState([]);
 
   //line percentages
   const [lineOneRedPercentage, setLineOneRedPercentage] = React.useState(0);
   const [lineOneBlackPercentage, setLineOneBlackPercentage] = React.useState(0);
   const [lineOneEqualityPercentage, setLineOneEqualityPercentage] = React.useState(0);
   const [lineOneHexaPercentage, setLineOneHexaPercentage] = React.useState(0);
+
   const [lineTwoRedPercentage, setLineTwoRedPercentage] = React.useState(0);
   const [lineTwoBlackPercentage, setLineTwoBlackPercentage] = React.useState(0);
   const [lineTwoEqualityPercentage, setLineTwoEqualityPercentage] = React.useState(0);
   const [lineTwoHexaPercentage, setLineTwoHexaPercentage] = React.useState(0);
+
   const [lineThreeRedPercentage, setLineThreeRedPercentage] = React.useState(0);
   const [lineThreeBlackPercentage, setLineThreeBlackPercentage] = React.useState(0);
   const [lineThreeEqualityPercentage, setLineThreeEqualityPercentage] = React.useState(0);
   const [lineThreeHexaPercentage, setLineThreeHexaPercentage] = React.useState(0);
+
   const [curRedPercentage, setCurRedPercentage] = React.useState(0);
   const [curBlackPercentage, setCurBlackPercentage] = React.useState(0);
   const [curEqualityPercentage, setCurEqualityPercentage] = React.useState(0);
@@ -320,6 +341,17 @@ export default function PotentialTable() {
     setTypeOptions(result);
   }
 
+  function updateTypeOptionsTwo(){
+    let options = JSON.parse(JSON.stringify(typeOptions));
+    let selectedField = typeOneInputValue;
+
+    options = options.filter(function(item) {
+      return item.type !== selectedField
+  })
+  
+    setTypeOptionsTwo(options);
+  }
+
   function getTotalRedPercentages() {
     var totalRedPercentage = 0;
     rows.map((row) =>
@@ -351,6 +383,17 @@ export default function PotentialTable() {
     )
     return totalHexaPercentage;
   }
+
+  function hexaCalc(line1, line2, line3){
+    //123 124 126 135 145 156
+    const perm1 = line1*line2*line3; 
+    //125
+    const perm2 = line1*line2*line2;
+    //134 136 146
+    const perm3 = line1*line3*line3;
+
+    return perm1*6 + perm2 + perm3*3
+}
 
   function clearRows() {
     setRows([]);
@@ -393,6 +436,7 @@ export default function PotentialTable() {
     }
 
     if (line1.type === type || (line1.type === 'AS' && acceptAllStat)) {
+
       sum = sum + line1.value;
     }
     if (line2.type === type || (line2.type === 'AS' && acceptAllStat)) {
@@ -420,10 +464,7 @@ export default function PotentialTable() {
               let redPercentage = line1.red1 * line2.red2 * line3.red3;
               let blackPercentage = line1.black1 * line2.black2 * line3.black3;
               let equalityPercentage = 0;
-              let hexaline1 = line1.red1;
-              let hexaline2 = 1 - ((1 - line2.red2) * Math.pow((1 - line2.red3), 4));
-              let hexaline3 = 1 - (Math.pow((1 - line3.red3), 4));
-              let hexaPercentage = hexaline1 * hexaline2 * hexaline3;
+              let hexaPercentage = hexaCalc(line1.red1, line2.red2, line3.red3);
 
               if (line2.red1 && line3.red1) {
                 equalityPercentage = line1.red1 * line2.red1 * line3.red1;
@@ -437,6 +478,10 @@ export default function PotentialTable() {
       })
     })
   }
+
+  useEffect(() => {
+    updateTypeOptionsTwo()
+  },[typeOneInputValue, xOneInputValue]);
 
   useEffect(() => {
     ((lineOneInputValue === "" || lineTwoInputValue === "" || lineThreeInputValue === "") ? setSecondExpanded(false) : setSecondExpanded(true));
@@ -580,7 +625,7 @@ export default function PotentialTable() {
                         setTypeTwoInputValue(newInputValue);
                         clearRows();
                       }}
-                      options={typeOptions}
+                      options={typeOptionsTwo}
                       getOptionLabel={(option) => option.type}
                       style={{ width: 300, fullWidth: true }}
                       renderInput={(params) => <TextField {...params} label="Type" variant="outlined" />}
@@ -665,151 +710,37 @@ export default function PotentialTable() {
             </Paper>
           </AccordionSummary>
         }
-
-        {/*<AccordionDetails>
-           <Accordion expanded={secondExpanded}>
-            <AccordionSummary
-              aria-label="Expand"
-              aria-controls="additional-actions1-content"
-              id="additional-actions1-header"
-            >
-
-              <Paper elevation={2} className={classes.flex}
-                aria-label="Acknowledge"
-                onClick={(event) => event.stopPropagation()}
-                onFocus={(event) => event.stopPropagation()} >
-                <Autocomplete
-                  id="lineOne"
-                  inputValue={lineOneInputValue}
-                  onInputChange={(event, newInputValue) => {
-                    setLineOneInputValue(newInputValue);
-                    if (newInputValue !== "") {
-                      const line1 = lineOptions.find(obj => obj.stat === newInputValue)
-                      setLineOneRedPercentage(line1.red1);
-                      setLineOneBlackPercentage(line1.black1);
-                      setLineOneEqualityPercentage(line1.red1);
-                      setLineOneHexaPercentage(line1.red1);
-                    }
-                  }}
-                  options={lineOptions}
-                  getOptionLabel={(option) => option.stat}
-                  style={{ width: 300, padding: 10 }}
-                  renderInput={(params) => <TextField {...params} label="Line 1" variant="outlined" />}
-                />
-                <Autocomplete
-                  id="lineTwo"
-                  inputValue={lineTwoInputValue}
-                  onInputChange={(event, newInputValue) => {
-                    setLineTwoInputValue(newInputValue);
-                    if (newInputValue !== "") {
-                      const line2 = subLineOptions.find(obj => obj.stat === newInputValue)
-                      setLineTwoRedPercentage(line2.red2);
-                      setLineTwoBlackPercentage(line2.black2);
-                      if (line2.prime === "Prime") {
-                        setLineTwoEqualityPercentage(line2.red1);
-                      }
-                      let hexaPercentage = 1 - (Math.pow((1 - line2.red2), 2) * Math.pow((1 - line2.red3), 3));
-                      setLineTwoHexaPercentage(hexaPercentage);
-                    }
-                  }}
-                  options={subLineOptions.sort((a, b) => b.prime.localeCompare(a.prime))}
-                  groupBy={(option) => option.prime}
-                  getOptionLabel={(option) => option.stat}
-                  style={{ width: 300, padding: 10 }}
-                  renderInput={(params) => <TextField {...params} label="Line 2" variant="outlined" />}
-                />
-                <Autocomplete
-                  id="lineThree"
-                  inputValue={lineThreeInputValue}
-                  onInputChange={(event, newInputValue) => {
-                    setLineThreeInputValue(newInputValue);
-                    if (newInputValue !== "") {
-                      const line3 = subLineOptions.find(obj => obj.stat === newInputValue)
-                      setLineThreeRedPercentage(line3.red3);
-                      setLineThreeBlackPercentage(line3.black3);
-                      if (line3.prime === "Prime") {
-                        setLineThreeEqualityPercentage(line3.red1);
-                      }
-                      let hexaPercentage = 1 - (Math.pow((1 - line3.red2), 1) * Math.pow((1 - line3.red3), 3));
-                      setLineThreeHexaPercentage(hexaPercentage);
-                    }
-                  }}
-                  options={subLineOptions.sort((a, b) => b.prime.localeCompare(a.prime))}
-                  groupBy={(option) => option.prime}
-                  getOptionLabel={(option) => option.stat}
-                  style={{ width: 300, padding: 10 }}
-                  renderInput={(params) => <TextField {...params} label="Line 3" variant="outlined" />}
-                />
-                <IconButton
-                  onClick={() => {
-                    addToRows(createRow(curRowId, lineOneInputValue, lineTwoInputValue, lineThreeInputValue, curRedPercentage, curBlackPercentage, curEqualityPercentage, curHexaPercentage));
-                    setCurRowId(curRowId + 1);
-                  }}
-                  color="primary" aria-label="Add to List">
-                  <Add />
-                </IconButton>
-              </Paper>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.cubesAccordion}>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMore />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography className={classes.heading}>
-                      {`Red Cubes: ${curRedPercentage * 100}%`}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography color="textSecondary">
-                      {`One in ${Math.round(1 / (curRedPercentage))} red cubes`}
-                    </Typography>
-                  </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMore />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography className={classes.heading}>
-                      {`Black Cubes: ${curBlackPercentage * 100}%`}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography color="textSecondary">
-                      {`One in ${Math.round(1 / (curBlackPercentage))} black cubes`}
-                    </Typography>
-                  </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMore />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography className={classes.heading}>
-                      {`Equality Cubes: ${curEqualityPercentage * 100}%`}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography color="textSecondary">
-                      {`One in ${Math.round(1 / (curEqualityPercentage))} equality cubes`}
-                    </Typography>
-                  </AccordionDetails>
-                </Accordion>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-        </AccordionDetails> */}
       </Accordion>
 
       <Paper elevation={2} className='container'>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="spanning table">
             <TableHead>
+            {/* <TableRow>
+                <TableCell>Total Purple(%)</TableCell>
+                <TableCell align="right">{`${getTotalHexaPercentages() * 100} %`}</TableCell>
+                <TableCell align="right">{`One in ${Math.round(1 / (getTotalHexaPercentages()))} purple cubes`}</TableCell>
+              </TableRow> */}
+            <TableRow>
+                <TableCell>Total Red(%)<img height="18px" src={redCubeIcon} /></TableCell>
+                <TableCell align="right">{`${getTotalRedPercentages() * 100} %`}</TableCell>
+                <TableCell align="right">{`One in ${Math.round(1 / (getTotalRedPercentages()))} red cubes`}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Total Black(%)<img height="18px" src={blackCubeIcon} /></TableCell>
+                <TableCell align="right">{`${getTotalBlackPercentages() * 100} %`}</TableCell>
+                <TableCell align="right">{`One in ${Math.round(1 / (getTotalBlackPercentages()))} black cubes`}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Total Equality(%) <img height="17px" src={equalityCubeIcon} /></TableCell>
+                <TableCell align="right">{`${getTotalEqualityPercentages() * 100} %`}</TableCell>
+                <TableCell align="right">{`One in ${Math.round(1 / (getTotalEqualityPercentages()))} equality cubes`}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Total Hexa(%) &nbsp;<img height="17px" src={hexaCubeIcon} /></TableCell>
+                <TableCell align="right">{`${getTotalHexaPercentages() * 100} %`}</TableCell>
+                <TableCell align="right">{`One in ${Math.round(1 / (getTotalHexaPercentages()))} hexa cubes`}</TableCell>
+              </TableRow>
               <TableRow>
                 <TableCell align="center" colSpan={3}>
                   Lines
@@ -820,6 +751,10 @@ export default function PotentialTable() {
                 <TableCell align="center">Line 1</TableCell>
                 <TableCell align="center">Line 2</TableCell>
                 <TableCell align="center">Line 3</TableCell>
+                {/* <TableCell align="center">
+                  <img src={purpleCubeIcon} />
+                  &nbsp;Purple (%)
+                </TableCell> */}
                 <TableCell align="center">
                   <img src={redCubeIcon} />
                   &nbsp;Red (%)
@@ -844,6 +779,7 @@ export default function PotentialTable() {
                   <TableCell align="center">{row.line1}</TableCell>
                   <TableCell align="center">{row.line2}</TableCell>
                   <TableCell align="center">{row.line3}</TableCell>
+                  {/* <TableCell align="center">{`${row.red * 100}%`}</TableCell> */}
                   <TableCell align="center">{`${row.red * 100}%`}</TableCell>
                   <TableCell align="center">{`${row.black * 100}%`}</TableCell>
                   <TableCell align="center">{`${row.equality * 100}%`}</TableCell>
@@ -860,39 +796,27 @@ export default function PotentialTable() {
                 </TableRow>
               ))}
 
-              <TableRow>
-                <TableCell>Total Red(%)</TableCell>
-                <TableCell align="right">{`${getTotalRedPercentages() * 100} %`}</TableCell>
-                <TableCell align="right">{`One in ${Math.round(1 / (getTotalRedPercentages()))} red cubes`}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Total Black(%)</TableCell>
-                <TableCell align="right">{`${getTotalBlackPercentages() * 100} %`}</TableCell>
-                <TableCell align="right">{`One in ${Math.round(1 / (getTotalBlackPercentages()))} black cubes`}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Total Equality(%)</TableCell>
-                <TableCell align="right">{`${getTotalEqualityPercentages() * 100} %`}</TableCell>
-                <TableCell align="right">{`One in ${Math.round(1 / (getTotalEqualityPercentages()))} equality cubes`}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Total Hexa(%)</TableCell>
-                <TableCell align="right">{`${getTotalHexaPercentages() * 100} %`}</TableCell>
-                <TableCell align="right">{`One in ${Math.round(1 / (getTotalHexaPercentages()))} hexa cubes`}</TableCell>
-              </TableRow>
+              
             </TableBody>
           </Table>
         </TableContainer>
       </Paper>
       <Paper>
-        <Typography>
-          All equality cube lines shown here assume that they have the same rate as rolling the first prime line of a red cube,
-          while hexa cube lines assume that the first line is the first line of a red cube, second is a second line, and lines 3-6 are third lines.
-          Hexacube numbers might be slightly off, so take with a pinch of salt.
+        <Typography align="left" className={classes.textBuffer}>
+          1. All equality cube lines shown here assume that they have the same rate as rolling the first prime line of a red cube. 
         </Typography>
+        <Typography align="left" className={classes.textBuffer}>
+          2. Hexacube lines assume that the first line is the first line of a red cube, line 2/4 is a second line, and lines 3/5/6 are third lines.
+        </Typography>
+        <Typography align="left" className={classes.textBuffer}>
+          3. Hexacube numbers might are slightly over estimate since it does not account for combinations without the first line.
+        </Typography>
+        <WhiteTextTypography color='FFFFFF' >
+          This coding project is a prime example of why you need UI/UX designers and why I do backend
+        </WhiteTextTypography>
         <Typography>
           Contact pladz#1984 on discord for bugs, or Note Pladz in-game MapleSEA
-        </Typography>
+        </Typography >
         <Typography>
           <a href="http://tiny.cc/finalfinaldamage" rel="noreferrer">
             IED Calculation aka "Final Final Damage" Doc
@@ -904,7 +828,7 @@ export default function PotentialTable() {
         </a>
         </Typography>
         <Typography>
-          To Do List: Add Addpot lines
+          UPDATE: You can no longer select the same stat twice
         </Typography>
       </Paper>
     </div>

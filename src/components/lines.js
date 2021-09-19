@@ -1191,7 +1191,7 @@ export const hatLines = [{
   },{
     stat: 'Damage when attacking boss monsters +40%',
     type: 'BOSS',
-    value: 1,
+    value: 40,
     red1: 0.0488,
     black1: 0.0488,
     red2: 0.0049,
