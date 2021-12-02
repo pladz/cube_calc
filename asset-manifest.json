@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/cube_calc/static/css/main.9d5b29c0.chunk.css",
-    "main.js": "/cube_calc/static/js/main.750de538.chunk.js",
-    "main.js.map": "/cube_calc/static/js/main.750de538.chunk.js.map",
-    "runtime-main.js": "/cube_calc/static/js/runtime-main.1a1dd71e.js",
-    "runtime-main.js.map": "/cube_calc/static/js/runtime-main.1a1dd71e.js.map",
-    "static/js/2.2ace9a0a.chunk.js": "/cube_calc/static/js/2.2ace9a0a.chunk.js",
-    "static/js/2.2ace9a0a.chunk.js.map": "/cube_calc/static/js/2.2ace9a0a.chunk.js.map",
-    "static/js/3.125b3bf6.chunk.js": "/cube_calc/static/js/3.125b3bf6.chunk.js",
-    "static/js/3.125b3bf6.chunk.js.map": "/cube_calc/static/js/3.125b3bf6.chunk.js.map",
+    "main.css": "/cube_calc/static/css/main.a617e044.chunk.css",
+    "main.js": "/cube_calc/static/js/main.1d4db6b1.chunk.js",
+    "main.js.map": "/cube_calc/static/js/main.1d4db6b1.chunk.js.map",
+    "runtime-main.js": "/cube_calc/static/js/runtime-main.5ea59a59.js",
+    "runtime-main.js.map": "/cube_calc/static/js/runtime-main.5ea59a59.js.map",
+    "static/js/2.959b6a94.chunk.js": "/cube_calc/static/js/2.959b6a94.chunk.js",
+    "static/js/2.959b6a94.chunk.js.map": "/cube_calc/static/js/2.959b6a94.chunk.js.map",
+    "static/js/3.7b0fad02.chunk.js": "/cube_calc/static/js/3.7b0fad02.chunk.js",
+    "static/js/3.7b0fad02.chunk.js.map": "/cube_calc/static/js/3.7b0fad02.chunk.js.map",
     "index.html": "/cube_calc/index.html",
-    "static/css/main.9d5b29c0.chunk.css.map": "/cube_calc/static/css/main.9d5b29c0.chunk.css.map",
-    "static/js/2.2ace9a0a.chunk.js.LICENSE.txt": "/cube_calc/static/js/2.2ace9a0a.chunk.js.LICENSE.txt",
+    "static/css/main.a617e044.chunk.css.map": "/cube_calc/static/css/main.a617e044.chunk.css.map",
+    "static/js/2.959b6a94.chunk.js.LICENSE.txt": "/cube_calc/static/js/2.959b6a94.chunk.js.LICENSE.txt",
     "static/media/blackCube.748e318e.webp": "/cube_calc/static/media/blackCube.748e318e.webp",
     "static/media/hexaCube.15daedb9.png": "/cube_calc/static/media/hexaCube.15daedb9.png",
     "static/media/logo.6ce24c58.svg": "/cube_calc/static/media/logo.6ce24c58.svg",
@@ -19,9 +19,9 @@
     "static/media/redCube.0809460f.webp": "/cube_calc/static/media/redCube.0809460f.webp"
   },
   "entrypoints": [
-    "static/js/runtime-main.1a1dd71e.js",
-    "static/js/2.2ace9a0a.chunk.js",
-    "static/css/main.9d5b29c0.chunk.css",
-    "static/js/main.750de538.chunk.js"
+    "static/js/runtime-main.5ea59a59.js",
+    "static/js/2.959b6a94.chunk.js",
+    "static/css/main.a617e044.chunk.css",
+    "static/js/main.1d4db6b1.chunk.js"
   ]
 }
