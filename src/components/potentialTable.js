@@ -53,11 +53,11 @@ import {
 import { useHistory } from "react-router-dom";
 
 
-import purpleCubeIcon from './icons/purpleCube.webp';
-import blackCubeIcon from './icons/blackCube.webp';
-import redCubeIcon from './icons/redCube.webp';
-import equalityCubeIcon from './icons/equalityCube.png';
-import hexaCubeIcon from './icons/hexaCube.png';
+import purpleCubeIcon from './icons/purple_clean.png';
+import blackCubeIcon from './icons/black_clean.png';
+import redCubeIcon from './icons/red_clean.png';
+import equalityCubeIcon from './icons/equality_clean.png';
+import hexaCubeIcon from './icons/hexa_clean.png';
 
 
 //CSS
@@ -152,7 +152,6 @@ const gearOptions = gearType.map((option) => {
     ...option,
   };
 });
-
 
 export default function PotentialTable() {
   const classes = useStyles();
@@ -480,6 +479,16 @@ export default function PotentialTable() {
   }
 
   useEffect(() => {
+    const visited = localStorage["visited"];
+    if (visited) {
+      setHelpOpen(false);
+    } else {
+      localStorage["visited"] = true;
+      setHelpOpen(true);
+    }
+  },[]);
+
+  useEffect(() => {
     updateTypeOptionsTwo()
   },[typeOneInputValue, xOneInputValue]);
 
@@ -532,16 +541,16 @@ export default function PotentialTable() {
               <DialogTitle id="simple-dialog-title">Wat Do?</DialogTitle>
               <DialogContent dividers>
                 <Typography gutterBottom>
-                  1. Select piece of gear that you want to generate lines for (Top left hand corner)
+                  1. <strong>Select</strong> piece of gear that you want to generate lines for in <strong>dropdown</strong>
                 </Typography>
                 <Typography gutterBottom>
-                  2a. Auto stat populator is for finding combinations that are more than or equal to the amount of stat listed.
+                  2. <strong>Enter</strong> the value of the lines
                 </Typography>
                 <Typography gutterBottom>
-                  2b. To filter cube lines, key in the type of lines you are selecting for, and enter the value of the lines you require.
+                  3. <strong>Select</strong> the type of lines
                 </Typography>
                 <Typography gutterBottom>
-                  2c. You can filter up to 2 stats at once. eg. BOSS 60 + ATK 9 outputs line combinations with more than or equal to 60% BOSS % 9 ATK
+                  4. You can filter <strong>up to 2 stats</strong> at once. eg. BOSS 60 + ATK 9 outputs line combinations with {">"}= 60% BOSS % 9 ATK
                 </Typography>
               </DialogContent>
             </Dialog>
@@ -574,10 +583,22 @@ export default function PotentialTable() {
               />
 
               <Typography padding="10px" align="center">
-                {`Auto Stat Populator`}
                 <p></p>
-                {`Stat 1`}
+                {`I want a combination of`}
+                &nbsp;
               </Typography>
+              <TextField
+                id="outlined-basic"
+                label="At Least (?) %"
+                variant="outlined"
+                value={xOneInputValue}
+                onChange={(e) => {
+                  setXOneInputValue(parseInt(e.target.value))
+                  clearRows();
+                }}
+                style={{ width: 300, fullWidth: true }}
+              />
+              <p></p>
               <Autocomplete
                 id="Line"
                 inputValue={typeOneInputValue}
@@ -588,20 +609,9 @@ export default function PotentialTable() {
                 options={typeOptions}
                 getOptionLabel={(option) => option.type}
                 style={{ width: 300, fullWidth: true }}
-                renderInput={(params) => <TextField {...params} label="Type" variant="outlined" />}
+                renderInput={(params) => <TextField {...params} label="Desired Line Type" variant="outlined" />}
               />
               <p></p>
-              <TextField
-                id="outlined-basic"
-                label=">= X%"
-                variant="outlined"
-                value={xOneInputValue}
-                onChange={(e) => {
-                  setXOneInputValue(parseInt(e.target.value))
-                  clearRows();
-                }}
-                style={{ width: 300, fullWidth: true }}
-              />
               <IconButton
                 onClick={() => {
                   clearRows();
@@ -616,8 +626,20 @@ export default function PotentialTable() {
                 <Paper style={{ position: 'absolute', bottom: 68, left: 330 }}>
                   <Box>
                     <Typography padding="10px" align="center">
-                      {`Stat 2 (Leave Blank if not required)`}
+                      {`as well as (leave blank if not required)`}
                     </Typography>
+                    <TextField
+                      id="outlined-basic"
+                      label="At Least (?) %"
+                      variant="outlined"
+                      value={xTwoInputValue}
+                      onChange={(e) => {
+                        setXTwoInputValue(parseInt(e.target.value))
+                        clearRows();
+                      }}
+                      style={{ width: 300, fullWidth: true }}
+                    />
+                    <p></p>
                     <Autocomplete
                       id="Line"
                       inputValue={typeTwoInputValue}
@@ -628,20 +650,9 @@ export default function PotentialTable() {
                       options={typeOptionsTwo}
                       getOptionLabel={(option) => option.type}
                       style={{ width: 300, fullWidth: true }}
-                      renderInput={(params) => <TextField {...params} label="Type" variant="outlined" />}
+                      renderInput={(params) => <TextField {...params} label="Desired Line Type 2" variant="outlined" />}
                     />
                     <p></p>
-                    <TextField
-                      id="outlined-basic"
-                      label=">= X%"
-                      variant="outlined"
-                      value={xTwoInputValue}
-                      onChange={(e) => {
-                        setXTwoInputValue(parseInt(e.target.value))
-                        clearRows();
-                      }}
-                      style={{ width: 300, fullWidth: true }}
-                    />
                   </Box>
                 </Paper>
                 <Paper style={{ position: 'absolute', bottom: 115, left: 330 }}>
@@ -668,16 +679,16 @@ export default function PotentialTable() {
             <Paper style={{ padding: 10 }}>
               <Grid container spacing={1}>
                 <Grid item xs={2}>
-                  <Paper className={classes.paper}>AS = All Stats</Paper>
+                  <Paper className={classes.paper}>16% Crit -{">"} 1 in 43 Equality</Paper>
                 </Grid>
                 <Grid item xs={2}>
-                  <Paper className={classes.paper}>SL = All Skill Levels +X</Paper>
+                  <Paper className={classes.paper}>24% Crit -{">"} 1 in 1331 Equality</Paper>
                 </Grid>
                 <Grid item xs={3}>
-                  <Paper className={classes.paper}>CID = Chance to ignore X% damage</Paper>
+                  <Paper className={classes.paper}>3s CDR -{">"} 1 in 45 Equality</Paper>
                 </Grid>
                 <Grid item xs={3}>
-                  <Paper className={classes.paper}>CDR = Skill CD -X seconds</Paper>
+                  <Paper className={classes.paper}>3s CDR -{">"} 1 in 158 Equality</Paper>
                 </Grid>
                 <Grid item xs={2}>
                   <Paper className={classes.paper}>SKILL = Decent Skills</Paper>
@@ -693,18 +704,6 @@ export default function PotentialTable() {
                 </Grid>
                 <Grid item xs={2}>
                   <Paper className={classes.paper}>CD = X% Crit Damage</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                  <Paper className={classes.paper}>MPC = -X% MP Consumption</Paper>
-                </Grid>
-                <Grid item xs={2}>
-                  <Paper className={classes.paper}>MESO = X% Meso Rate</Paper>
-                </Grid>
-                <Grid item xs={2}>
-                  <Paper className={classes.paper}>DR = X% Drop Rate</Paper>
-                </Grid>
-                <Grid item xs={4}>
-                  <Paper className={classes.paper}>(M)ATTTEN = X (M)ATT every 10 levels</Paper>
                 </Grid>
               </Grid>
             </Paper>
@@ -828,7 +827,7 @@ export default function PotentialTable() {
         </a>
         </Typography>
         <Typography>
-          UPDATE: You can no longer select the same stat twice
+          Updated to newest KMS cube rates as of 2 December 2021
         </Typography>
       </Paper>
     </div>

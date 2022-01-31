@@ -90,7 +90,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red1: 0.0666,
     black1: 0.0666,
@@ -101,7 +101,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red1: 0.0666,
     black1: 0.0666,
@@ -112,7 +112,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: 'Skill cooldown -1 second',
-    type: 'CDR',
+    type: 'Cooldown Reduction',
     value: 1,
     red1: 0.0666,
     black1: 0.0666,
@@ -123,7 +123,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: 'Skill cooldown -2 seconds',
-    type: 'CDR',
+    type: 'Cooldown Reduction',
     value: 2,
     red1: 0.0444,
     black1: 0.0444,
@@ -134,7 +134,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: 'Decent Advanced Bless',
-    type: 'SKILL',
+    type: 'Decent Skill',
     value: 1,
     red1: 0.0666,
     black1: 0.0666,
@@ -235,7 +235,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red1: 0.069767,
     black1: 0.069767,
@@ -246,7 +246,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red1: 0.069767,
     black1: 0.069767,
@@ -257,7 +257,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: 'Invincibility time +3 seconds when hit',
-    type: 'IT',
+    type: 'Invincibility Time',
     value: 3,
     red1: 0.069767,
     black1: 0.069767,
@@ -268,7 +268,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '4% chance of being invincible for 7 seconds when hit',
-    type: 'INV',
+    type: 'Chance of being invincibile',
     value: 4,
     red1: 0.069767,
     black1: 0.069767,
@@ -369,7 +369,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red1: 0.081081,
     black1: 0.081081,
@@ -380,7 +380,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red1: 0.081081,
     black1: 0.081081,
@@ -481,7 +481,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red1: 0.075,
     black1: 0.075,
@@ -492,7 +492,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red1: 0.075,
     black1: 0.075,
@@ -503,7 +503,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: 'Decent Combat Orders',
-    type: 'SKILL',
+    type: 'Decent Skill',
     value: 1,
     red1: 0.075,
     black1: 0.075,
@@ -593,7 +593,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '8% Critical Damage',
-    type: 'CD',
+    type: 'Crit Damage',
     value: 8,
     red1: 0.0909,
     black1: 0.0909,
@@ -615,7 +615,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red1: 0.0682,
     black1: 0.0682,
@@ -626,7 +626,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red1: 0.0682,
     black1: 0.0682,
@@ -637,7 +637,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: 'Decent Sharp Eyes',
-    type: 'SKILL',
+    type: 'Decent Skill',
     value: 1,
     red1: 0.0682,
     black1: 0.0682,
@@ -738,7 +738,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red1: 0.0811,
     black1: 0.0811,
@@ -749,7 +749,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red1: 0.0811,
     black1: 0.0811,
@@ -852,7 +852,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: 'MP consumption of all skills -15%',
-    type: 'MPC',
+    type: 'MP Consumption Decrease',
     value: 15,
     red1: 0.0698,
     black1: 0.0698,
@@ -863,7 +863,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: 'MP consumption of all skills -30%',
-    type: 'MPC',
+    type: 'MP Consumption Decrease',
     value: 30,
     red1: 0.0698,
     black1: 0.0698,
@@ -1058,7 +1058,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '12% Critical Chance',
-    type: 'CRIT',
+    type: 'Crit Chance',
     value: 12,
     red1: 0.0488,
     black1: 0.0488,
@@ -1091,7 +1091,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '+1 ATT per 10 character levels',
-    type: 'ATTTEN',
+    type: '+1 WA per 10',
     value: 1,
     red1: 0.0488,
     black1: 0.0488,
@@ -1102,7 +1102,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '+1 MATT per 10 character levels',
-    type: 'MATTTEN',
+    type: '+1 MA per 10',
     value: 1,
     red1: 0.0488,
     black1: 0.0488,
@@ -1236,7 +1236,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '12% Critical Chance',
-    type: 'CRIT',
+    type: 'Crit Chance',
     value: 12,
     red1: 0.0426,
     black1: 0.0426,
@@ -1269,7 +1269,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '+1 ATT per 10 character levels',
-    type: 'ATTTEN',
+    type: '+1 WA per 10',
     value: 1,
     red1: 0.0426,
     black1: 0.0426,
@@ -1280,7 +1280,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '+1 MATT per 10 character levels',
-    type: 'MATTTEN',
+    type: '+1 MA per 10',
     value: 1,
     red1: 0.0426,
     black1: 0.0426,
@@ -1313,7 +1313,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 20% dmg when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red1: 0.0638,
     black1: 0.0638,
@@ -1324,7 +1324,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '10% chance to ignore 40% dmg when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red1: 0.0638,
     black1: 0.0638,
@@ -1436,7 +1436,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '12% Critical Chance',
-    type: 'CRIT',
+    type: 'Crit Chance',
     value: 12,
     red1: 0.0571,
     black1: 0.0571,
@@ -1469,7 +1469,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '+1 ATT per 10 character levels',
-    type: 'ATTTEN',
+    type: '+1 WA per 10',
     value: 1,
     red1: 0.0571,
     black1: 0.0571,
@@ -1480,7 +1480,7 @@ export const hatLines = [{
     prime: 'Prime',
   },{
     stat: '+1 MATT per 10 character levels',
-    type: 'MATTTEN',
+    type: '+1 MA per 10',
     value: 1,
     red1: 0.0571,
     black1: 0.0571,

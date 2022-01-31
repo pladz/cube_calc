@@ -73,7 +73,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red2: 0.064286,
     black2: 0.0516,
@@ -82,7 +82,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red2: 0.064286,
     black2: 0.0516,
@@ -100,7 +100,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: 'Decent Mystic Door',
-    type: 'SKILL',
+    type: 'Decent Skill',
     value: 1,
     red2: 0.064286,
     black2: 0.057143,
@@ -183,7 +183,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red2: 0.0545,
     black2: 0.0485,
@@ -192,7 +192,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red2: 0.0545,
     black2: 0.0485,
@@ -201,7 +201,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: 'Invincibility time +2 seconds when hit',
-    type: 'IT',
+    type: 'Invincibility Time',
     value: 9,
     red2: 0.0545,
     black2: 0.0485,
@@ -210,7 +210,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '2% chance of being invincible for 7 seconds when hit ',
-    type: 'INV',
+    type: 'Chance of being invincibile',
     value: 2,
     red2: 0.0545,
     black2: 0.0485,
@@ -219,7 +219,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '30% chance to reflect 50% of damage taken',
-    type: 'REF',
+    type: 'Reflect Damage',
     value: 50,
     red2: 0.0545,
     black2: 0.0485,
@@ -228,7 +228,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '30% chance to reflect 70% of damage taken',
-    type: 'REF',
+    type: 'Reflect Damage',
     value: 70,
     red2: 0.027273,
     black2: 0.024242,
@@ -320,7 +320,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red2: 0.0643,
     black2: 0.0571,
@@ -329,7 +329,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red2: 0.0643,
     black2: 0.0571,
@@ -347,7 +347,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: 'Decent Hyper Body',
-    type: 'SKILL',
+    type: 'Decent Skill',
     value: 1,
     red2: 0.0643,
     black2: 0.0571,
@@ -466,7 +466,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red2: 0.06,
     black2: 0.0533,
@@ -475,7 +475,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red2: 0.06,
     black2: 0.0533,
@@ -493,7 +493,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: 'Decent Sharp Eyes',
-    type: 'SKILL',
+    type: 'Decent Skill',
     value: 1,
     red2: 0.06,
     black2: 0.0533,
@@ -576,7 +576,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red2: 0.0692,
     black2: 0.0615,
@@ -585,7 +585,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red2: 0.0692,
     black2: 0.0615,
@@ -953,7 +953,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 20% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 20,
     red2: 0.0679,
     black2: 0.0604,
@@ -962,7 +962,7 @@ export const hatSubLines = [{
     prime: 'Not Prime',
   },{
     stat: '5% chance to ignore 40% damage when hit',
-    type: 'CID',
+    type: 'Chance to Ignore DMG',
     value: 40,
     red2: 0.0679,
     black2: 0.0604,
