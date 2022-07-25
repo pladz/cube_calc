@@ -7,6 +7,7 @@ import {
     Container,
     Grid,
     Button,
+    Typography,
 } from "@material-ui/core";
 
 export default function PercentageGraphs() {
@@ -188,6 +189,7 @@ export default function PercentageGraphs() {
 
     return (
         <div>
+            <Box><Typography>{`The graphs dont actually do anything just turn back now`}</Typography></Box>
             <Box className={classes.alignItemsAndJustifyContent}>
                 <Container maxWidth='lg'>
                     <Grid container spacing={3} className={classes.container1}>

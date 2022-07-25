@@ -10,6 +10,7 @@ import PotentialTable from './potentialTable';
 import PercentageGraphs from './percentageGraphs';
 
 import { useHistory } from "react-router-dom";
+import ShouldITodd from './shouldITodd';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -50,13 +51,13 @@ const MainPage = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            The Calculator of Cubes
+            Maple Math with Shitty UI
           </Typography>
           <Button className={classes.button} color="inherit" onClick={handleOpen}>
             {open ?
-              <Typography>GIVE GRAPH</Typography>
+              <Typography>TODD COST CALCULATOR</Typography>
               :
-              <Typography>GIVE STATS</Typography>
+              <Typography>CUBE RATES CALCULATOR</Typography>
             }
           </Button>
         </Toolbar>
@@ -64,7 +65,7 @@ const MainPage = () => {
       {open ?
         <PotentialTable />
         :
-        <PercentageGraphs />}
+        <ShouldITodd />}
     </div>
   );
 };

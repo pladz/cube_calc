@@ -618,7 +618,7 @@ export default function PotentialTable() {
                   addIfMoreThanStat(xOneInputValue, typeOneInputValue, xTwoInputValue, typeTwoInputValue);
                 }}
                 color="primary" aria-label="Do the magic" align="right">
-                <DoubleArrow />
+                <Box><Typography>{'Calculate'}</Typography></Box>
               </IconButton>
             </Paper>
             {xOneInputValue === 0 || typeOneInputValue === "" ? [] :
@@ -678,32 +678,17 @@ export default function PotentialTable() {
             }
             <Paper style={{ padding: 10 }}>
               <Grid container spacing={1}>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                   <Paper className={classes.paper}>16% Crit -{">"} 1 in 43 Equality</Paper>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                   <Paper className={classes.paper}>24% Crit -{">"} 1 in 1331 Equality</Paper>
                 </Grid>
                 <Grid item xs={3}>
-                  <Paper className={classes.paper}>3s CDR -{">"} 1 in 45 Equality</Paper>
+                  <Paper className={classes.paper}>At least 3s CDR -{">"} 1 in 45 Equality</Paper>
                 </Grid>
                 <Grid item xs={3}>
-                  <Paper className={classes.paper}>3s CDR -{">"} 1 in 158 Equality</Paper>
-                </Grid>
-                <Grid item xs={2}>
-                  <Paper className={classes.paper}>SKILL = Decent Skills</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                  <Paper className={classes.paper}>ER = x% Elemental Resistance</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                  <Paper className={classes.paper}>IT = Invincibility Time +Xs</Paper>
-                </Grid>
-                <Grid item xs={4}>
-                  <Paper className={classes.paper}>INV = X% chance to become invincible</Paper>
-                </Grid>
-                <Grid item xs={2}>
-                  <Paper className={classes.paper}>CD = X% Crit Damage</Paper>
+                  <Paper className={classes.paper}>At least 4s CDR -{">"} 1 in 158 Equality</Paper>
                 </Grid>
               </Grid>
             </Paper>
