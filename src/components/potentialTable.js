@@ -674,7 +674,8 @@ export default function PotentialTable() {
                 id="outlined-basic"
                 label="At Least (?) %"
                 variant="outlined"
-                value={xOneInputValue}
+                type="number"
+                //value={xOneInputValue}
                 onChange={(e) => {
                   setXOneInputValue(safeParseInt(e.target.value));
                   clearRows();
