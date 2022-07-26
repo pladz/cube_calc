@@ -26,3 +26,7 @@ This simulation can:
     c) Works for WSE as well, Boss Dmg, IED, etc.
 
 2. Give you the percentage to roll a specific line in that specific order
+
+26/7/22
+
+NaN bug fixed by https://github.com/hehai123/ (thanks)
