@@ -30,3 +30,8 @@ This simulation can:
 26/7/22
 
 NaN bug fixed by https://github.com/hehai123/ (thanks)
+
+
+4/12/22
+
+Removed 30% boss lines from prime lines as per update

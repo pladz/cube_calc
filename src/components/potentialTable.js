@@ -965,6 +965,9 @@ export default function PotentialTable() {
         <Typography>
           Updated to newest KMS cube rates as of 2 December 2021
         </Typography>
+        <Typography>
+          NaN input bug fixed by https://github.com/hehai123/cube_calc
+        </Typography>
       </Paper>
     </div>
   );
