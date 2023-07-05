@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
   Paper,
   TextField,
@@ -20,6 +21,7 @@ import {
   DialogTitle,
   DialogContent,
   Button,
+  Container,
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {
@@ -28,6 +30,8 @@ import {
   Add,
   DoubleArrow,
   HelpOutline,
+  FastForward,
+  LineStyle,
 } from "@material-ui/icons";
 import {
   hatLines,
@@ -54,6 +58,31 @@ import {
   secondarySubLines,
   emblemSubLines,
 } from "./subLines";
+import {
+  legendHatLines,
+  legendTopLines,
+  legendBottomLines,
+  legendShoeLines,
+  legendGloveLines,
+  legendCapeShoulderBeltLines,
+  legendAccessoryLines,
+  legendHeartLines,
+  legendWeaponLines,
+  legendSecondaryLines,
+  legendEmblemLines,
+} from "./legendLines";
+import {
+  uniqueHatLines,
+  uniqueTopLines,
+  uniquebottomShoeLines,
+  uniqueGloveLines,
+  uniqueCapeShoulderBeltLines,
+  uniqueAccessoryLines,
+  // uniqueHeartLines,
+  uniqueWeaponLines,
+  uniqueSecondaryLines,
+  uniqueEmblemLines,
+} from "./uniqueLines";
 
 import { useHistory } from "react-router-dom";
 
@@ -62,8 +91,11 @@ import blackCubeIcon from "./icons/black_clean.png";
 import redCubeIcon from "./icons/red_clean.png";
 import equalityCubeIcon from "./icons/equality_clean.png";
 import hexaCubeIcon from "./icons/hexa_clean.png";
+import { display } from "@material-ui/system";
 
 //CSS
+const DECIMAL_PRECISION = 6; // for % display
+const CUBE_DECIMAL = 2; // for one in x cubes display
 const useStyles = makeStyles((theme) => ({
   avatar: {
     width: theme.spacing(15),
@@ -118,6 +150,17 @@ const useStyles = makeStyles((theme) => ({
     flex: "1 1 150px" /*  Stretching: */,
     margin: "5px",
   },
+  paper: {
+    padding: theme.spacing(1),
+    margin: "0 5px",
+    textAlign: "center",
+    backgroundColor: "#D6E4FF",
+  },
+  container: {
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "0",
+  },
 }));
 
 const WhiteTextTypography = withStyles({
@@ -125,6 +168,11 @@ const WhiteTextTypography = withStyles({
     color: "#FFFFFF",
   },
 })(Typography);
+
+// For one in x cubes formatting
+const formatNumberWithCommas = (number) => {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
 
 const gearType = [
   { title: "Hat", type: "Armor" },
@@ -156,6 +204,7 @@ const gearOptions = gearType.map((option) => {
 });
 
 export default function PotentialTable() {
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const classes = useStyles();
   const history = useHistory();
 
@@ -176,6 +225,12 @@ export default function PotentialTable() {
   const [subLineOptions, setSubLineOptions] = React.useState([]);
   const [typeOptions, setTypeOptions] = React.useState([]);
   const [typeOptionsTwo, setTypeOptionsTwo] = React.useState([]);
+  const [checkSecondCriterion, setCheckSecondCombination] = useState(false);
+
+  const [legendLineOp, setLegendLineOp] = useState([]);
+  const [uniqueLineOp, setUniqueLineOp] = useState([]);
+  const [acceptAS1, setAcceptAS1] = useState(false);
+  const [acceptAS2, setAcceptAS2] = useState(false);
 
   //line percentages
   const [lineOneRedPercentage, setLineOneRedPercentage] = React.useState(0);
@@ -203,9 +258,20 @@ export default function PotentialTable() {
   const [curEqualityPercentage, setCurEqualityPercentage] = React.useState(0);
   const [curHexaPercentage, setCurHexaPercentage] = React.useState(0);
 
+  // Final probability calculated by hehai
+  const [hexaProbability, setHexaProbability] = useState(0);
+  const [blackProbability, setBlackProbability] = useState(0);
+  const [redProbability, setRedProbability] = useState(0);
+  const [equalityProbability, setEqualityProbability] = useState(0);
+
+  const [hexaCubeNumber, setHexaCubeNumber] = useState(0);
+  const [blackCubeNumber, setBlackCubeNumber] = useState(0);
+  const [redCubeNumber, setRedCubeNumber] = useState(0);
+  const [equalityCubeNumber, setEqualityCubeNumber] = useState(0);
+
   //table
   const [rows, setRows] = React.useState([]);
-  const [curRowId, setCurRowId] = React.useState([]);
+  // const [curRowId, setCurRowId] = React.useState(0);
 
   //readMe
   const [helpOpen, setHelpOpen] = React.useState(false);
@@ -267,7 +333,8 @@ export default function PotentialTable() {
         break;
       case "Heart":
         curLines = heartLines;
-        curSubLines = heartSubLines;
+        curSubLines = accessorySubLines;
+        // curSubLines = heartSubLines;
         break;
       case "Weapon":
         curLines = weaponLines;
@@ -406,6 +473,739 @@ export default function PotentialTable() {
     return perm1 * 6 + perm2 + perm3 * 3;
   }
 
+  //============================================================= July 2023 ================================================================
+
+  // Sort the array of lines by descedning value and type
+  const lineSorter = (lines) => {
+    lines.sort((a, b) => {
+      if (b.value !== a.value) {
+        return b.value - a.value; // Sort by descending value
+      } else {
+        return a.type.localeCompare(b.type); // Sort alphabetically by type
+      }
+    });
+  };
+
+  // Sort key by descending value and by type
+  const keySorter = (keyFormat) => {
+    keyFormat.sort(function (a, b) {
+      // Extract the numeric values and the string parts from the strings
+      let valueA = parseFloat(a);
+      let valueB = parseFloat(b);
+      let stringA = a.split(" ")[1];
+      let stringB = b.split(" ")[1];
+
+      // Compare the values in descending order
+      if (valueA > valueB) {
+        return -1;
+      } else if (valueA < valueB) {
+        return 1;
+      } else {
+        // If the values are equal, compare the string parts
+        return stringA.localeCompare(stringB);
+      }
+    });
+
+    return keyFormat;
+  };
+
+  const lineWeightSum = (line) => {
+    return line.reduce((total, item) => total + item.weight, 0);
+  };
+
+  const usefulLineWeightSum = (line, filteredArray) => {
+    return line.reduce((accumulator, line) => {
+      if (!checkSecondCriterion) {
+        if (
+          line.type === typeOneInputValue ||
+          (line.type === "AS" && acceptAS1) ||
+          filteredArray.includes(line.type)
+        ) {
+          return accumulator + line.weight;
+        }
+      } else if (checkSecondCriterion) {
+        if (
+          line.type === typeOneInputValue ||
+          line.type === typeTwoInputValue ||
+          (line.type === "AS" && (acceptAS1 || acceptAS2)) ||
+          filteredArray.includes(line.type)
+        ) {
+          return accumulator + line.weight;
+        }
+      }
+      return accumulator;
+    }, 0);
+  };
+
+  const lineCounter = (array, type) => {
+    return array.reduce((accumulator, line) => {
+      if (line === type) {
+        return accumulator + 1;
+      } else {
+        return accumulator;
+      }
+    }, 0);
+  };
+
+  const potentialLineFormat = (array, cubeType, lineNumber) => {
+    const tempLines = [];
+    const tempLines2 = [];
+    const mappedLines = [];
+    const red2 = 10; // 1 in 10 chance of being a legendary line for red cube 2nd line
+    const red3 = 100; // 1 in 100 chance of being a legendary line for red cube 3rd line
+    const black2 = 5;
+    const black3 = 20;
+    const specialLines = [
+      "DR",
+      "IED",
+      "BOSS",
+      "Decent Skill",
+      "Invincibility Time",
+      "Chance to Ignore DMG",
+      "Chance of being invincibile",
+    ];
+    const specialLinesFiltered = [
+      "DR",
+      "IED",
+      "BOSS",
+      "Decent Skill",
+      "Invincibility Time",
+      "Chance to Ignore DMG",
+      "Chance of being invincibile",
+    ];
+    const specialLinesToRemove = [];
+
+    const dRCount = lineCounter(array, "DR");
+    const iedCount = lineCounter(array, "IED");
+    const bossCount = lineCounter(array, "BOSS");
+    const decentCount = lineCounter(array, "Decent Skill");
+    const invincibilityCount = lineCounter(array, "Invincibility Time");
+    const ignoreCount = lineCounter(array, "Chance to Ignore DMG");
+    const invincibileCount = lineCounter(array, "Chance of being invincibile");
+
+    if (decentCount === 1) {
+      specialLinesFiltered.splice(
+        specialLinesFiltered.indexOf("Decent Skill"),
+        1
+      );
+      specialLinesToRemove.push("Decent Skill");
+    }
+    if (dRCount === 2) {
+      specialLinesFiltered.splice(specialLinesFiltered.indexOf("DR"), 1);
+      specialLinesToRemove.push("DR");
+    }
+    if (iedCount === 2) {
+      specialLinesFiltered.splice(specialLinesFiltered.indexOf("IED"), 1);
+      specialLinesToRemove.push("IED");
+    }
+    if (bossCount === 2) {
+      specialLinesFiltered.splice(specialLinesFiltered.indexOf("BOSS"), 1);
+      specialLinesToRemove.push("BOSS");
+    }
+    if (invincibilityCount === 1) {
+      specialLinesFiltered.splice(
+        specialLinesFiltered.indexOf("Invincibility Time"),
+        1
+      );
+      specialLinesToRemove.push("Invincibility Time");
+    }
+    if (ignoreCount === 2) {
+      specialLinesFiltered.splice(
+        specialLinesFiltered.indexOf("Chance to Ignore DMG"),
+        1
+      );
+      specialLinesToRemove.push("Chance to Ignore DMG");
+    }
+    if (invincibileCount === 2) {
+      specialLinesFiltered.splice(
+        specialLinesFiltered.indexOf("Chance of being invincibile"),
+        1
+      );
+      specialLinesToRemove.push("Chance of being invincibile");
+    }
+
+    // Remove line options if option limit is reached
+    legendLineOp.forEach((line) => {
+      if (specialLinesToRemove.includes(line.type)) {
+        return;
+      }
+      tempLines.push({ ...line });
+    });
+
+    if (lineNumber === 2 || lineNumber === 3) {
+      uniqueLineOp.forEach((line) => {
+        if (specialLinesToRemove.includes(line.type)) {
+          return;
+        }
+        tempLines2.push({ ...line });
+      });
+    }
+
+    const totalWeights = lineWeightSum(tempLines);
+    const usefulWeight = usefulLineWeightSum(tempLines, specialLinesFiltered);
+    const totalWeights2 = lineWeightSum(tempLines2);
+    const usefulWeight2 = usefulLineWeightSum(tempLines2, specialLinesFiltered);
+
+    // Make a list of useful lines to check for
+    // Example: str, dex, int, luk, hp, mp, def becomes only str and junk if filtered for str
+    // Legend line options
+    tempLines.forEach((line) => {
+      if (
+        (!checkSecondCriterion &&
+          (line.type === typeOneInputValue ||
+            (line.type === "AS" && acceptAS1) ||
+            specialLines.includes(line.type))) ||
+        (checkSecondCriterion &&
+          (line.type === typeOneInputValue ||
+            line.type === typeTwoInputValue ||
+            (line.type === "AS" && (acceptAS1 || acceptAS2)) ||
+            specialLines.includes(line.type)))
+      ) {
+        if (lineNumber === 1) {
+          mappedLines.push({ ...line, totalWeight: totalWeights });
+        } else if (lineNumber === 2) {
+          if (cubeType === "Red") {
+            mappedLines.push({ ...line, totalWeight: totalWeights * red2 });
+          } else if (cubeType === "Black") {
+            mappedLines.push({ ...line, totalWeight: totalWeights * black2 });
+          }
+        } else if (lineNumber === 3) {
+          if (cubeType === "Red") {
+            mappedLines.push({ ...line, totalWeight: totalWeights * red3 });
+          } else if (cubeType === "Black") {
+            mappedLines.push({ ...line, totalWeight: totalWeights * black3 });
+          }
+        }
+      }
+    });
+
+    // Unique line options
+    if (lineNumber !== 1) {
+      tempLines2.forEach((line) => {
+        if (!checkSecondCriterion) {
+          if (
+            line.type === typeOneInputValue ||
+            (line.type === "AS" && acceptAS1) ||
+            specialLines.includes(line.type)
+          ) {
+            if (lineNumber === 2) {
+              if (cubeType === "Red") {
+                mappedLines.push({
+                  ...line,
+                  weight: line.weight * (red2 - 1),
+                  totalWeight: totalWeights2 * red2,
+                });
+              } else if (cubeType === "Black") {
+                mappedLines.push({
+                  ...line,
+                  weight: line.weight * (black2 - 1),
+                  totalWeight: totalWeights2 * black2,
+                });
+              }
+            } else if (lineNumber === 3) {
+              if (cubeType === "Red") {
+                mappedLines.push({
+                  ...line,
+                  weight: line.weight * (red3 - 1),
+                  totalWeight: totalWeights2 * red3,
+                });
+              } else if (cubeType === "Black") {
+                mappedLines.push({
+                  ...line,
+                  weight: line.weight * (black3 - 1),
+                  totalWeight: totalWeights2 * black3,
+                });
+              }
+            }
+          } else if (checkSecondCriterion) {
+            if (
+              line.type === typeOneInputValue ||
+              line.type === typeTwoInputValue ||
+              (line.type === "AS" && (acceptAS1 || acceptAS2)) ||
+              specialLines.includes(line.type)
+            ) {
+              if (lineNumber === 2) {
+                if (cubeType === "Red") {
+                  mappedLines.push({
+                    ...line,
+                    weight: line.weight * (red2 - 1),
+                    totalWeight: totalWeights2 * red2,
+                  });
+                } else if (cubeType === "Black") {
+                  mappedLines.push({
+                    ...line,
+                    weight: line.weight * (black2 - 1),
+                    totalWeight: totalWeights2 * black2,
+                  });
+                }
+              } else if (lineNumber === 3) {
+                if (cubeType === "Red") {
+                  mappedLines.push({
+                    ...line,
+                    weight: line.weight * (red3 - 1),
+                    totalWeight: totalWeights2 * red3,
+                  });
+                } else if (cubeType === "Black") {
+                  mappedLines.push({
+                    ...line,
+                    weight: line.weight * (black3 - 1),
+                    totalWeight: totalWeights2 * black3,
+                  });
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    let junkWeight = 0;
+    let junkTotalWeight = 0;
+
+    if (lineNumber === 1) {
+      junkWeight = totalWeights - usefulWeight;
+      junkTotalWeight = totalWeights;
+    } else if (lineNumber === 2 || lineNumber === 3) {
+      let multiplier;
+      if (cubeType === "Red") {
+        if (lineNumber === 2) {
+          multiplier = red2;
+        } else multiplier = red3;
+      } else if (cubeType === "Black") {
+        if (lineNumber === 2) {
+          multiplier = black2;
+        } else multiplier = black3;
+      }
+
+      junkWeight =
+        (totalWeights - usefulWeight) * (totalWeights2 * multiplier) +
+        (totalWeights2 - usefulWeight2) *
+          (multiplier - 1) *
+          (totalWeights * multiplier);
+      junkTotalWeight = totalWeights * totalWeights2 * multiplier ** 2;
+    }
+
+    mappedLines.push({
+      // stat: "0",
+      // value: 0,
+      type: "Junk",
+      weight: junkWeight,
+      totalWeight: junkTotalWeight,
+    });
+
+    return mappedLines;
+  };
+
+  const cubeProbabiltyCalc = (line1, line2, line3) => {
+    let sumOne = 0;
+    let sumTwo = 0;
+
+    const probability =
+      (line1.weight * line2.weight * line3.weight) /
+      (line1.totalWeight * line2.totalWeight * line3.totalWeight);
+
+    const lines = [line1, line2, line3];
+
+    for (const line of lines) {
+      if (
+        line.type === typeOneInputValue ||
+        (line.type === "AS" && acceptAS1)
+      ) {
+        sumOne += line.value;
+      }
+      if (
+        checkSecondCriterion &&
+        (line.type === typeTwoInputValue || (line.type === "AS" && acceptAS2))
+      ) {
+        sumTwo += line.value;
+      }
+    }
+
+    if (checkSecondCriterion) {
+      if (sumOne >= xOneInputValue && sumTwo >= xTwoInputValue) {
+        return probability;
+      }
+    } else if (sumOne >= xOneInputValue) {
+      return probability;
+    }
+
+    return 0;
+  };
+
+  const hexaFirst3LinesCalc = (l1, l2, l3, dictionary) => {
+    let sum = 0;
+    let sum2 = 0;
+    let probability = 1;
+    let lines = [];
+    const specialLines = [
+      "DR",
+      "IED",
+      "BOSS",
+      "Decent Skill",
+      "Invincibility Time",
+      "Chance to Ignore DMG",
+      "Chance of being invincibile",
+    ];
+
+    for (let i = 1; i <= 3; i++) {
+      const currentLine = eval(`l${i}`);
+      // if (!currentLine) continue;
+
+      probability *= currentLine.weight / currentLine.totalWeight;
+      if (
+        currentLine.type === typeOneInputValue ||
+        (currentLine.type === "AS" && acceptAS1) ||
+        (checkSecondCriterion &&
+          (currentLine.type === typeTwoInputValue ||
+            (currentLine.type === "AS" && acceptAS2))) ||
+        specialLines.includes(currentLine.type)
+      ) {
+        lines.push({ value: currentLine.value, type: currentLine.type });
+      }
+    }
+
+    lineSorter(lines);
+
+    let linesSelected = 0;
+    let selectableLines = [];
+    for (let i = 0; i < lines.length; i++) {
+      if (linesSelected >= 3 || sum >= xOneInputValue) {
+        selectableLines.push(i);
+        continue;
+      }
+
+      const line = lines[i];
+      if (
+        line.type === typeOneInputValue ||
+        (line.type === "AS" && acceptAS1)
+      ) {
+        sum += line.value;
+        linesSelected += 1;
+        if (
+          line.type === typeTwoInputValue ||
+          (line.type === "AS" && acceptAS2)
+        ) {
+          sum2 += line.value;
+        }
+      } else {
+        selectableLines.push(i);
+      }
+    }
+
+    if (!checkSecondCriterion) {
+      if (linesSelected <= 3 && sum >= xOneInputValue) {
+        return probability;
+      }
+    } else {
+      if (linesSelected === 3) {
+        if (sum >= xOneInputValue && sum2 >= xTwoInputValue) {
+          return probability;
+        }
+      } else {
+        for (const index of selectableLines) {
+          const line = lines[index];
+
+          if (
+            line.type === typeTwoInputValue ||
+            (line.type === "AS" && acceptAS2)
+          ) {
+            sum2 += line.value;
+            linesSelected += 1;
+            if (
+              line.type === typeOneInputValue ||
+              (line.type === "AS" && acceptAS1)
+            ) {
+              sum += line.value;
+            }
+          }
+
+          if (linesSelected >= 3) break;
+        }
+
+        if (sum >= xOneInputValue && sum2 >= xTwoInputValue) {
+          return probability;
+        }
+      }
+    }
+
+    let keyArray = [];
+    for (const line of lines) {
+      keyArray.push(line.value.toString() + " " + line.type);
+    }
+
+    keySorter(keyArray);
+    let key = keyArray.join(", ");
+    if (key in dictionary) {
+      dictionary[key] += probability;
+    } else {
+      dictionary[key] = probability;
+    }
+
+    return 0;
+  };
+
+  const hexaSingleLineCalc = (line, currentLines) => {
+    let sum = 0;
+    let sum2 = 0;
+    const addedLine = [];
+    let criteriaMet = false;
+
+    if (
+      line.type === typeOneInputValue ||
+      (line.type === "AS" && acceptAS1) ||
+      (checkSecondCriterion &&
+        (line.type === typeTwoInputValue || (line.type === "AS" && acceptAS2)))
+    ) {
+      currentLines.push({ value: line.value, type: line.type });
+      addedLine.push({ value: line.value, type: line.type });
+    }
+
+    lineSorter(currentLines);
+
+    let linesSelected = 0;
+    let selectableLines = [];
+    for (let i = 0; i < currentLines.length; i++) {
+      if (linesSelected >= 3 || sum >= xOneInputValue) {
+        selectableLines.push(i);
+        continue;
+      }
+
+      const line = currentLines[i];
+      if (
+        line.type === typeOneInputValue ||
+        (line.type === "AS" && acceptAS1)
+      ) {
+        sum += line.value;
+        linesSelected += 1;
+        if (
+          line.type === typeTwoInputValue ||
+          (line.type === "AS" && acceptAS2)
+        ) {
+          sum2 += line.value;
+        }
+      } else {
+        selectableLines.push(i);
+      }
+    }
+
+    if (!checkSecondCriterion) {
+      if (linesSelected <= 3 && sum >= xOneInputValue) {
+        criteriaMet = true;
+      }
+    } else {
+      if (linesSelected === 3) {
+        if (sum >= xOneInputValue && sum2 >= xTwoInputValue) {
+          criteriaMet = true;
+        }
+      } else {
+        for (const index of selectableLines) {
+          const line = currentLines[index];
+
+          if (
+            line.type === typeTwoInputValue ||
+            (line.type === "AS" && acceptAS2)
+          ) {
+            sum2 += line.value;
+            linesSelected += 1;
+            if (
+              line.type === typeOneInputValue ||
+              (line.type === "AS" && acceptAS1)
+            ) {
+              sum += line.value;
+            }
+          }
+
+          if (linesSelected >= 3) break;
+        }
+
+        if (sum >= xOneInputValue && sum2 >= xTwoInputValue) {
+          criteriaMet = true;
+        }
+      }
+    }
+
+    if (criteriaMet && addedLine.length > 0) {
+      const index = currentLines.findIndex(
+        (line) =>
+          line.value === addedLine[0].value && line.type === addedLine[0].type
+      );
+      currentLines.splice(index, 1);
+    }
+
+    return { criteriaMet, addedLine };
+  };
+
+  const newHexaAndRedCalc = () => {
+    let totalProbability = 0;
+    let redProbability = 0;
+    let currentLines = [];
+    const data = {};
+
+    const line1 = potentialLineFormat(currentLines, "Red", 1);
+
+    for (const l1 of line1) {
+      const addedLine1 = l1.type;
+      currentLines.push(addedLine1);
+      const line2 = potentialLineFormat(currentLines, "Red", 2);
+
+      for (const l2 of line2) {
+        const addedLine2 = l2.type;
+        currentLines.push(addedLine2);
+        const line3 = potentialLineFormat(currentLines, "Red", 3);
+
+        for (const l3 of line3) {
+          totalProbability += hexaFirst3LinesCalc(l1, l2, l3, data);
+        }
+        currentLines.splice(currentLines.indexOf(addedLine2), 1);
+      }
+      currentLines.splice(currentLines.indexOf(addedLine1), 1);
+    }
+
+    redProbability = totalProbability;
+
+    for (const [key, value] of Object.entries(data)) {
+      const lineComponents = key.split(", ");
+      let lines = lineComponents.map((component) => {
+        let [value, ...typeParts] = component.split(" ");
+        let type = typeParts.join(" ").trim();
+        return { value: parseInt(value), type: type };
+      });
+
+      for (const line of lines) {
+        currentLines.push(line.type);
+      }
+
+      const line4 = potentialLineFormat(currentLines, "Red", 2);
+
+      for (const l4 of line4) {
+        const result4 = hexaSingleLineCalc(l4, lines);
+        if (result4.criteriaMet) {
+          totalProbability += (value * l4.weight) / l4.totalWeight;
+          continue;
+        }
+        const addedLine4 = l4.type;
+        currentLines.push(addedLine4);
+        const line5 = potentialLineFormat(currentLines, "Red", 3);
+
+        for (const l5 of line5) {
+          const result5 = hexaSingleLineCalc(l5, lines);
+          if (result5.criteriaMet) {
+            totalProbability +=
+              (value * l5.weight * l4.weight) /
+              (l4.totalWeight * l5.totalWeight);
+            continue;
+          }
+
+          const addedLine5 = l5.type;
+          currentLines.push(addedLine5);
+          const line6 = potentialLineFormat(currentLines, "Red", 3);
+
+          for (const l6 of line6) {
+            const result6 = hexaSingleLineCalc(l6, lines);
+            if (result6.criteriaMet) {
+              totalProbability +=
+                (value * l5.weight * l6.weight * l4.weight) /
+                (l5.totalWeight * l6.totalWeight * l4.totalWeight);
+            } else if (result6.addedLine.length > 0) {
+              const addedLine = result6.addedLine[0];
+              const index = lines.findIndex(
+                (line) =>
+                  line.value === addedLine.value && line.type === addedLine.type
+              );
+              lines.splice(index, 1);
+            }
+          }
+
+          if (result5.addedLine.length > 0) {
+            const addedLine = result5.addedLine[0];
+            const index = lines.findIndex(
+              (line) =>
+                line.value === addedLine.value && line.type === addedLine.type
+            );
+            lines.splice(index, 1);
+          }
+          currentLines.splice(currentLines.indexOf(addedLine5), 1);
+        }
+
+        if (result4.addedLine.length > 0) {
+          const addedLine = result4.addedLine[0];
+          const index = lines.findIndex(
+            (line) =>
+              line.value === addedLine.value && line.type === addedLine.type
+          );
+          lines.splice(index, 1);
+        }
+        currentLines.splice(currentLines.indexOf(addedLine4), 1);
+      }
+      currentLines = [];
+    }
+
+    setRedProbability(redProbability);
+    setRedCubeNumber((1 / redProbability).toFixed(CUBE_DECIMAL));
+    setHexaProbability(totalProbability);
+    setHexaCubeNumber((1 / totalProbability).toFixed(CUBE_DECIMAL));
+  };
+
+  const newEqualityCalc = () => {
+    let totalProbability = 0;
+    const currentLines = [];
+    const line1 = potentialLineFormat(currentLines, "Black", 1);
+
+    for (const l1 of line1) {
+      const addedLine1 = l1.type;
+      currentLines.push(addedLine1);
+
+      const line2 = potentialLineFormat(currentLines, "Black", 1);
+      for (const l2 of line2) {
+        const addedLine2 = l2.type;
+        currentLines.push(addedLine2);
+        const line3 = potentialLineFormat(currentLines, "Black", 1);
+        for (const l3 of line3) {
+          totalProbability += cubeProbabiltyCalc(l1, l2, l3);
+        }
+        currentLines.splice(currentLines.indexOf(addedLine2), 1);
+      }
+      currentLines.splice(currentLines.indexOf(addedLine1), 1);
+    }
+
+    setEqualityProbability(totalProbability);
+    setEqualityCubeNumber((1 / totalProbability).toFixed(CUBE_DECIMAL));
+  };
+
+  const newBlackCalc = () => {
+    let totalProbability = 0;
+    const currentLines = [];
+    const line1 = potentialLineFormat(currentLines, "Black", 1);
+
+    for (const l1 of line1) {
+      const addedLine1 = l1.type;
+      currentLines.push(addedLine1);
+
+      const line2 = potentialLineFormat(currentLines, "Black", 2);
+      for (const l2 of line2) {
+        const addedLine2 = l2.type;
+        currentLines.push(addedLine2);
+        const line3 = potentialLineFormat(currentLines, "Black", 3);
+        for (const l3 of line3) {
+          totalProbability += cubeProbabiltyCalc(l1, l2, l3);
+        }
+        currentLines.splice(currentLines.indexOf(addedLine2), 1);
+      }
+      currentLines.splice(currentLines.indexOf(addedLine1), 1);
+    }
+
+    setBlackProbability(totalProbability);
+    setBlackCubeNumber((1 / totalProbability).toFixed(CUBE_DECIMAL));
+  };
+
+  const newProbCalc = () => {
+    newHexaAndRedCalc();
+    newEqualityCalc();
+    newBlackCalc();
+  };
+
+  //============================================================= END ===============================================================
+
   function clearRows() {
     setRows([]);
   }
@@ -468,6 +1268,7 @@ export default function PotentialTable() {
   }
 
   function addIfMoreThanStat(x1, type1, x2, type2) {
+    let rowId = 0;
     lineOptions.forEach((line1, i) => {
       subLineOptions.forEach((line2, j) => {
         subLineOptions.forEach((line3, k) => {
@@ -491,7 +1292,8 @@ export default function PotentialTable() {
 
               addToRows(
                 createRow(
-                  curRowId,
+                  // curRowId,
+                  rowId,
                   line1.stat,
                   line2.stat,
                   line3.stat,
@@ -501,7 +1303,8 @@ export default function PotentialTable() {
                   hexaPercentage
                 )
               );
-              setCurRowId(curRowId + 1);
+              rowId += 1;
+              // setCurRowId(curRowId + 1);
             }
           }
         });
@@ -521,6 +1324,16 @@ export default function PotentialTable() {
 
   useEffect(() => {
     updateTypeOptionsTwo();
+    if (
+      typeOneInputValue === "STR" ||
+      typeOneInputValue === "DEX" ||
+      typeOneInputValue === "INT" ||
+      typeOneInputValue === "LUK"
+    ) {
+      setAcceptAS1(true);
+    } else {
+      setAcceptAS1(false);
+    }
   }, [typeOneInputValue, xOneInputValue]);
 
   useEffect(() => {
@@ -565,48 +1378,196 @@ export default function PotentialTable() {
     lineThreeHexaPercentage,
   ]);
 
+  useEffect(() => {
+    if (xTwoInputValue > 0 && typeTwoInputValue !== "") {
+      setCheckSecondCombination(true);
+      if (
+        typeTwoInputValue === "STR" ||
+        typeTwoInputValue === "DEX" ||
+        typeTwoInputValue === "INT" ||
+        typeTwoInputValue === "LUK"
+      ) {
+        setAcceptAS2(true);
+      } else {
+        setAcceptAS2(false);
+      }
+    } else {
+      setCheckSecondCombination(false);
+    }
+  }, [xTwoInputValue, typeTwoInputValue]);
+
+  useEffect(() => {
+    let legendLines = [];
+    let uniqueLines = [];
+    switch (inputValue) {
+      case "Hat":
+        legendLines = legendHatLines;
+        uniqueLines = uniqueHatLines;
+        break;
+      case "Top":
+      case "Overall":
+        legendLines = legendTopLines;
+        uniqueLines = uniqueTopLines;
+        break;
+      case "Bottom":
+        legendLines = legendBottomLines;
+        uniqueLines = uniquebottomShoeLines;
+        break;
+      case "Shoe":
+        legendLines = legendShoeLines;
+        uniqueLines = uniquebottomShoeLines;
+        break;
+      case "Glove":
+        legendLines = legendGloveLines;
+        uniqueLines = uniqueGloveLines;
+        break;
+      case "Cape":
+      case "Shoulder":
+      case "Belt":
+        legendLines = legendCapeShoulderBeltLines;
+        uniqueLines = uniqueCapeShoulderBeltLines;
+        break;
+      case "Ring":
+      case "Earring":
+      case "Pendant":
+      case "Face":
+      case "Eye":
+        legendLines = legendAccessoryLines;
+        uniqueLines = uniqueAccessoryLines;
+        break;
+      case "Heart":
+        legendLines = legendHeartLines;
+        uniqueLines = uniqueAccessoryLines;
+        break;
+      case "Weapon":
+        legendLines = legendWeaponLines;
+        uniqueLines = uniqueWeaponLines;
+        break;
+      case "Secondary":
+        legendLines = legendSecondaryLines;
+        uniqueLines = uniqueSecondaryLines;
+        break;
+      case "Emblem":
+        legendLines = legendEmblemLines;
+        uniqueLines = uniqueEmblemLines;
+        break;
+      default:
+        legendLines = legendHatLines;
+        uniqueLines = uniqueHatLines;
+        break;
+    }
+
+    setLegendLineOp(legendLines);
+    setUniqueLineOp(uniqueLines);
+  }, [inputValue]);
+
   return (
-    <div>
-      <Accordion expanded={expanded} fullWidth>
-        {inputValue === "" ? (
-          <AccordionSummary
-            aria-label="Expand"
-            aria-controls="additional-actions1-content"
-            id="additional-actions1-header"
+    <>
+      <Paper
+        elevation={2}
+        aria-label="Acknowledge"
+        onClick={(event) => event.stopPropagation()}
+        onFocus={(event) => event.stopPropagation()}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: "100%",
+          maxWidth: "1100px",
+          margin: "10px auto",
+        }}
+      >
+        <Container
+          className={classes.container}
+          style={isMobile ? { flexWrap: "wrap" } : {}}
+        >
+          <Box
+            style={{
+              width: "50%",
+              padding: "10px",
+              flexBasis: "100%",
+            }}
           >
-            <Paper
-              elevation={2}
-              width="50%"
-              aria-label="Acknowledge"
-              onClick={(event) => event.stopPropagation()}
-              onFocus={(event) => event.stopPropagation()}
+            <Autocomplete
+              id="grouped-demo"
+              inputValue={inputValue}
+              onInputChange={(event, newInputValue) => {
+                newInputValue === "" ? setExpanded(false) : setExpanded(true);
+                setInputValue(newInputValue);
+                updateLineOptions(newInputValue);
+                clearRows();
+              }}
+              options={gearOptions.sort(
+                (a, b) => -b.type.localeCompare(a.type)
+              )}
+              groupBy={(option) => option.type}
+              getOptionLabel={(option) => option.title}
+              fullWidth
+              renderInput={(params) => (
+                <TextField {...params} label="Gear" variant="outlined" />
+              )}
+            />
+          </Box>
+          <Box
+            style={{
+              width: "50%",
+              padding: "10px",
+              flexBasis: "100%",
+            }}
+          >
+            {inputValue === "Glove" ? (
+              <Grid
+                container
+                justify="space-around"
+                alignContent="space-around"
+              >
+                <Grid item xs={6}>
+                  <Paper className={classes.paper}>
+                    16% Crit -&gt; 1 in 43 Equality
+                  </Paper>
+                </Grid>
+                <Grid item xs={6}>
+                  <Paper className={classes.paper}>
+                    24% Crit -&gt; 1 in 1331 Equality
+                  </Paper>
+                </Grid>
+              </Grid>
+            ) : inputValue === "Hat" ? (
+              <Grid
+                container
+                justify="space-around"
+                alignContent="space-around"
+              >
+                <Grid item xs={6}>
+                  <Paper className={classes.paper}>
+                    At least 3s CDR -&gt; 1 in 44 Equality
+                  </Paper>
+                </Grid>
+                <Grid item xs={6}>
+                  <Paper className={classes.paper}>
+                    At least 4s CDR -&gt; 1 in 157 Equality
+                  </Paper>
+                </Grid>
+              </Grid>
+            ) : null}
+          </Box>
+        </Container>
+        <Container className={classes.container}>
+          {inputValue === "" ? (
+            <Box
+              style={{
+                width: "50%",
+                flexBasis: "100%",
+              }}
             >
-              <Autocomplete
-                id="grouped-demo"
-                inputValue={inputValue}
-                onInputChange={(event, newInputValue) => {
-                  newInputValue === "" ? setExpanded(false) : setExpanded(true);
-                  setInputValue(newInputValue);
-                  updateLineOptions(newInputValue);
-                  clearRows();
-                }}
-                options={gearOptions.sort(
-                  (a, b) => -b.type.localeCompare(a.type)
-                )}
-                groupBy={(option) => option.type}
-                getOptionLabel={(option) => option.title}
-                style={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Gear" variant="outlined" />
-                )}
-              />
-              <IconButton
-                variant="contained"
-                color="primary"
+              <Button
                 onClick={handleHelpOpen}
+                color="primary"
+                size="large"
+                fullWidth
               >
                 <HelpOutline />
-              </IconButton>
+              </Button>
               <Dialog
                 onClose={handleHelpClose}
                 aria-labelledby="simple-dialog-title"
@@ -626,307 +1587,433 @@ export default function PotentialTable() {
                   </Typography>
                   <Typography gutterBottom>
                     4. You can filter <strong>up to 2 stats</strong> at once.
-                    eg. BOSS 60 + ATK 9 outputs line combinations with {">"}=
+                    eg. BOSS 60 + ATK 9 outputs line combinations with {">="}{" "}
                     60% BOSS % 9 ATK
                   </Typography>
                 </DialogContent>
               </Dialog>
-            </Paper>
-          </AccordionSummary>
-        ) : (
-          <AccordionSummary
-            aria-label="Expand"
-            aria-controls="additional-actions1-content"
-            id="additional-actions1-header"
-          >
-            <Paper
-              elevation={2}
-              aria-label="Acknowledge"
-              onClick={(event) => event.stopPropagation()}
-              onFocus={(event) => event.stopPropagation()}
+            </Box>
+          ) : (
+            <Container
+              className={classes.container}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
             >
-              <Autocomplete
-                id="grouped-demo"
-                inputValue={inputValue}
-                onInputChange={(event, newInputValue) => {
-                  newInputValue === "" ? setExpanded(false) : setExpanded(true);
-                  setInputValue(newInputValue);
-                  updateLineOptions(newInputValue);
-                  clearRows();
-                }}
-                options={gearOptions.sort(
-                  (a, b) => -b.type.localeCompare(a.type)
-                )}
-                groupBy={(option) => option.type}
-                getOptionLabel={(option) => option.title}
-                style={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Gear" variant="outlined" />
-                )}
-              />
-
-              <Typography padding="10px" align="center">
-                <p></p>
-                {`I want a combination of`}
-                &nbsp;
-              </Typography>
-              <TextField
-                id="outlined-basic"
-                label="At Least (?) %"
-                variant="outlined"
-                type="number"
-                //value={xOneInputValue}
-                onChange={(e) => {
-                  setXOneInputValue(safeParseInt(e.target.value));
-                  clearRows();
-                }}
-                style={{ width: 300, fullWidth: true }}
-              />
-              <p></p>
-              <Autocomplete
-                id="Line"
-                inputValue={typeOneInputValue}
-                onInputChange={(event, newInputValue) => {
-                  setTypeOneInputValue(newInputValue);
-                  clearRows();
-                }}
-                options={typeOptions}
-                getOptionLabel={(option) => option.type}
-                style={{ width: 300, fullWidth: true }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Desired Line Type"
-                    variant="outlined"
-                  />
-                )}
-              />
-              <p></p>
-              <IconButton
-                onClick={() => {
-                  clearRows();
-                  addIfMoreThanStat(
-                    xOneInputValue,
-                    typeOneInputValue,
-                    xTwoInputValue,
-                    typeTwoInputValue
-                  );
-                }}
-                color="primary"
-                aria-label="Do the magic"
-                align="right"
+              <Container
+                className={classes.container}
+                style={isMobile ? { flexWrap: "wrap" } : {}}
               >
-                <Box>
-                  <Typography>{"Calculate"}</Typography>
+                <Box
+                  style={{
+                    width: "50%",
+                    padding: "10px",
+                    flexBasis: "100%",
+                  }}
+                >
+                  <Typography align="center">{`I want a combination of`}</Typography>
+                  <TextField
+                    id="outlined-basic"
+                    label="At Least (?) %"
+                    variant="outlined"
+                    type="number"
+                    style={{ marginBottom: "10px" }}
+                    onChange={(e) => {
+                      setXOneInputValue(safeParseInt(e.target.value));
+                      clearRows();
+                    }}
+                    fullWidth
+                  />
+                  <Autocomplete
+                    id="Line"
+                    inputValue={typeOneInputValue}
+                    onInputChange={(event, newInputValue) => {
+                      setTypeOneInputValue(newInputValue);
+                      clearRows();
+                    }}
+                    options={typeOptions}
+                    getOptionLabel={(option) => option.type}
+                    fullWidth
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Desired Line Type"
+                        variant="outlined"
+                      />
+                    )}
+                  />
                 </Box>
-              </IconButton>
-            </Paper>
-            {xOneInputValue === 0 || typeOneInputValue === "" ? (
-              []
-            ) : (
-              <div>
-                <Paper style={{ position: "absolute", bottom: 68, left: 330 }}>
-                  <Box>
-                    <Typography padding="10px" align="center">
-                      {`as well as (leave blank if not required)`}
-                    </Typography>
-                    <TextField
-                      id="outlined-basic"
-                      label="At Least (?) %"
-                      variant="outlined"
-                      value={xTwoInputValue}
-                      onChange={(e) => {
-                        setXTwoInputValue(safeParseInt(e.target.value));
-                        clearRows();
-                      }}
-                      style={{ width: 300, fullWidth: true }}
-                    />
-                    <p></p>
-                    <Autocomplete
-                      id="Line"
-                      inputValue={typeTwoInputValue}
-                      onInputChange={(event, newInputValue) => {
-                        setTypeTwoInputValue(newInputValue);
-                        clearRows();
-                      }}
-                      options={typeOptionsTwo}
-                      getOptionLabel={(option) => option.type}
-                      style={{ width: 300, fullWidth: true }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Desired Line Type 2"
-                          variant="outlined"
-                        />
-                      )}
-                    />
-                    <p></p>
-                  </Box>
-                </Paper>
-                <Paper style={{ position: "absolute", bottom: 115, left: 330 }}>
-                  <Box>
-                    {/* {both ?
-                      <Button color="primary" onClick={() => setBoth(false)}>
-                        <Typography padding="10px" align="center">
-                          {'AND'}
-                        </Typography>
-                      </Button>
-                      :
-                      <Button color="primary" onClick={() => setBoth(true)}>
-                        <Typography padding="10px" align="center">
-                          {'OR'}
-                        </Typography>
-                      </Button>
-                    } */}
-                  </Box>
-                </Paper>
-              </div>
-            )}
-            <Paper style={{ padding: 10 }}>
-              <Grid container spacing={1}>
-                <Grid item xs={3}>
-                  <Paper className={classes.paper}>
-                    16% Crit -{">"} 1 in 43 Equality
-                  </Paper>
-                </Grid>
-                <Grid item xs={3}>
-                  <Paper className={classes.paper}>
-                    24% Crit -{">"} 1 in 1331 Equality
-                  </Paper>
-                </Grid>
-                <Grid item xs={3}>
-                  <Paper className={classes.paper}>
-                    At least 3s CDR -{">"} 1 in 45 Equality
-                  </Paper>
-                </Grid>
-                <Grid item xs={3}>
-                  <Paper className={classes.paper}>
-                    At least 4s CDR -{">"} 1 in 158 Equality
-                  </Paper>
-                </Grid>
-              </Grid>
-            </Paper>
-          </AccordionSummary>
-        )}
-      </Accordion>
+                <Box
+                  style={{
+                    width: "50%",
+                    padding: "10px",
+                    flexBasis: "100%",
+                  }}
+                >
+                  {xOneInputValue === 0 || typeOneInputValue === "" ? null : (
+                    <>
+                      <Typography align="center">{`as well as (leave blank if not required)`}</Typography>
+                      <TextField
+                        id="outlined-basic"
+                        label="At Least (?) %"
+                        variant="outlined"
+                        type="number"
+                        onChange={(e) => {
+                          setXTwoInputValue(safeParseInt(e.target.value));
+                          clearRows();
+                        }}
+                        style={{ marginBottom: "10px" }}
+                        fullWidth
+                      />
+                      <Autocomplete
+                        id="Line"
+                        inputValue={typeTwoInputValue}
+                        onInputChange={(event, newInputValue) => {
+                          setTypeTwoInputValue(newInputValue);
+                          clearRows();
+                        }}
+                        options={typeOptionsTwo}
+                        getOptionLabel={(option) => option.type}
+                        fullWidth
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Desired Line Type 2"
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                    </>
+                  )}
+                </Box>
+              </Container>
+              <Box
+                style={{
+                  width: "100%",
+                  padding: "0 10px 10px 10px",
+                  boxSizing: "border-box",
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="large"
+                  fullWidth
+                  onClick={() => {
+                    clearRows();
+                    addIfMoreThanStat(
+                      xOneInputValue,
+                      typeOneInputValue,
+                      xTwoInputValue,
+                      typeTwoInputValue
+                    );
+                    newProbCalc();
+                  }}
+                >
+                  Calculate
+                </Button>
+              </Box>
+            </Container>
+          )}
+        </Container>
+      </Paper>
+      {/* </AccordionSummary>
+      </Accordion> */}
 
       <Paper elevation={2} className="container">
         <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="spanning table">
-            <TableHead>
-              {/* <TableRow>
-                <TableCell>Total Purple(%)</TableCell>
-                <TableCell align="right">{`${getTotalHexaPercentages() * 100} %`}</TableCell>
-                <TableCell align="right">{`One in ${Math.round(1 / (getTotalHexaPercentages()))} purple cubes`}</TableCell>
-              </TableRow> */}
-              <TableRow>
-                <TableCell>
-                  Total Red(%)
-                  <img height="18px" src={redCubeIcon} />
-                </TableCell>
-                <TableCell align="right">{`${
-                  getTotalRedPercentages() * 100
-                } %`}</TableCell>
-                <TableCell align="right">{`One in ${Math.round(
-                  1 / getTotalRedPercentages()
-                )} red cubes`}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  Total Black(%)
-                  <img height="18px" src={blackCubeIcon} />
-                </TableCell>
-                <TableCell align="right">{`${
-                  getTotalBlackPercentages() * 100
-                } %`}</TableCell>
-                <TableCell align="right">{`One in ${Math.round(
-                  1 / getTotalBlackPercentages()
-                )} black cubes`}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  Total Equality(%) <img height="17px" src={equalityCubeIcon} />
-                </TableCell>
-                <TableCell align="right">{`${
-                  getTotalEqualityPercentages() * 100
-                } %`}</TableCell>
-                <TableCell align="right">{`One in ${Math.round(
-                  1 / getTotalEqualityPercentages()
-                )} equality cubes`}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  Total Hexa(%) &nbsp;
-                  <img height="17px" src={hexaCubeIcon} />
-                </TableCell>
-                <TableCell align="right">{`${
-                  getTotalHexaPercentages() * 100
-                } %`}</TableCell>
-                <TableCell align="right">{`One in ${Math.round(
-                  1 / getTotalHexaPercentages()
-                )} hexa cubes`}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="center" colSpan={3}>
-                  Lines
-                </TableCell>
-                <TableCell align="right">Percentages</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="center">Line 1</TableCell>
-                <TableCell align="center">Line 2</TableCell>
-                <TableCell align="center">Line 3</TableCell>
-                {/* <TableCell align="center">
-                  <img src={purpleCubeIcon} />
-                  &nbsp;Purple (%)
-                </TableCell> */}
-                <TableCell align="center">
-                  <img src={redCubeIcon} />
-                  &nbsp;Red (%)
-                </TableCell>
-                <TableCell align="center">
-                  <img src={blackCubeIcon} />
-                  &nbsp;Black (%)
-                </TableCell>
-                <TableCell align="center">
-                  <img src={equalityCubeIcon} />
-                  &nbsp;Equality (%)
-                </TableCell>
-                <TableCell align="center">
-                  <img src={hexaCubeIcon} />
-                  &nbsp;Hexa (%)
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell align="center">{row.line1}</TableCell>
-                  <TableCell align="center">{row.line2}</TableCell>
-                  <TableCell align="center">{row.line3}</TableCell>
-                  {/* <TableCell align="center">{`${row.red * 100}%`}</TableCell> */}
-                  <TableCell align="center">{`${row.red * 100}%`}</TableCell>
-                  <TableCell align="center">{`${row.black * 100}%`}</TableCell>
-                  <TableCell align="center">{`${
-                    row.equality * 100
-                  }%`}</TableCell>
-                  <TableCell align="center">{`${row.hexa * 100}%`}</TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      className={classes.button}
-                      onClick={() => {
-                        handleRemoveItem(row.id);
-                      }}
-                      color="primary"
-                      aria-label="Add to List"
-                    >
-                      <Clear />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <Grid container justify="center" style={{ marginTop: "10px" }}>
+            <Grid style={{ border: "1px solid black", overflowX: "auto" }}>
+              <div style={{ minWidth: "600px" }}>
+                <Table className={classes.table}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Cube Type</TableCell>
+                      <TableCell align="center">
+                        <div>Probability&nbsp;(%)</div>
+                        <div>
+                          <span
+                            style={{ color: "magenta", fontWeight: "bold" }}
+                          >
+                            (Updated)
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell align="center">
+                        <div>Probability&nbsp;(1&nbsp;in&nbsp;x)</div>
+                        <div>
+                          <span
+                            style={{ color: "magenta", fontWeight: "bold" }}
+                          >
+                            (Updated)
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell align="center">
+                        <div>Probability&nbsp;(1&nbsp;in&nbsp;x)</div>
+                        <div>
+                          <span style={{ color: "red", fontWeight: "bold" }}>
+                            (Old)
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell align="center">
+                        <div>Probability&nbsp;(%){"\n"}</div>
+                        <div>
+                          <span style={{ color: "red", fontWeight: "bold" }}>
+                            (Old)
+                          </span>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span>Red Cube</span>
+                          <img height="25px" src={redCubeIcon} />
+                        </div>
+                      </TableCell>
+                      <TableCell align="center">
+                        {(redProbability * 100).toPrecision(DECIMAL_PRECISION)}
+                        &nbsp;%
+                      </TableCell>
+                      <TableCell align="center">
+                        One in{" "}
+                        {redCubeNumber !== 0 ? (
+                          <b>{formatNumberWithCommas(redCubeNumber)}</b>
+                        ) : (
+                          "Infinite"
+                        )}{" "}
+                        cubes
+                      </TableCell>
+                      <TableCell align="center">{`One in ${formatNumberWithCommas(
+                        (1 / getTotalRedPercentages()).toFixed(CUBE_DECIMAL)
+                      )} red cubes`}</TableCell>
+                      <TableCell align="center">{`${(
+                        getTotalRedPercentages() * 100
+                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="center">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span>Black&nbsp;Cube</span>
+                          <img height="25px" src={blackCubeIcon} />
+                        </div>
+                      </TableCell>
+                      <TableCell align="center">
+                        {(blackProbability * 100).toPrecision(
+                          DECIMAL_PRECISION
+                        )}
+                        &nbsp;%
+                      </TableCell>
+                      <TableCell align="center">
+                        One in{" "}
+                        {blackCubeNumber !== 0 ? (
+                          <b>{formatNumberWithCommas(blackCubeNumber)}</b>
+                        ) : (
+                          "Infinite"
+                        )}{" "}
+                        cubes
+                      </TableCell>
+                      <TableCell align="center">{`One in ${formatNumberWithCommas(
+                        (1 / getTotalBlackPercentages()).toFixed(CUBE_DECIMAL)
+                      )} black cubes`}</TableCell>
+                      <TableCell align="center">{`${(
+                        getTotalBlackPercentages() * 100
+                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="center">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span>Equality&nbsp;Cube</span>
+                          <img height="25px" src={equalityCubeIcon} />
+                        </div>
+                      </TableCell>
+                      <TableCell align="center">
+                        {(equalityProbability * 100).toPrecision(
+                          DECIMAL_PRECISION
+                        )}
+                        &nbsp;%
+                      </TableCell>
+                      <TableCell align="center">
+                        One in{" "}
+                        {equalityCubeNumber !== 0 ? (
+                          <b>{formatNumberWithCommas(equalityCubeNumber)}</b>
+                        ) : (
+                          "Infinite"
+                        )}{" "}
+                        cubes
+                      </TableCell>
+                      <TableCell align="center">{`One in ${formatNumberWithCommas(
+                        (1 / getTotalEqualityPercentages()).toFixed(
+                          CUBE_DECIMAL
+                        )
+                      )} equality cubes`}</TableCell>
+                      <TableCell align="center">{`${(
+                        getTotalEqualityPercentages() * 100
+                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="center">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span>Hexa Cube</span>
+                          <img height="25px" src={hexaCubeIcon} />
+                        </div>
+                      </TableCell>
+                      <TableCell align="center">
+                        {(hexaProbability * 100).toPrecision(DECIMAL_PRECISION)}
+                        &nbsp;%
+                      </TableCell>
+                      <TableCell align="center">
+                        One in{" "}
+                        {hexaCubeNumber !== 0 ? (
+                          <b>{formatNumberWithCommas(hexaCubeNumber)}</b>
+                        ) : (
+                          "Infinite"
+                        )}{" "}
+                        cubes
+                      </TableCell>
+                      <TableCell align="center">{`One in ${formatNumberWithCommas(
+                        (1 / getTotalHexaPercentages()).toFixed(CUBE_DECIMAL)
+                      )} hexa cubes`}</TableCell>
+                      <TableCell align="center">{`${(
+                        getTotalHexaPercentages() * 100
+                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            justify="center"
+            style={{
+              marginTop: "20px",
+              marginLeft: isMobile ? "10px" : "0",
+              marginRight: isMobile ? "10px" : "0",
+            }}
+          >
+            <Grid item xs={12} sm={12} md={12}>
+              <div style={{ minWidth: "1000px" }}>
+                <Table className={classes.table} aria-label="spanning table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center" colSpan={3}>
+                        Lines
+                      </TableCell>
+                      <TableCell align="center" colSpan={4}>
+                        Percentages{" "}
+                        <span style={{ color: "red", fontWeight: "bold" }}>
+                          (old)
+                        </span>
+                      </TableCell>
+                      <TableCell align="center">Actions</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="center">Line 1</TableCell>
+                      <TableCell align="center">Line 2</TableCell>
+                      <TableCell align="center">Line 3</TableCell>
+                      <TableCell align="center">
+                        <Grid container direction="column" alignItems="center">
+                          <Grid item>
+                            <img src={redCubeIcon} alt="Red Cube" />
+                          </Grid>
+                          <Grid item>&nbsp;Red (%)</Grid>
+                        </Grid>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Grid container direction="column" alignItems="center">
+                          <Grid item>
+                            <img src={blackCubeIcon} alt="Black Cube" />
+                          </Grid>
+                          <Grid item>Black (%)</Grid>
+                        </Grid>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Grid container direction="column" alignItems="center">
+                          <Grid item>
+                            <img src={equalityCubeIcon} alt="Equality Cube" />
+                          </Grid>
+                          <Grid item>Equality&nbsp;(%)</Grid>
+                        </Grid>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Grid container direction="column" alignItems="center">
+                          <Grid item>
+                            <img src={hexaCubeIcon} alt="Hexa Cube" />
+                          </Grid>
+                          <Grid item>Hexa (%)</Grid>
+                        </Grid>
+                      </TableCell>
+                      <TableCell align="center">Remove</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row) => (
+                      <TableRow key={row.id}>
+                        <TableCell align="center">{row.line1}</TableCell>
+                        <TableCell align="center">{row.line2}</TableCell>
+                        <TableCell align="center">{row.line3}</TableCell>
+                        <TableCell align="center">{`${
+                          row.red * 100
+                        }%`}</TableCell>
+                        <TableCell align="center">{`${
+                          row.black * 100
+                        }%`}</TableCell>
+                        <TableCell align="center">{`${
+                          row.equality * 100
+                        }%`}</TableCell>
+                        <TableCell align="center">{`${
+                          row.hexa * 100
+                        }%`}</TableCell>
+                        <TableCell align="center">
+                          <IconButton
+                            className={classes.button}
+                            onClick={() => {
+                              handleRemoveItem(row.id);
+                            }}
+                            color="primary"
+                            aria-label="Remove Item"
+                          >
+                            <Clear />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </Grid>
+          </Grid>
         </TableContainer>
       </Paper>
       <Paper>
@@ -942,7 +2029,7 @@ export default function PotentialTable() {
           3. Hexacube numbers might are slightly over estimate since it does not
           account for combinations without the first line.
         </Typography>
-        <WhiteTextTypography color="FFFFFF">
+        <WhiteTextTypography color="textPrimary">
           This coding project is a prime example of why you need UI/UX designers
           and why I do backend
         </WhiteTextTypography>
@@ -969,6 +2056,6 @@ export default function PotentialTable() {
           NaN input bug fixed by https://github.com/hehai123/cube_calc
         </Typography>
       </Paper>
-    </div>
+    </>
   );
 }
