@@ -1751,22 +1751,22 @@ export default function PotentialTable() {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell align="center">
+                      {/* <TableCell align="center">
                         <div>Probability&nbsp;(1&nbsp;in&nbsp;x)</div>
                         <div>
                           <span style={{ color: "red", fontWeight: "bold" }}>
                             (Old)
                           </span>
                         </div>
-                      </TableCell>
-                      <TableCell align="center">
+                      </TableCell> */}
+                      {/* <TableCell align="center">
                         <div>Probability&nbsp;(%){"\n"}</div>
                         <div>
                           <span style={{ color: "red", fontWeight: "bold" }}>
                             (Old)
                           </span>
                         </div>
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -1796,12 +1796,12 @@ export default function PotentialTable() {
                         )}{" "}
                         cubes
                       </TableCell>
-                      <TableCell align="center">{`One in ${formatNumberWithCommas(
+                      {/* <TableCell align="center">{`One in ${formatNumberWithCommas(
                         (1 / getTotalRedPercentages()).toFixed(CUBE_DECIMAL)
-                      )} red cubes`}</TableCell>
-                      <TableCell align="center">{`${(
+                      )} red cubes`}</TableCell> */}
+                      {/* <TableCell align="center">{`${(
                         getTotalRedPercentages() * 100
-                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell>
+                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell> */}
                     </TableRow>
                     <TableRow>
                       <TableCell align="center">
@@ -1831,12 +1831,12 @@ export default function PotentialTable() {
                         )}{" "}
                         cubes
                       </TableCell>
-                      <TableCell align="center">{`One in ${formatNumberWithCommas(
+                      {/* <TableCell align="center">{`One in ${formatNumberWithCommas(
                         (1 / getTotalBlackPercentages()).toFixed(CUBE_DECIMAL)
                       )} black cubes`}</TableCell>
                       <TableCell align="center">{`${(
                         getTotalBlackPercentages() * 100
-                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell>
+                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell> */}
                     </TableRow>
                     <TableRow>
                       <TableCell align="center">
@@ -1866,14 +1866,14 @@ export default function PotentialTable() {
                         )}{" "}
                         cubes
                       </TableCell>
-                      <TableCell align="center">{`One in ${formatNumberWithCommas(
+                      {/* <TableCell align="center">{`One in ${formatNumberWithCommas(
                         (1 / getTotalEqualityPercentages()).toFixed(
                           CUBE_DECIMAL
                         )
-                      )} equality cubes`}</TableCell>
-                      <TableCell align="center">{`${(
+                      )} equality cubes`}</TableCell> */}
+                      {/* <TableCell align="center">{`${(
                         getTotalEqualityPercentages() * 100
-                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell>
+                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell> */}
                     </TableRow>
                     <TableRow>
                       <TableCell align="center">
@@ -1901,12 +1901,12 @@ export default function PotentialTable() {
                         )}{" "}
                         cubes
                       </TableCell>
-                      <TableCell align="center">{`One in ${formatNumberWithCommas(
+                      {/* <TableCell align="center">{`One in ${formatNumberWithCommas(
                         (1 / getTotalHexaPercentages()).toFixed(CUBE_DECIMAL)
-                      )} hexa cubes`}</TableCell>
-                      <TableCell align="center">{`${(
+                      )} hexa cubes`}</TableCell> */}
+                      {/* <TableCell align="center">{`${(
                         getTotalHexaPercentages() * 100
-                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell>
+                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell> */}
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -1922,7 +1922,7 @@ export default function PotentialTable() {
               marginRight: isMobile ? "10px" : "0",
             }}
           >
-            <Grid item xs={12} sm={12} md={12}>
+            {/* <Grid item xs={12} sm={12} md={12}>
               <div style={{ minWidth: "1000px" }}>
                 <Table className={classes.table} aria-label="spanning table">
                   <TableHead>
@@ -2012,7 +2012,7 @@ export default function PotentialTable() {
                   </TableBody>
                 </Table>
               </div>
-            </Grid>
+            </Grid> */}
           </Grid>
         </TableContainer>
       </Paper>
@@ -2025,10 +2025,10 @@ export default function PotentialTable() {
           2. Hexacube lines assume that the first line is the first line of a
           red cube, line 2/4 is a second line, and lines 3/5/6 are third lines.
         </Typography>
-        <Typography align="left" className={classes.textBuffer}>
+        {/* <Typography align="left" className={classes.textBuffer}>
           3. Hexacube numbers might are slightly over estimate since it does not
           account for combinations without the first line.
-        </Typography>
+        </Typography> */}
         <WhiteTextTypography color="textPrimary">
           This coding project is a prime example of why you need UI/UX designers
           and why I do backend
@@ -2050,10 +2050,10 @@ export default function PotentialTable() {
           </a>
         </Typography>
         <Typography>
-          Updated to newest KMS cube rates as of 4 December 2022
+          Updated to newest KMS cube rates as of whatever the newest one was recently in 2023 idk
         </Typography>
         <Typography>
-          NaN input bug fixed by https://github.com/hehai123/cube_calc
+          NaN input bug, CSS, Cube Rates for shitty lines fixed by https://github.com/hehai123/cube_calc
         </Typography>
       </Paper>
     </>
