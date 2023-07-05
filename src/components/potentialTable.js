@@ -502,13 +502,7 @@ export default function PotentialTable() {
         return 1;
       } else {
         // If the values are equal, compare the string parts
-        if (stringA > stringB) {
-          return -1;
-        } else if (stringA < stringB) {
-          return 1;
-        } else {
-          return 0;
-        }
+        return stringA.localeCompare(stringB);
       }
     });
 
