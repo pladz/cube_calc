@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/cube_calc/static/css/main.1635e87c.chunk.css",
-    "main.js": "/cube_calc/static/js/main.1e487629.chunk.js",
-    "main.js.map": "/cube_calc/static/js/main.1e487629.chunk.js.map",
-    "runtime-main.js": "/cube_calc/static/js/runtime-main.c63ff848.js",
-    "runtime-main.js.map": "/cube_calc/static/js/runtime-main.c63ff848.js.map",
-    "static/js/2.18227dc5.chunk.js": "/cube_calc/static/js/2.18227dc5.chunk.js",
-    "static/js/2.18227dc5.chunk.js.map": "/cube_calc/static/js/2.18227dc5.chunk.js.map",
-    "static/js/3.87207119.chunk.js": "/cube_calc/static/js/3.87207119.chunk.js",
-    "static/js/3.87207119.chunk.js.map": "/cube_calc/static/js/3.87207119.chunk.js.map",
+    "main.css": "/cube_calc/static/css/main.5739ad41.chunk.css",
+    "main.js": "/cube_calc/static/js/main.2c13465a.chunk.js",
+    "main.js.map": "/cube_calc/static/js/main.2c13465a.chunk.js.map",
+    "runtime-main.js": "/cube_calc/static/js/runtime-main.bc06c0ae.js",
+    "runtime-main.js.map": "/cube_calc/static/js/runtime-main.bc06c0ae.js.map",
+    "static/js/2.715bc5fb.chunk.js": "/cube_calc/static/js/2.715bc5fb.chunk.js",
+    "static/js/2.715bc5fb.chunk.js.map": "/cube_calc/static/js/2.715bc5fb.chunk.js.map",
+    "static/js/3.26574d55.chunk.js": "/cube_calc/static/js/3.26574d55.chunk.js",
+    "static/js/3.26574d55.chunk.js.map": "/cube_calc/static/js/3.26574d55.chunk.js.map",
     "index.html": "/cube_calc/index.html",
-    "static/css/main.1635e87c.chunk.css.map": "/cube_calc/static/css/main.1635e87c.chunk.css.map",
-    "static/js/2.18227dc5.chunk.js.LICENSE.txt": "/cube_calc/static/js/2.18227dc5.chunk.js.LICENSE.txt",
+    "static/css/main.5739ad41.chunk.css.map": "/cube_calc/static/css/main.5739ad41.chunk.css.map",
+    "static/js/2.715bc5fb.chunk.js.LICENSE.txt": "/cube_calc/static/js/2.715bc5fb.chunk.js.LICENSE.txt",
     "static/media/daybreakPendant.2fe1f030.png": "/cube_calc/static/media/daybreakPendant.2fe1f030.png",
     "static/media/logo.6ce24c58.svg": "/cube_calc/static/media/logo.6ce24c58.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.c63ff848.js",
-    "static/js/2.18227dc5.chunk.js",
-    "static/css/main.1635e87c.chunk.css",
-    "static/js/main.1e487629.chunk.js"
+    "static/js/runtime-main.bc06c0ae.js",
+    "static/js/2.715bc5fb.chunk.js",
+    "static/css/main.5739ad41.chunk.css",
+    "static/js/main.2c13465a.chunk.js"
   ]
 }
