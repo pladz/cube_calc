@@ -14,7 +14,7 @@ All rates in this simulation are taken from KMS rates
 
 Update 17/5/21,
 
--Fixed three line boss appearing, added multiple stats to select for
+- Fixed three line boss appearing, added multiple stats to select for
 
 As of 15/5/21,
 
@@ -29,14 +29,14 @@ This simulation can:
 
 26/7/22
 
--NaN bug fixed by https://github.com/hehai123/ (thanks)
+- NaN bug fixed by https://github.com/hehai123/ (thanks)
 
 4/12/22
 
--Removed 30% boss lines from prime lines as per update
+- Removed 30% boss lines from prime lines as per update
 
 6/7/23
 
--Fixed hexa cube probability
--Boss damage, Ignore Enemy Defense (IED), Item drop rate, Chance of ignoring damage by a certain percentage, and Chance of being invincible for a certain duration are now limited to a maximum of two occurrences.
--Decent skills and Invincibility time increase options are limited to a single occurrence.
+- Fixed hexa cube probability
+- Boss damage, Ignore Enemy Defense (IED), Item drop rate, Chance of ignoring damage by a certain percentage, and Chance of being invincible for a certain duration are now limited to a maximum of two occurrences.
+- Decent skills and Invincibility time increase options are limited to a single occurrence.
