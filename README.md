@@ -38,5 +38,5 @@ This simulation can:
 6/7/23
 
 - Fixed hexa cube probability
-- Boss damage, Ignore Enemy Defense (IED), Item drop rate, Chance of ignoring damage, and Chance of being invincible are now limited to a maximum of two occurrences.
-- Decent skills and Invincibility time increase options are limited to a single occurrence.
+- Boss damage, Ignore Enemy Defense (IED), Item drop rate, Chance of ignoring damage, and Chance of being invincible are now limited to a maximum of two occurrences
+- Decent skills and Invincibility time increase options are limited to a single occurrence
