@@ -7,6 +7,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Collapse,
   Typography,
   TableContainer,
   Table,
@@ -21,6 +22,7 @@ import {
   DialogTitle,
   DialogContent,
   Button,
+  ButtonBase,
   Container,
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -32,6 +34,7 @@ import {
   HelpOutline,
   FastForward,
   LineStyle,
+  ExpandLess,
 } from "@material-ui/icons";
 import {
   hatLines,
@@ -94,8 +97,8 @@ import hexaCubeIcon from "./icons/hexa_clean.png";
 import { display } from "@material-ui/system";
 
 //CSS
-const DECIMAL_PRECISION = 6; // for % display
-const CUBE_DECIMAL = 2; // for one in x cubes display
+const DECIMAL_PRECISION = 5; // for % display
+const CUBE_DECIMAL = 1; // for one in x cubes display
 const useStyles = makeStyles((theme) => ({
   avatar: {
     width: theme.spacing(15),
@@ -151,15 +154,51 @@ const useStyles = makeStyles((theme) => ({
     margin: "5px",
   },
   paper: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(0.5),
     margin: "0 5px",
     textAlign: "center",
     backgroundColor: "#D6E4FF",
+    height: "90%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  boldText: {
+    color: "magenta",
+    fontWeight: "bold",
   },
   container: {
     display: "flex",
     justifyContent: "space-between",
     padding: "0",
+  },
+  table: {
+    width: "100%",
+  },
+  cellContent: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  tableCell: {
+    textAlign: "center",
+  },
+  "@media (max-width: 768px)": {
+    cellContent: {
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    container: {
+      overflowX: "auto",
+    },
+    table: {
+      tableLayout: "auto",
+    },
+    tableCell: {
+      padding: theme.spacing(1.3),
+      textAlign: "center",
+    },
   },
 }));
 
@@ -281,6 +320,12 @@ export default function PotentialTable() {
 
   const handleHelpClose = (value) => {
     setHelpOpen(false);
+  };
+
+  // Optional stats filter show or hide
+  const [secondOptionExpand, setSecondOptionExpand] = useState(true);
+  const handleToggleExpand = () => {
+    setSecondOptionExpand((secondOptionExpand) => !secondOptionExpand);
   };
 
   const safeParseInt = (value) => {
@@ -515,23 +560,15 @@ export default function PotentialTable() {
 
   const usefulLineWeightSum = (line, filteredArray) => {
     return line.reduce((accumulator, line) => {
-      if (!checkSecondCriterion) {
-        if (
-          line.type === typeOneInputValue ||
-          (line.type === "AS" && acceptAS1) ||
-          filteredArray.includes(line.type)
-        ) {
-          return accumulator + line.weight;
-        }
-      } else if (checkSecondCriterion) {
-        if (
-          line.type === typeOneInputValue ||
-          line.type === typeTwoInputValue ||
-          (line.type === "AS" && (acceptAS1 || acceptAS2)) ||
-          filteredArray.includes(line.type)
-        ) {
-          return accumulator + line.weight;
-        }
+      if (
+        line.type === typeOneInputValue ||
+        (line.type === "AS" && acceptAS1) ||
+        (checkSecondCriterion &&
+          (line.type === typeTwoInputValue ||
+            (line.type === "AS" && acceptAS2))) ||
+        filteredArray.includes(line.type)
+      ) {
+        return accumulator + line.weight;
       }
       return accumulator;
     }, 0);
@@ -651,15 +688,12 @@ export default function PotentialTable() {
     // Legend line options
     tempLines.forEach((line) => {
       if (
-        (!checkSecondCriterion &&
-          (line.type === typeOneInputValue ||
-            (line.type === "AS" && acceptAS1) ||
-            specialLines.includes(line.type))) ||
+        line.type === typeOneInputValue ||
+        (line.type === "AS" && acceptAS1) ||
         (checkSecondCriterion &&
-          (line.type === typeOneInputValue ||
-            line.type === typeTwoInputValue ||
-            (line.type === "AS" && (acceptAS1 || acceptAS2)) ||
-            specialLines.includes(line.type)))
+          (line.type === typeTwoInputValue ||
+            (line.type === "AS" && acceptAS2))) ||
+        specialLines.includes(line.type)
       ) {
         if (lineNumber === 1) {
           mappedLines.push({ ...line, totalWeight: totalWeights });
@@ -682,77 +716,41 @@ export default function PotentialTable() {
     // Unique line options
     if (lineNumber !== 1) {
       tempLines2.forEach((line) => {
-        if (!checkSecondCriterion) {
-          if (
-            line.type === typeOneInputValue ||
-            (line.type === "AS" && acceptAS1) ||
-            specialLines.includes(line.type)
-          ) {
-            if (lineNumber === 2) {
-              if (cubeType === "Red") {
-                mappedLines.push({
-                  ...line,
-                  weight: line.weight * (red2 - 1),
-                  totalWeight: totalWeights2 * red2,
-                });
-              } else if (cubeType === "Black") {
-                mappedLines.push({
-                  ...line,
-                  weight: line.weight * (black2 - 1),
-                  totalWeight: totalWeights2 * black2,
-                });
-              }
-            } else if (lineNumber === 3) {
-              if (cubeType === "Red") {
-                mappedLines.push({
-                  ...line,
-                  weight: line.weight * (red3 - 1),
-                  totalWeight: totalWeights2 * red3,
-                });
-              } else if (cubeType === "Black") {
-                mappedLines.push({
-                  ...line,
-                  weight: line.weight * (black3 - 1),
-                  totalWeight: totalWeights2 * black3,
-                });
-              }
+        if (
+          line.type === typeOneInputValue ||
+          (line.type === "AS" && acceptAS1) ||
+          (checkSecondCriterion &&
+            (line.type === typeTwoInputValue ||
+              (line.type === "AS" && acceptAS2))) ||
+          specialLines.includes(line.type)
+        ) {
+          if (lineNumber === 2) {
+            if (cubeType === "Red") {
+              mappedLines.push({
+                ...line,
+                weight: line.weight * (red2 - 1),
+                totalWeight: totalWeights2 * red2,
+              });
+            } else if (cubeType === "Black") {
+              mappedLines.push({
+                ...line,
+                weight: line.weight * (black2 - 1),
+                totalWeight: totalWeights2 * black2,
+              });
             }
-          } else if (checkSecondCriterion) {
-            if (
-              line.type === typeOneInputValue ||
-              line.type === typeTwoInputValue ||
-              (line.type === "AS" && (acceptAS1 || acceptAS2)) ||
-              specialLines.includes(line.type)
-            ) {
-              if (lineNumber === 2) {
-                if (cubeType === "Red") {
-                  mappedLines.push({
-                    ...line,
-                    weight: line.weight * (red2 - 1),
-                    totalWeight: totalWeights2 * red2,
-                  });
-                } else if (cubeType === "Black") {
-                  mappedLines.push({
-                    ...line,
-                    weight: line.weight * (black2 - 1),
-                    totalWeight: totalWeights2 * black2,
-                  });
-                }
-              } else if (lineNumber === 3) {
-                if (cubeType === "Red") {
-                  mappedLines.push({
-                    ...line,
-                    weight: line.weight * (red3 - 1),
-                    totalWeight: totalWeights2 * red3,
-                  });
-                } else if (cubeType === "Black") {
-                  mappedLines.push({
-                    ...line,
-                    weight: line.weight * (black3 - 1),
-                    totalWeight: totalWeights2 * black3,
-                  });
-                }
-              }
+          } else if (lineNumber === 3) {
+            if (cubeType === "Red") {
+              mappedLines.push({
+                ...line,
+                weight: line.weight * (red3 - 1),
+                totalWeight: totalWeights2 * red3,
+              });
+            } else if (cubeType === "Black") {
+              mappedLines.push({
+                ...line,
+                weight: line.weight * (black3 - 1),
+                totalWeight: totalWeights2 * black3,
+              });
             }
           }
         }
@@ -1185,6 +1183,7 @@ export default function PotentialTable() {
       for (const l2 of line2) {
         const addedLine2 = l2.type;
         currentLines.push(addedLine2);
+
         const line3 = potentialLineFormat(currentLines, "Black", 3);
         for (const l3 of line3) {
           totalProbability += cubeProbabiltyCalc(l1, l2, l3);
@@ -1472,7 +1471,7 @@ export default function PotentialTable() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          width: "100%",
+          width: "96%",
           maxWidth: "1100px",
           margin: "10px auto",
         }}
@@ -1483,9 +1482,9 @@ export default function PotentialTable() {
         >
           <Box
             style={{
-              width: "50%",
               padding: "10px",
-              flexBasis: "100%",
+              flex: isMobile ? "0 0 100%" : "0 1 50%",
+              boxSizing: "border-box",
             }}
           >
             <Autocomplete
@@ -1508,19 +1507,15 @@ export default function PotentialTable() {
               )}
             />
           </Box>
-          <Box
-            style={{
-              width: "50%",
-              padding: "10px",
-              flexBasis: "100%",
-            }}
-          >
-            {inputValue === "Glove" ? (
-              <Grid
-                container
-                justify="space-around"
-                alignContent="space-around"
-              >
+          {inputValue === "Glove" ? (
+            <Box
+              style={{
+                padding: "10px",
+                flex: isMobile ? "0 0 100%" : "0 1 50%",
+                boxSizing: "border-box",
+              }}
+            >
+              <Grid container>
                 <Grid item xs={6}>
                   <Paper className={classes.paper}>
                     16% Crit -&gt; 1 in 43 Equality
@@ -1532,12 +1527,16 @@ export default function PotentialTable() {
                   </Paper>
                 </Grid>
               </Grid>
-            ) : inputValue === "Hat" ? (
-              <Grid
-                container
-                justify="space-around"
-                alignContent="space-around"
-              >
+            </Box>
+          ) : inputValue === "Hat" ? (
+            <Box
+              style={{
+                padding: "10px",
+                flex: isMobile ? "0 0 100%" : "0 1 50%",
+                boxSizing: "border-box",
+              }}
+            >
+              <Grid container>
                 <Grid item xs={6}>
                   <Paper className={classes.paper}>
                     At least 3s CDR -&gt; 1 in 44 Equality
@@ -1549,8 +1548,8 @@ export default function PotentialTable() {
                   </Paper>
                 </Grid>
               </Grid>
-            ) : null}
-          </Box>
+            </Box>
+          ) : null}
         </Container>
         <Container className={classes.container}>
           {inputValue === "" ? (
@@ -1608,9 +1607,9 @@ export default function PotentialTable() {
               >
                 <Box
                   style={{
-                    width: "50%",
                     padding: "10px",
-                    flexBasis: "100%",
+                    flex: isMobile ? "0 0 100%" : "0 1 50%",
+                    boxSizing: "border-box",
                   }}
                 >
                   <Typography align="center">{`I want a combination of`}</Typography>
@@ -1645,15 +1644,32 @@ export default function PotentialTable() {
                     )}
                   />
                 </Box>
-                <Box
-                  style={{
-                    width: "50%",
-                    padding: "10px",
-                    flexBasis: "100%",
-                  }}
-                >
-                  {xOneInputValue === 0 || typeOneInputValue === "" ? null : (
-                    <>
+                {isMobile &&
+                  !(xOneInputValue === 0 || typeOneInputValue === "") && (
+                    <ButtonBase
+                      focusRipple
+                      centerRipple
+                      style={{ flexBasis: "100%" }}
+                      onClick={handleToggleExpand}
+                    >
+                      {secondOptionExpand ? <ExpandLess /> : <ExpandMore />}
+                    </ButtonBase>
+                  )}
+
+                {!(xOneInputValue === 0 || typeOneInputValue === "") && (
+                  <Collapse
+                    in={secondOptionExpand}
+                    style={{
+                      flex: isMobile ? "0 0 100%" : "0 1 50%",
+                    }}
+                  >
+                    <Box
+                      style={{
+                        padding: "10px",
+                        flex: isMobile ? "0 0 100%" : "0 1 50%",
+                        boxSizing: "border-box",
+                      }}
+                    >
                       <Typography align="center">{`as well as (leave blank if not required)`}</Typography>
                       <TextField
                         id="outlined-basic"
@@ -1685,9 +1701,9 @@ export default function PotentialTable() {
                           />
                         )}
                       />
-                    </>
-                  )}
-                </Box>
+                    </Box>
+                  </Collapse>
+                )}
               </Container>
               <Box
                 style={{
@@ -1702,13 +1718,13 @@ export default function PotentialTable() {
                   size="large"
                   fullWidth
                   onClick={() => {
-                    clearRows();
-                    addIfMoreThanStat(
-                      xOneInputValue,
-                      typeOneInputValue,
-                      xTwoInputValue,
-                      typeTwoInputValue
-                    );
+                    // clearRows();
+                    // addIfMoreThanStat(
+                    //   xOneInputValue,
+                    //   typeOneInputValue,
+                    //   xTwoInputValue,
+                    //   typeTwoInputValue
+                    // );
                     newProbCalc();
                   }}
                 >
@@ -1722,298 +1738,117 @@ export default function PotentialTable() {
       {/* </AccordionSummary>
       </Accordion> */}
 
-      <Paper elevation={2} className="container">
-        <TableContainer component={Paper}>
-          <Grid container justify="center" style={{ marginTop: "10px" }}>
-            <Grid style={{ border: "1px solid black", overflowX: "auto" }}>
-              <div style={{ minWidth: "600px" }}>
-                <Table className={classes.table}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="center">Cube Type</TableCell>
-                      <TableCell align="center">
-                        <div>Probability&nbsp;(%)</div>
-                        <div>
-                          <span
-                            style={{ color: "magenta", fontWeight: "bold" }}
-                          >
-                            (Updated)
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell align="center">
-                        <div>Probability&nbsp;(1&nbsp;in&nbsp;x)</div>
-                        <div>
-                          <span
-                            style={{ color: "magenta", fontWeight: "bold" }}
-                          >
-                            (Updated)
-                          </span>
-                        </div>
-                      </TableCell>
-                      {/* <TableCell align="center">
-                        <div>Probability&nbsp;(1&nbsp;in&nbsp;x)</div>
-                        <div>
-                          <span style={{ color: "red", fontWeight: "bold" }}>
-                            (Old)
-                          </span>
-                        </div>
-                      </TableCell> */}
-                      {/* <TableCell align="center">
-                        <div>Probability&nbsp;(%){"\n"}</div>
-                        <div>
-                          <span style={{ color: "red", fontWeight: "bold" }}>
-                            (Old)
-                          </span>
-                        </div>
-                      </TableCell> */}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center">
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
-                          <span>Red Cube</span>
-                          <img height="25px" src={redCubeIcon} />
-                        </div>
-                      </TableCell>
-                      <TableCell align="center">
-                        {(redProbability * 100).toPrecision(DECIMAL_PRECISION)}
-                        &nbsp;%
-                      </TableCell>
-                      <TableCell align="center">
-                        One in{" "}
-                        {redCubeNumber !== 0 ? (
-                          <b>{formatNumberWithCommas(redCubeNumber)}</b>
-                        ) : (
-                          "Infinite"
-                        )}{" "}
-                        cubes
-                      </TableCell>
-                      {/* <TableCell align="center">{`One in ${formatNumberWithCommas(
-                        (1 / getTotalRedPercentages()).toFixed(CUBE_DECIMAL)
-                      )} red cubes`}</TableCell> */}
-                      {/* <TableCell align="center">{`${(
-                        getTotalRedPercentages() * 100
-                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell> */}
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="center">
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
-                          <span>Black&nbsp;Cube</span>
-                          <img height="25px" src={blackCubeIcon} />
-                        </div>
-                      </TableCell>
-                      <TableCell align="center">
-                        {(blackProbability * 100).toPrecision(
-                          DECIMAL_PRECISION
-                        )}
-                        &nbsp;%
-                      </TableCell>
-                      <TableCell align="center">
-                        One in{" "}
-                        {blackCubeNumber !== 0 ? (
-                          <b>{formatNumberWithCommas(blackCubeNumber)}</b>
-                        ) : (
-                          "Infinite"
-                        )}{" "}
-                        cubes
-                      </TableCell>
-                      {/* <TableCell align="center">{`One in ${formatNumberWithCommas(
-                        (1 / getTotalBlackPercentages()).toFixed(CUBE_DECIMAL)
-                      )} black cubes`}</TableCell>
-                      <TableCell align="center">{`${(
-                        getTotalBlackPercentages() * 100
-                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell> */}
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="center">
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
-                          <span>Equality&nbsp;Cube</span>
-                          <img height="25px" src={equalityCubeIcon} />
-                        </div>
-                      </TableCell>
-                      <TableCell align="center">
-                        {(equalityProbability * 100).toPrecision(
-                          DECIMAL_PRECISION
-                        )}
-                        &nbsp;%
-                      </TableCell>
-                      <TableCell align="center">
-                        One in{" "}
-                        {equalityCubeNumber !== 0 ? (
-                          <b>{formatNumberWithCommas(equalityCubeNumber)}</b>
-                        ) : (
-                          "Infinite"
-                        )}{" "}
-                        cubes
-                      </TableCell>
-                      {/* <TableCell align="center">{`One in ${formatNumberWithCommas(
-                        (1 / getTotalEqualityPercentages()).toFixed(
-                          CUBE_DECIMAL
-                        )
-                      )} equality cubes`}</TableCell> */}
-                      {/* <TableCell align="center">{`${(
-                        getTotalEqualityPercentages() * 100
-                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell> */}
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="center">
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
-                          <span>Hexa Cube</span>
-                          <img height="25px" src={hexaCubeIcon} />
-                        </div>
-                      </TableCell>
-                      <TableCell align="center">
-                        {(hexaProbability * 100).toPrecision(DECIMAL_PRECISION)}
-                        &nbsp;%
-                      </TableCell>
-                      <TableCell align="center">
-                        One in{" "}
-                        {hexaCubeNumber !== 0 ? (
-                          <b>{formatNumberWithCommas(hexaCubeNumber)}</b>
-                        ) : (
-                          "Infinite"
-                        )}{" "}
-                        cubes
-                      </TableCell>
-                      {/* <TableCell align="center">{`One in ${formatNumberWithCommas(
-                        (1 / getTotalHexaPercentages()).toFixed(CUBE_DECIMAL)
-                      )} hexa cubes`}</TableCell> */}
-                      {/* <TableCell align="center">{`${(
-                        getTotalHexaPercentages() * 100
-                      ).toPrecision(DECIMAL_PRECISION)} %`}</TableCell> */}
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            justify="center"
-            style={{
-              marginTop: "20px",
-              marginLeft: isMobile ? "10px" : "0",
-              marginRight: isMobile ? "10px" : "0",
-            }}
-          >
-            {/* <Grid item xs={12} sm={12} md={12}>
-              <div style={{ minWidth: "1000px" }}>
-                <Table className={classes.table} aria-label="spanning table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="center" colSpan={3}>
-                        Lines
-                      </TableCell>
-                      <TableCell align="center" colSpan={4}>
-                        Percentages{" "}
-                        <span style={{ color: "red", fontWeight: "bold" }}>
-                          (old)
-                        </span>
-                      </TableCell>
-                      <TableCell align="center">Actions</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="center">Line 1</TableCell>
-                      <TableCell align="center">Line 2</TableCell>
-                      <TableCell align="center">Line 3</TableCell>
-                      <TableCell align="center">
-                        <Grid container direction="column" alignItems="center">
-                          <Grid item>
-                            <img src={redCubeIcon} alt="Red Cube" />
-                          </Grid>
-                          <Grid item>&nbsp;Red (%)</Grid>
-                        </Grid>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Grid container direction="column" alignItems="center">
-                          <Grid item>
-                            <img src={blackCubeIcon} alt="Black Cube" />
-                          </Grid>
-                          <Grid item>Black (%)</Grid>
-                        </Grid>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Grid container direction="column" alignItems="center">
-                          <Grid item>
-                            <img src={equalityCubeIcon} alt="Equality Cube" />
-                          </Grid>
-                          <Grid item>Equality&nbsp;(%)</Grid>
-                        </Grid>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Grid container direction="column" alignItems="center">
-                          <Grid item>
-                            <img src={hexaCubeIcon} alt="Hexa Cube" />
-                          </Grid>
-                          <Grid item>Hexa (%)</Grid>
-                        </Grid>
-                      </TableCell>
-                      <TableCell align="center">Remove</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row) => (
-                      <TableRow key={row.id}>
-                        <TableCell align="center">{row.line1}</TableCell>
-                        <TableCell align="center">{row.line2}</TableCell>
-                        <TableCell align="center">{row.line3}</TableCell>
-                        <TableCell align="center">{`${
-                          row.red * 100
-                        }%`}</TableCell>
-                        <TableCell align="center">{`${
-                          row.black * 100
-                        }%`}</TableCell>
-                        <TableCell align="center">{`${
-                          row.equality * 100
-                        }%`}</TableCell>
-                        <TableCell align="center">{`${
-                          row.hexa * 100
-                        }%`}</TableCell>
-                        <TableCell align="center">
-                          <IconButton
-                            className={classes.button}
-                            onClick={() => {
-                              handleRemoveItem(row.id);
-                            }}
-                            color="primary"
-                            aria-label="Remove Item"
-                          >
-                            <Clear />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </Grid> */}
-          </Grid>
+      <Paper
+        elevation={2}
+        className="container"
+        style={{
+          width: "96%",
+          maxWidth: "600px",
+          margin: "10px auto",
+        }}
+      >
+        <TableContainer>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.tableCell}>Cube Type</TableCell>
+                <TableCell className={classes.tableCell}>
+                  Probability&nbsp;(%)
+                  <div className={classes.boldText}>(Updated)</div>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  Probability&nbsp;(1&nbsp;in&nbsp;x)
+                  <div className={classes.boldText}>(Updated)</div>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell className={classes.tableCell}>
+                  <div className={classes.cellContent}>
+                    <span>Red Cube</span>
+                    <img height="25px" src={redCubeIcon} />
+                  </div>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  {(redProbability * 100).toPrecision(DECIMAL_PRECISION)}
+                  &nbsp;%
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  One in{" "}
+                  {redCubeNumber !== 0 ? (
+                    <b>{formatNumberWithCommas(redCubeNumber)}</b>
+                  ) : (
+                    "Infinite"
+                  )}{" "}
+                  cubes
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className={classes.tableCell}>
+                  <div className={classes.cellContent}>
+                    <span>Black&nbsp;Cube</span>
+                    <img height="25px" src={blackCubeIcon} />
+                  </div>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  {(blackProbability * 100).toPrecision(DECIMAL_PRECISION)}
+                  &nbsp;%
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  One in{" "}
+                  {blackCubeNumber !== 0 ? (
+                    <b>{formatNumberWithCommas(blackCubeNumber)}</b>
+                  ) : (
+                    "Infinite"
+                  )}{" "}
+                  cubes
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className={classes.tableCell}>
+                  <div className={classes.cellContent}>
+                    <span>Equality&nbsp;Cube</span>
+                    <img height="25px" src={equalityCubeIcon} />
+                  </div>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  {(equalityProbability * 100).toPrecision(DECIMAL_PRECISION)}
+                  &nbsp;%
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  One in{" "}
+                  {equalityCubeNumber !== 0 ? (
+                    <b>{formatNumberWithCommas(equalityCubeNumber)}</b>
+                  ) : (
+                    "Infinite"
+                  )}{" "}
+                  cubes
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className={classes.tableCell}>
+                  <div className={classes.cellContent}>
+                    <span>Hexa Cube</span>
+                    <img height="25px" src={hexaCubeIcon} />
+                  </div>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  {(hexaProbability * 100).toPrecision(DECIMAL_PRECISION)}
+                  &nbsp;%
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  One in{" "}
+                  {hexaCubeNumber !== 0 ? (
+                    <b>{formatNumberWithCommas(hexaCubeNumber)}</b>
+                  ) : (
+                    "Infinite"
+                  )}{" "}
+                  cubes
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </TableContainer>
       </Paper>
       <Paper>
@@ -2050,10 +1885,19 @@ export default function PotentialTable() {
           </a>
         </Typography>
         <Typography>
-          Updated to newest KMS cube rates as of whatever the newest one was recently in 2023 idk
+          Updated to reflect the potential lines changes in the{" "}
+          <a
+            href="http://www.maplesea.com/updates/view/v209_patch_notes"
+            target="_blank"
+            rel="noreferrer"
+          >
+            ON AIR v209
+          </a>{" "}
+          patch for MapleSEA.
         </Typography>
         <Typography>
-          NaN input bug, CSS, Cube Rates for shitty lines fixed by https://github.com/hehai123/cube_calc
+          NaN input bug, CSS, Cube Rates for shitty lines fixed by
+          https://github.com/hehai123/cube_calc
         </Typography>
       </Paper>
     </>
