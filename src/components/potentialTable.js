@@ -24,6 +24,9 @@ import {
   Button,
   ButtonBase,
   Container,
+  Switch,
+  FormGroup,
+  FormControlLabel,
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {
@@ -91,7 +94,9 @@ import { useHistory } from "react-router-dom";
 
 import purpleCubeIcon from "./icons/purple_clean.png";
 import blackCubeIcon from "./icons/black_clean.png";
+import choiceCubeIcon from "./icons/Choice_Cube.png";
 import redCubeIcon from "./icons/red_clean.png";
+import regularCubeIcon from "./icons/Regular_Cube.png";
 import equalityCubeIcon from "./icons/equality_clean.png";
 import hexaCubeIcon from "./icons/hexa_clean.png";
 import { display } from "@material-ui/system";
@@ -328,6 +333,8 @@ export default function PotentialTable() {
     setSecondOptionExpand((secondOptionExpand) => !secondOptionExpand);
   };
 
+  const [switchChecked, setSwitchChecked] = useState(false);
+
   const safeParseInt = (value) => {
     const num = parseInt(value);
     return isNaN(num) ? 0 : num;
@@ -452,13 +459,16 @@ export default function PotentialTable() {
       })
     );
 
-    let types = curLines.concat(curSubLines).map((option) => {
-      const type = option.type;
+    let types = curLines
+      .concat(curSubLines)
+      .map((option) => {
+        const type = option.type;
 
-      return {
-        type: type,
-      };
-    });
+        return {
+          type: type,
+        };
+      })
+      .filter((option) => !switchChecked || option.type !== "DEF");
 
     let result = types.filter(function ({ type }) {
       return !this.has(type) && this.add(type);
@@ -478,6 +488,7 @@ export default function PotentialTable() {
     setTypeOptionsTwo(options);
   }
 
+  /*
   function getTotalRedPercentages() {
     var totalRedPercentage = 0;
     rows.map((row) => (totalRedPercentage = totalRedPercentage + row.red));
@@ -517,6 +528,7 @@ export default function PotentialTable() {
 
     return perm1 * 6 + perm2 + perm3 * 3;
   }
+  */
 
   //============================================================= July 2023 ================================================================
 
@@ -660,6 +672,9 @@ export default function PotentialTable() {
       );
       specialLinesToRemove.push("Chance of being invincibile");
     }
+    if (switchChecked === true) {
+      specialLinesToRemove.push("DEF");
+    }
 
     // Remove line options if option limit is reached
     legendLineOp.forEach((line) => {
@@ -677,6 +692,8 @@ export default function PotentialTable() {
         tempLines2.push({ ...line });
       });
     }
+
+    // Remove def lines if toggle v225 is on
 
     const totalWeights = lineWeightSum(tempLines);
     const usefulWeight = usefulLineWeightSum(tempLines, specialLinesFiltered);
@@ -1203,6 +1220,14 @@ export default function PotentialTable() {
     newBlackCalc();
   };
 
+  const toggleSwitch = () => {
+    setSwitchChecked((prev) => !prev);
+  };
+
+  useEffect(() => {
+    updateLineOptions();
+    newProbCalc();
+  }, [switchChecked]);
   //============================================================= END ===============================================================
 
   function clearRows() {
@@ -1234,6 +1259,7 @@ export default function PotentialTable() {
     setCurHexaPercentage(hex1 * hex2 * hex3);
   }
 
+  /*
   function moreThanStat(x, type, line1, line2, line3) {
     let sum = 0;
     let acceptAllStat = false;
@@ -1265,7 +1291,8 @@ export default function PotentialTable() {
 
     return false;
   }
-
+  */
+  /*
   function addIfMoreThanStat(x1, type1, x2, type2) {
     let rowId = 0;
     lineOptions.forEach((line1, i) => {
@@ -1310,6 +1337,7 @@ export default function PotentialTable() {
       });
     });
   }
+  */
 
   useEffect(() => {
     const visited = localStorage["visited"];
@@ -1476,6 +1504,18 @@ export default function PotentialTable() {
           margin: "10px auto",
         }}
       >
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                color="primary"
+                checked={switchChecked}
+                onChange={toggleSwitch}
+              />
+            }
+            label="v225 and above"
+          />
+        </FormGroup>
         <Container
           className={classes.container}
           style={isMobile ? { flexWrap: "wrap" } : {}}
@@ -1766,8 +1806,22 @@ export default function PotentialTable() {
               <TableRow>
                 <TableCell className={classes.tableCell}>
                   <div className={classes.cellContent}>
-                    <span>Red Cube</span>
-                    <img height="25px" src={redCubeIcon} />
+                    <span>
+                      {switchChecked ? "Regular\u00a0Cube" : "Red\u00a0Cube"}
+                    </span>
+                    {switchChecked ? (
+                      <img
+                        style={{ height: "30px" }}
+                        src={regularCubeIcon}
+                        alt="Regular Cube"
+                      />
+                    ) : (
+                      <img
+                        style={{ height: "25px" }}
+                        src={redCubeIcon}
+                        alt="Red Cube"
+                      />
+                    )}
                   </div>
                 </TableCell>
                 <TableCell className={classes.tableCell}>
@@ -1787,8 +1841,22 @@ export default function PotentialTable() {
               <TableRow>
                 <TableCell className={classes.tableCell}>
                   <div className={classes.cellContent}>
-                    <span>Black&nbsp;Cube</span>
-                    <img height="25px" src={blackCubeIcon} />
+                    <span>
+                      {switchChecked ? "Choice\u00a0Cube" : "Black\u00a0Cube"}
+                    </span>
+                    {switchChecked ? (
+                      <img
+                        style={{ height: "35px" }}
+                        src={choiceCubeIcon}
+                        alt="Choice Cube"
+                      />
+                    ) : (
+                      <img
+                        style={{ height: "25px" }}
+                        src={blackCubeIcon}
+                        alt="Black Cube"
+                      />
+                    )}
                   </div>
                 </TableCell>
                 <TableCell className={classes.tableCell}>
