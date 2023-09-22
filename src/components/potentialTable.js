@@ -1955,11 +1955,11 @@ export default function PotentialTable() {
         <Typography>
           Updated to reflect the potential lines changes in the{" "}
           <a
-            href="http://www.maplesea.com/updates/view/v209_patch_notes"
+            href="http://www.maplesea.com/updates/view/v225_patch_notes"
             target="_blank"
             rel="noreferrer"
           >
-            ON AIR v209
+            Energize v225
           </a>{" "}
           patch for MapleSEA.
         </Typography>
