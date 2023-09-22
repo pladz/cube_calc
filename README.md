@@ -40,3 +40,7 @@ This simulation can:
 - Fixed hexa cube probability
 - Boss damage, Ignore Enemy Defense (IED), Item drop rate, Chance of ignoring damage, and Chance of being invincible are now limited to a maximum of two occurrences
 - Decent skills and Invincibility time increase options are limited to a single occurrence
+
+21/9/23
+
+- Added toggle option to reflect cube lines changes for v225: Def lines removed
