@@ -1225,7 +1225,7 @@ export default function PotentialTable() {
   };
 
   useEffect(() => {
-    updateLineOptions();
+    updateLineOptions(inputValue);
     newProbCalc();
   }, [switchChecked]);
   //============================================================= END ===============================================================
