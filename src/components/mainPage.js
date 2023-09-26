@@ -87,7 +87,7 @@ const MainPage = () => {
               </div>
             )}
           </div>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6" className={classes.title} align="center">
             Maple Math with <del>Shitty</del> Okay UI
           </Typography>
           <Button

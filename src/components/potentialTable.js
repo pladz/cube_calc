@@ -1928,23 +1928,19 @@ export default function PotentialTable() {
           2. Hexacube lines assume that the first line is the first line of a
           red cube, line 2/4 is a second line, and lines 3/5/6 are third lines.
         </Typography>
-        {/* <Typography align="left" className={classes.textBuffer}>
-          3. Hexacube numbers might are slightly over estimate since it does not
-          account for combinations without the first line.
-        </Typography> */}
         <WhiteTextTypography color="textPrimary">
           This coding project is a prime example of why you need UI/UX designers
           and why I do backend
         </WhiteTextTypography>
-        <Typography>
+        <Typography align="center">
           Contact pladz#1984 on discord for bugs, or Note Pladz in-game MapleSEA
         </Typography>
-        <Typography>
+        <Typography align="center">
           <a href="http://tiny.cc/finalfinaldamage" rel="noreferrer">
             IED Calculation aka "Final Final Damage" Doc
           </a>
         </Typography>
-        <Typography>
+        <Typography align="center">
           <a
             href="https://github.com/pladz/cube_calc/tree/master"
             rel="noreferrer"
@@ -1952,7 +1948,7 @@ export default function PotentialTable() {
             Very scuffed source code
           </a>
         </Typography>
-        <Typography>
+        <Typography align="center">
           Updated to reflect the potential lines changes in the{" "}
           <a
             href="http://www.maplesea.com/updates/view/v225_patch_notes"
@@ -1963,7 +1959,7 @@ export default function PotentialTable() {
           </a>{" "}
           patch for MapleSEA.
         </Typography>
-        <Typography>
+        <Typography align="center">
           NaN input bug, CSS, Cube Rates for shitty lines fixed by
           https://github.com/hehai123/cube_calc
         </Typography>
