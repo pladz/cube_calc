@@ -4,9 +4,6 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
   Paper,
   TextField,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Collapse,
   Typography,
   TableContainer,
@@ -15,7 +12,6 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  IconButton,
   Grid,
   Box,
   Dialog,
@@ -31,12 +27,7 @@ import {
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {
   ExpandMore,
-  Clear,
-  Add,
-  DoubleArrow,
   HelpOutline,
-  FastForward,
-  LineStyle,
   ExpandLess,
 } from "@material-ui/icons";
 import {
@@ -59,7 +50,6 @@ import {
   gloveSubLines,
   capeShoulderBeltSubLines,
   accessorySubLines,
-  heartSubLines,
   weaponSubLines,
   secondarySubLines,
   emblemSubLines,
@@ -84,7 +74,6 @@ import {
   uniqueGloveLines,
   uniqueCapeShoulderBeltLines,
   uniqueAccessoryLines,
-  // uniqueHeartLines,
   uniqueWeaponLines,
   uniqueSecondaryLines,
   uniqueEmblemLines,
@@ -99,7 +88,6 @@ import redCubeIcon from "./icons/red_clean.png";
 import regularCubeIcon from "./icons/Regular_Cube.png";
 import equalityCubeIcon from "./icons/equality_clean.png";
 import hexaCubeIcon from "./icons/hexa_clean.png";
-import { display } from "@material-ui/system";
 
 //CSS
 const DECIMAL_PRECISION = 5; // for % display
@@ -1259,86 +1247,6 @@ export default function PotentialTable() {
     setCurHexaPercentage(hex1 * hex2 * hex3);
   }
 
-  /*
-  function moreThanStat(x, type, line1, line2, line3) {
-    let sum = 0;
-    let acceptAllStat = false;
-    if (type === "STR" || type === "DEX" || type === "INT" || type === "LUK") {
-      acceptAllStat = true;
-    }
-
-    if (
-      line1.type === "BOSS" &&
-      line2.type === "BOSS" &&
-      line3.type === "BOSS"
-    ) {
-      return false;
-    }
-
-    if (line1.type === type || (line1.type === "AS" && acceptAllStat)) {
-      sum = sum + line1.value;
-    }
-    if (line2.type === type || (line2.type === "AS" && acceptAllStat)) {
-      sum = sum + line2.value;
-    }
-    if (line3.type === type || (line3.type === "AS" && acceptAllStat)) {
-      sum = sum + line3.value;
-    }
-
-    if (sum >= x) {
-      return true;
-    }
-
-    return false;
-  }
-  */
-  /*
-  function addIfMoreThanStat(x1, type1, x2, type2) {
-    let rowId = 0;
-    lineOptions.forEach((line1, i) => {
-      subLineOptions.forEach((line2, j) => {
-        subLineOptions.forEach((line3, k) => {
-          //First stat check
-          if (moreThanStat(x1, type1, line1, line2, line3)) {
-            if (
-              x2 === "" ||
-              type2 === "" ||
-              (x2 !== "" &&
-                type2 !== "" &&
-                moreThanStat(x2, type2, line1, line2, line3))
-            ) {
-              let redPercentage = line1.red1 * line2.red2 * line3.red3;
-              let blackPercentage = line1.black1 * line2.black2 * line3.black3;
-              let equalityPercentage = 0;
-              let hexaPercentage = hexaCalc(line1.red1, line2.red2, line3.red3);
-
-              if (line2.red1 && line3.red1) {
-                equalityPercentage = line1.red1 * line2.red1 * line3.red1;
-              }
-
-              addToRows(
-                createRow(
-                  // curRowId,
-                  rowId,
-                  line1.stat,
-                  line2.stat,
-                  line3.stat,
-                  redPercentage,
-                  blackPercentage,
-                  equalityPercentage,
-                  hexaPercentage
-                )
-              );
-              rowId += 1;
-              // setCurRowId(curRowId + 1);
-            }
-          }
-        });
-      });
-    });
-  }
-  */
-
   useEffect(() => {
     const visited = localStorage["visited"];
     if (visited) {
@@ -1557,15 +1465,15 @@ export default function PotentialTable() {
             >
               <Grid container>
                 <Grid item xs={6}>
-                  <Paper className={classes.paper}>
+                  {/* <Paper className={classes.paper}>
                     16% Crit -&gt; 1 in 43 Equality
                   </Paper>
                 </Grid>
                 <Grid item xs={6}>
                   <Paper className={classes.paper}>
-                    24% Crit -&gt; 1 in 1331 Equality
-                  </Paper>
-                </Grid>
+                    24% Crit -&gt; 1 in 1000 Equality v225
+                  </Paper>*/}
+                </Grid> 
               </Grid>
             </Box>
           ) : inputValue === "Hat" ? (
@@ -1937,7 +1845,7 @@ export default function PotentialTable() {
           and why I do backend
         </WhiteTextTypography>
         <Typography>
-          Contact pladz#1984 on discord for bugs, or Note Pladz in-game MapleSEA
+          Contact @pladz on discord for bugs, or Note Pladz in-game MapleSEA
         </Typography>
         <Typography>
           <a href="http://tiny.cc/finalfinaldamage" rel="noreferrer">
@@ -1959,7 +1867,7 @@ export default function PotentialTable() {
             target="_blank"
             rel="noreferrer"
           >
-            Energize v225
+            Energize v225 using KMS cube rates
           </a>{" "}
           patch for MapleSEA.
         </Typography>
