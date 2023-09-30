@@ -12,6 +12,7 @@ for (let i = 0; i < fullArray.length; i++) {
 }
 
 var sum = 0
+var names = ["Micro Missiles", "Mecha Carrier", "Big Mech", "Small Ass Turret"]
 var pointers = [1, 1, 1, 1]
 var curValue = [fullArray[0][0], fullArray[1][0], fullArray[2][0], fullArray[3][0]]
 var outputArray = []
@@ -20,7 +21,6 @@ var finalArray = []
 for (let i = 0; i <= 115; i++) {
     var max = 0
     var position = 0
-    var name = null
     
     for (let j = 0; j < pointers.length; j++) {
         if (curValue[j] > max) {
@@ -29,21 +29,8 @@ for (let i = 0; i <= 115; i++) {
         }
 
     }
-    switch (position) {
-        case 0:
-            name = "Micro Missiles"
-            break
-        case 1:
-            name = "Mecha Carrier"
-            break
-        case 2:
-            name = "Big Mech"
-            break
-        case 3:
-            name = "Small Ass Turret"
-    }
     pointers[position] = pointers[position] + 1
-    outputArray.push(name + " : " + pointers[position])
+    outputArray.push(names[position] + " : " + pointers[position])
     curValue[position] = fullArray[position][pointers[position]]   
 }
 
