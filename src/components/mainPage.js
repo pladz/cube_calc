@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
 import PotentialTable from "./potentialTable";
 import PercentageGraphs from "./percentageGraphs";
+import { Link } from "react-router-dom";
 
 import { useHistory } from "react-router-dom";
 import ShouldITodd from "./shouldITodd";
@@ -28,6 +29,7 @@ const MainPage = () => {
   const classes = useStyles();
   const history = useHistory();
   const [open, setOpen] = useState(true);
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -37,19 +39,55 @@ const MainPage = () => {
     setOpen(false);
   };
 
+  const handleMenuOpen = () => {
+    setMenuOpen(true);
+  };
+
+  const handleMenuClose = () => {
+    setMenuOpen(false);
+  };
+
   return (
     <>
       <AppBar position="static">
         <Toolbar style={{ backgroundColor: "#f25c54" }}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
+          <div style={{ position: "relative" }}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              className={classes.menuButton}
+              onMouseEnter={handleMenuOpen}
+              onMouseLeave={handleMenuClose}
+            >
+              <MenuIcon />
+            </IconButton>
+            {isMenuOpen && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  backgroundColor: "white",
+                  boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.3)",
+                  padding: "4px",
+                }}
+                onMouseEnter={handleMenuOpen}
+                onMouseLeave={handleMenuClose}
+              >
+                <Button
+                  onClick={() => {
+                    // Link to monster life
+                    handleMenuClose();
+                  }}
+                >
+                  Monster&nbsp;Life
+                </Button>
+                {/* Add more options as needed */}
+              </div>
+            )}
+          </div>
+          <Typography variant="h6" className={classes.title} align="center">
             Maple Math with <del>Shitty</del> Okay UI
           </Typography>
           <Button
