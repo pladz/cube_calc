@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+// import { makeStyles, withStyles } from "@material-ui/core/styles";
+// import makeStyles from "@mui/styles/makeStyles";
+// import withStyles from "@mui/styles/withStyles";
+// import { makeStyles, withStyles } from "@mui/material";
+import { ThemeProvider, createTheme, useTheme } from "@mui/material/styles";
 import {
   TextField,
   Button,
@@ -13,77 +17,80 @@ import {
   TableCell,
   Table,
   Paper,
-  Typography
+  Typography,
+} from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import {
+  ExpandMore,
+  Clear,
+  Add,
+  DoubleArrow,
+  HelpOutline,
+} from "@mui/icons-material";
+import daybreakPendantIcon from "./icons/daybreakPendant.png";
 
-} from "@material-ui/core";
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { ExpandMore, Clear, Add, DoubleArrow, HelpOutline } from "@material-ui/icons";
-import daybreakPendantIcon from './icons/daybreakPendant.png';
-
-import { useHistory } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 //CSS
-const useStyles = makeStyles((theme) => ({
-  avatar: {
-    width: theme.spacing(15),
-    height: theme.spacing(15),
-    margin: theme.spacing(1),
-  },
-  title: {
-    color: "tomato",
-  },
-  subtitle: {
-    color: "tan",
-    marginBottom: "3rem",
-  },
-  typedContainer: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%,-50%)",
-    width: "100vw",
-    textAlign: "center",
-    zIndex: 1
-  },
-  flex: {
-    display: "flex",
-  },
-  cubesAccordion: {
-    width: '100%',
-  },
-  buffer: {
-    marginTop: "10px",
-    marginRight: "0px",
-    marginBottom: "10px",
-    marginLeft: "0px",
-  },
-  textBuffer: {
-    marginTop: "0px",
-    marginRight: "0px",
-    marginBottom: "0px",
-    marginLeft: "15px",
-  },
-  button: {
-    width: 24, height: 24,
-    padding: 0
-  },
-  parent: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
-  boxes: {
-    flex: '1 1 150px', /*  Stretching: */
-    margin: '5px',
-  },
-
-}));
-
+// const useStyles = makeStyles((theme) => ({
+//   avatar: {
+//     width: theme.spacing(15),
+//     height: theme.spacing(15),
+//     margin: theme.spacing(1),
+//   },
+//   title: {
+//     color: "tomato",
+//   },
+//   subtitle: {
+//     color: "tan",
+//     marginBottom: "3rem",
+//   },
+//   typedContainer: {
+//     position: "absolute",
+//     top: "50%",
+//     left: "50%",
+//     transform: "translate(-50%,-50%)",
+//     width: "100vw",
+//     textAlign: "center",
+//     zIndex: 1,
+//   },
+//   flex: {
+//     display: "flex",
+//   },
+//   cubesAccordion: {
+//     width: "100%",
+//   },
+//   buffer: {
+//     marginTop: "10px",
+//     marginRight: "0px",
+//     marginBottom: "10px",
+//     marginLeft: "0px",
+//   },
+//   textBuffer: {
+//     marginTop: "0px",
+//     marginRight: "0px",
+//     marginBottom: "0px",
+//     marginLeft: "15px",
+//   },
+//   button: {
+//     width: 24,
+//     height: 24,
+//     padding: 0,
+//   },
+//   parent: {
+//     display: "flex",
+//     flexWrap: "wrap",
+//     justifyContent: "center",
+//   },
+//   boxes: {
+//     flex: "1 1 150px" /*  Stretching: */,
+//     margin: "5px",
+//   },
+// }));
 
 export default function ShouldITodd() {
-  const classes = useStyles();
-  const history = useHistory();
+  // const classes = useStyles();
+  const navigate = useNavigate();
   const [numTrials, setNumTrials] = React.useState(0);
   const [mainCost, setMainCost] = React.useState(0);
   const [equipLevel, setEquipLevel] = React.useState(0);
@@ -92,18 +99,74 @@ export default function ShouldITodd() {
   const [starCatch, setStarCatch] = React.useState(true);
   const [resultTable, setResultTable] = React.useState([]);
 
+  //CSS
+  const theme = useTheme();
+  const styles = {
+    avatar: {
+      width: theme.spacing(15),
+      height: theme.spacing(15),
+      margin: theme.spacing(1),
+    },
+    title: {
+      color: "tomato",
+    },
+    subtitle: {
+      color: "tan",
+      marginBottom: "3rem",
+    },
+    typedContainer: {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%,-50%)",
+      width: "100vw",
+      textAlign: "center",
+      zIndex: 1,
+    },
+    flex: {
+      display: "flex",
+    },
+    cubesAccordion: {
+      width: "100%",
+    },
+    buffer: {
+      marginTop: "10px",
+      marginRight: "0px",
+      marginBottom: "10px",
+      marginLeft: "0px",
+    },
+    textBuffer: {
+      marginTop: "0px",
+      marginRight: "0px",
+      marginBottom: "0px",
+      marginLeft: "15px",
+    },
+    button: {
+      width: 24,
+      height: 24,
+      padding: 0,
+    },
+    parent: {
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "center",
+    },
+    boxes: {
+      flex: "1 1 150px" /*  Stretching: */,
+      margin: "5px",
+    },
+  };
+
   const boomRates = new Map([
     [16, 0.021],
     [17, 0.021],
     [18, 0.028],
     [19, 0.028],
     [20, 0.07],
-    [21, 0.07]
+    [21, 0.07],
   ]);
 
-  function createData(
-    toddAt, mesoCost, dollarCost, boom, todds
-  ) {
+  function createData(toddAt, mesoCost, dollarCost, boom, todds) {
     return { toddAt, mesoCost, dollarCost, boom, todds };
   }
 
@@ -120,13 +183,12 @@ export default function ShouldITodd() {
     let seventeenTodds = 0;
     let eighteenTodds = 0;
 
-    let sixtee
+    let sixtee;
 
     for (let i = numTrials; i >= 0; i--) {
       let sixteenCycle = simulateOneCycle(16);
       let seventeenCycle = simulateOneCycle(17);
       let eighteenCycle = simulateOneCycle(18);
-
 
       sixteenCost += sixteenCycle[0];
       sixteenBoom += sixteenCycle[1];
@@ -139,17 +201,36 @@ export default function ShouldITodd() {
       eighteenCost += eighteenCycle[0];
       eighteenBoom += eighteenCycle[1];
       eighteenTodds += eighteenCycle[2];
-
     }
 
     const sixteenRounded = (sixteenCost / numTrials / 1000000000).toFixed(2);
-    const seventeenRounded = (seventeenCost / numTrials / 1000000000).toFixed(2);
+    const seventeenRounded = (seventeenCost / numTrials / 1000000000).toFixed(
+      2
+    );
     const eighteenRounded = (eighteenCost / numTrials / 1000000000).toFixed(2);
 
     const rows = [
-      createData('16', sixteenRounded + "b", "$" + Math.ceil(sixteenRounded * mesoPrice), (sixteenBoom / numTrials).toFixed(2), (sixteenTodds / numTrials).toFixed(2)),
-      createData('17', seventeenRounded + "b", "$" + Math.ceil(seventeenRounded * mesoPrice), (seventeenBoom / numTrials).toFixed(2), (seventeenTodds / numTrials).toFixed(2)),
-      createData('18', eighteenRounded + "b", "$" + Math.ceil(eighteenRounded * mesoPrice), (eighteenBoom / numTrials).toFixed(2), (eighteenTodds / numTrials).toFixed(2)),
+      createData(
+        "16",
+        sixteenRounded + "b",
+        "$" + Math.ceil(sixteenRounded * mesoPrice),
+        (sixteenBoom / numTrials).toFixed(2),
+        (sixteenTodds / numTrials).toFixed(2)
+      ),
+      createData(
+        "17",
+        seventeenRounded + "b",
+        "$" + Math.ceil(seventeenRounded * mesoPrice),
+        (seventeenBoom / numTrials).toFixed(2),
+        (seventeenTodds / numTrials).toFixed(2)
+      ),
+      createData(
+        "18",
+        eighteenRounded + "b",
+        "$" + Math.ceil(eighteenRounded * mesoPrice),
+        (eighteenBoom / numTrials).toFixed(2),
+        (eighteenTodds / numTrials).toFixed(2)
+      ),
     ];
 
     setResultTable(rows);
@@ -180,7 +261,7 @@ export default function ShouldITodd() {
             failureChain = 0;
           } else {
             failureChain++;
-            if (((curLevel - 1) <= stoppingPoint) && failureChain !== 2) {
+            if (curLevel - 1 <= stoppingPoint && failureChain !== 2) {
               totalCost += getMesoCost(curLevel) + junkCost;
               toddCount++;
               curLevel = 19;
@@ -212,23 +293,24 @@ export default function ShouldITodd() {
     let diceValue = (Math.floor(Math.random() * 1000) + 1) / 1000;
 
     if (diceValue <= boom) {
-      return 0
+      return 0;
     } else if (diceValue <= 0.7) {
-      return -1
+      return -1;
     } else {
-      return 1
+      return 1;
     }
   }
 
   function getMesoCost(startingStar) {
-    return Math.ceil(1000 + (Math.pow(equipLevel, 3) * Math.pow((startingStar + 1), 2.7) / 200));
+    return Math.ceil(
+      1000 + (Math.pow(equipLevel, 3) * Math.pow(startingStar + 1, 2.7)) / 200
+    );
   }
 
   function handleCheckboxChange(e) {
     const checked = e.target.checked;
-    setStarCatch(checked)
+    setStarCatch(checked);
   }
-
 
   useEffect(() => {
     setNumTrials(1000);
@@ -239,17 +321,13 @@ export default function ShouldITodd() {
   }, []);
 
   useEffect(() => {
-    runSimulation()
+    runSimulation();
   }, [mesoPrice]);
 
-
-
   return (
-    <div>
+    <div align="center">
       <Paper>
-        <Typography variant="h2">
-          DAWN PENDANT TODD PAGE
-        </Typography >
+        <Typography variant="h2">DAWN PENDANT TODD PAGE</Typography>
         <img height="96px" src={daybreakPendantIcon} />
       </Paper>
       <TextField
@@ -288,7 +366,13 @@ export default function ShouldITodd() {
         onChange={(e) => setMesoPrice(Number(e.target.value))}
       />
 
-      <Button variant="contained" color="primary" onClick={() => runSimulation()}>Run Simulation</Button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => runSimulation()}
+      >
+        Run Simulation
+      </Button>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -305,7 +389,7 @@ export default function ShouldITodd() {
             {resultTable.map((row) => (
               <TableRow
                 key={row.name}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="right">{row.toddAt}</TableCell>
                 <TableCell align="right">{row.mesoCost}</TableCell>
@@ -324,7 +408,10 @@ export default function ShouldITodd() {
           </a>
         </Typography>
         <Typography>
-          <a href="https://github.com/pladz/cube_calc/tree/master" rel="noreferrer">
+          <a
+            href="https://github.com/pladz/cube_calc/tree/master"
+            rel="noreferrer"
+          >
             Very scuffed source code
           </a>
         </Typography>
