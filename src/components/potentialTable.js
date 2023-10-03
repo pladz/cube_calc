@@ -83,9 +83,9 @@ import { useHistory } from "react-router-dom";
 
 import purpleCubeIcon from "./icons/purple_clean.png";
 import blackCubeIcon from "./icons/black_clean.png";
-import choiceCubeIcon from "./icons/Choice_Cube.png";
+import choiceCubeIcon from "./icons/choice_clean.png";
 import redCubeIcon from "./icons/red_clean.png";
-import regularCubeIcon from "./icons/Regular_Cube.png";
+import regularCubeIcon from "./icons/regular_clean.png";
 import equalityCubeIcon from "./icons/equality_clean.png";
 import hexaCubeIcon from "./icons/hexa_clean.png";
 
@@ -321,7 +321,7 @@ export default function PotentialTable() {
     setSecondOptionExpand((secondOptionExpand) => !secondOptionExpand);
   };
 
-  const [switchChecked, setSwitchChecked] = useState(false);
+  const [switchChecked, setSwitchChecked] = useState(true);
 
   const safeParseInt = (value) => {
     const num = parseInt(value);
@@ -660,7 +660,7 @@ export default function PotentialTable() {
       );
       specialLinesToRemove.push("Chance of being invincibile");
     }
-    if (switchChecked === true) {
+    if (switchChecked) {
       specialLinesToRemove.push("DEF");
     }
 
@@ -1537,6 +1537,10 @@ export default function PotentialTable() {
                     eg. BOSS 60 + ATK 9 outputs line combinations with {">="}{" "}
                     60% BOSS % 9 ATK
                   </Typography>
+                  <Typography gutterBottom>
+                    5. Take note that AllStat filters already filter for the stat you want.
+                    eg. Putting in 33% Str will also return 12%Str/12%Str/9%AS combinations
+                  </Typography>
                 </DialogContent>
               </Dialog>
             </Box>
@@ -1719,7 +1723,7 @@ export default function PotentialTable() {
                     </span>
                     {switchChecked ? (
                       <img
-                        style={{ height: "30px" }}
+                        style={{ height: "25px" }}
                         src={regularCubeIcon}
                         alt="Regular Cube"
                       />
@@ -1754,7 +1758,7 @@ export default function PotentialTable() {
                     </span>
                     {switchChecked ? (
                       <img
-                        style={{ height: "35px" }}
+                        style={{ height: "25px" }}
                         src={choiceCubeIcon}
                         alt="Choice Cube"
                       />
