@@ -1,24 +1,24 @@
 {
   "files": {
     "main.css": "/cube_calc/static/css/main.5739ad41.chunk.css",
-    "main.js": "/cube_calc/static/js/main.3d7f5d0e.chunk.js",
-    "main.js.map": "/cube_calc/static/js/main.3d7f5d0e.chunk.js.map",
+    "main.js": "/cube_calc/static/js/main.6de6d53e.chunk.js",
+    "main.js.map": "/cube_calc/static/js/main.6de6d53e.chunk.js.map",
     "runtime-main.js": "/cube_calc/static/js/runtime-main.5cfc9915.js",
     "runtime-main.js.map": "/cube_calc/static/js/runtime-main.5cfc9915.js.map",
-    "static/js/2.8d88364a.chunk.js": "/cube_calc/static/js/2.8d88364a.chunk.js",
-    "static/js/2.8d88364a.chunk.js.map": "/cube_calc/static/js/2.8d88364a.chunk.js.map",
+    "static/js/2.56755e5e.chunk.js": "/cube_calc/static/js/2.56755e5e.chunk.js",
+    "static/js/2.56755e5e.chunk.js.map": "/cube_calc/static/js/2.56755e5e.chunk.js.map",
     "static/js/3.c274ea7a.chunk.js": "/cube_calc/static/js/3.c274ea7a.chunk.js",
     "static/js/3.c274ea7a.chunk.js.map": "/cube_calc/static/js/3.c274ea7a.chunk.js.map",
     "index.html": "/cube_calc/index.html",
     "static/css/main.5739ad41.chunk.css.map": "/cube_calc/static/css/main.5739ad41.chunk.css.map",
-    "static/js/2.8d88364a.chunk.js.LICENSE.txt": "/cube_calc/static/js/2.8d88364a.chunk.js.LICENSE.txt",
+    "static/js/2.56755e5e.chunk.js.LICENSE.txt": "/cube_calc/static/js/2.56755e5e.chunk.js.LICENSE.txt",
     "static/media/daybreakPendant.2fe1f030.png": "/cube_calc/static/media/daybreakPendant.2fe1f030.png",
     "static/media/logo.6ce24c58.svg": "/cube_calc/static/media/logo.6ce24c58.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.5cfc9915.js",
-    "static/js/2.8d88364a.chunk.js",
+    "static/js/2.56755e5e.chunk.js",
     "static/css/main.5739ad41.chunk.css",
-    "static/js/main.3d7f5d0e.chunk.js"
+    "static/js/main.6de6d53e.chunk.js"
   ]
 }
