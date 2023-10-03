@@ -70,7 +70,7 @@ const MainPage = () => {
             aria-label="menu"
             // className={classes.menuButton}
             sx={styles.menuButton}
-            onClick={handleClick}
+            // onClick={handleClick}
             size="large"
             id="menu-button"
             aria-controls={open ? "resources-menu" : undefined}

@@ -169,5 +169,4 @@ for (let i = 0; i < outputArray.length - 1; i++) {
     finalArray.push(outputArray[i]);
   }
 }
-
 console.log(JSON.stringify(finalArray));
