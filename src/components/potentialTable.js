@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useNavigate } from "react-router-dom";
+import {
+  ThemeProvider,
+  createTheme,
+  useTheme,
+  styled,
+} from "@mui/material/styles";
 import {
   Paper,
   TextField,
@@ -23,13 +28,11 @@ import {
   Switch,
   FormGroup,
   FormControlLabel,
-} from "@material-ui/core";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import {
-  ExpandMore,
-  HelpOutline,
-  ExpandLess,
-} from "@material-ui/icons";
+  Autocomplete,
+  useMediaQuery,
+} from "@mui/material";
+// import Autocomplete from "@mui/material/Autocomplete";
+import { ExpandMore, HelpOutline, ExpandLess } from "@mui/icons-material";
 import {
   hatLines,
   topLines,
@@ -79,8 +82,6 @@ import {
   uniqueEmblemLines,
 } from "./uniqueLines";
 
-import { useHistory } from "react-router-dom";
-
 import purpleCubeIcon from "./icons/purple_clean.png";
 import blackCubeIcon from "./icons/black_clean.png";
 import choiceCubeIcon from "./icons/choice_clean.png";
@@ -92,114 +93,196 @@ import hexaCubeIcon from "./icons/hexa_clean.png";
 //CSS
 const DECIMAL_PRECISION = 5; // for % display
 const CUBE_DECIMAL = 1; // for one in x cubes display
-const useStyles = makeStyles((theme) => ({
-  avatar: {
-    width: theme.spacing(15),
-    height: theme.spacing(15),
-    margin: theme.spacing(1),
-  },
-  title: {
-    color: "tomato",
-  },
-  subtitle: {
-    color: "tan",
-    marginBottom: "3rem",
-  },
-  typedContainer: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%,-50%)",
-    width: "100vw",
-    textAlign: "center",
-    zIndex: 1,
-  },
-  flex: {
-    display: "flex",
-  },
-  cubesAccordion: {
-    width: "100%",
-  },
-  buffer: {
-    marginTop: "10px",
-    marginRight: "0px",
-    marginBottom: "10px",
-    marginLeft: "0px",
-  },
-  textBuffer: {
-    marginTop: "0px",
-    marginRight: "0px",
-    marginBottom: "0px",
-    marginLeft: "15px",
-  },
-  button: {
-    width: 24,
-    height: 24,
-    padding: 0,
-  },
-  parent: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-  },
-  boxes: {
-    flex: "1 1 150px" /*  Stretching: */,
-    margin: "5px",
-  },
-  paper: {
-    padding: theme.spacing(0.5),
-    margin: "0 5px",
-    textAlign: "center",
-    backgroundColor: "#D6E4FF",
-    height: "90%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-  boldText: {
-    color: "magenta",
-    fontWeight: "bold",
-  },
-  container: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "0",
-  },
-  table: {
-    width: "100%",
-  },
-  cellContent: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  tableCell: {
-    textAlign: "center",
-  },
-  "@media (max-width: 768px)": {
-    cellContent: {
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    container: {
-      overflowX: "auto",
-    },
-    table: {
-      tableLayout: "auto",
-    },
-    tableCell: {
-      padding: theme.spacing(1.3),
-      textAlign: "center",
-    },
-  },
-}));
 
-const WhiteTextTypography = withStyles({
-  root: {
-    color: "#FFFFFF",
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 768,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
   },
-})(Typography);
+});
+
+// const StyledPaper = styled(Paper)({
+//   // padding: theme.spacing(0.5),
+//   margin: "0 5px",
+//   textAlign: "center",
+//   backgroundColor: "#D6E4FF",
+//   height: "90%",
+//   display: "flex",
+//   flexDirection: "column",
+//   justifyContent: "center",
+// });
+
+// const StyledContainer = styled(Container)({
+//   padding: 0,
+//   display: "flex",
+//   justifyContent: "space-between",
+// });
+
+// const CustomContainer = styled(Container)(({ theme }) => ({
+//   padding: 0,
+//   display: "flex",
+//   justifyContent: "space-between",
+//   [theme.breakpoints.down("sm")]: {
+//     flexWrap: "wrap",
+//   },
+// }));
+
+// const StyledBox = styled(Box)({
+//   padding: "10px",
+//   boxSizing: "border-box",
+//   sx={{ flex: (theme) => theme.breakpoints.up('sm') "0 1 50%" ? : "0 0 100%" }},
+// });
+
+// const StyledBox = styled(Box)(({ theme }) => ({
+//   // padding: "10px",
+//   // boxSizing: "border-box",
+//   sx: { padding: "10px", boxSizing: "border-box" },
+//   flex: theme.breakpoints.up("sm") ? "0 1 50%" : "0 0 100%",
+// }));
+
+const StyledTable = styled(Table)({
+  width: "100%",
+});
+
+const StyledTableCell = styled(TableCell)({
+  textAlign: "center",
+});
+
+const StyledTableCellContent = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+});
+
+const StyledTableCellContentWord = styled("div")({
+  color: "magenta",
+  fontWeight: "bold",
+});
+
+const WhiteTextTypography = styled(Typography)({
+  color: "#FFFFFF",
+});
+
+// const TextBufferTypography = styled(Typography)({
+//   marginTop: "0px",
+//   marginRight: "0px",
+//   marginBottom: "0px",
+//   marginLeft: "15px",
+// });
+
+// const WhiteTextTypography = withStyles({
+//   root: {
+//     color: "#FFFFFF",
+//   },
+// })(Typography);
+
+// const useStyles = makeStyles((theme) => ({
+//   avatar: {
+//     width: theme.spacing(15),
+//     height: theme.spacing(15),
+//     margin: theme.spacing(1),
+//   },
+//   title: {
+//     color: "tomato",
+//   },
+//   subtitle: {
+//     color: "tan",
+//     marginBottom: "3rem",
+//   },
+//   typedContainer: {
+//     position: "absolute",
+//     top: "50%",
+//     left: "50%",
+//     transform: "translate(-50%,-50%)",
+//     width: "100vw",
+//     textAlign: "center",
+//     zIndex: 1,
+//   },
+//   flex: {
+//     display: "flex",
+//   },
+//   cubesAccordion: {
+//     width: "100%",
+//   },
+//   buffer: {
+//     marginTop: "10px",
+//     marginRight: "0px",
+//     marginBottom: "10px",
+//     marginLeft: "0px",
+//   },
+//   textBuffer: {
+//     marginTop: "0px",
+//     marginRight: "0px",
+//     marginBottom: "0px",
+//     marginLeft: "15px",
+//   },
+//   button: {
+//     width: 24,
+//     height: 24,
+//     padding: 0,
+//   },
+//   parent: {
+//     display: "flex",
+//     flexWrap: "wrap",
+//     justifyContent: "center",
+//   },
+//   boxes: {
+//     flex: "1 1 150px" /*  Stretching: */,
+//     margin: "5px",
+//   },
+//   paper: {
+//     padding: theme.spacing(0.5),
+//     margin: "0 5px",
+//     textAlign: "center",
+//     backgroundColor: "#D6E4FF",
+//     height: "90%",
+//     display: "flex",
+//     flexDirection: "column",
+//     justifyContent: "center",
+//   },
+//   boldText: {
+//     color: "magenta",
+//     fontWeight: "bold",
+//   },
+//   container: {
+//     display: "flex",
+//     justifyContent: "space-between",
+//     padding: "0",
+//   },
+//   table: {
+//     width: "100%",
+//   },
+//   cellContent: {
+//     display: "flex",
+//     flexDirection: "column",
+//     alignItems: "center",
+//   },
+//   tableCell: {
+//     textAlign: "center",
+//   },
+//   "@media (max-width: 768px)": {
+//     cellContent: {
+//       flexDirection: "column",
+//       alignItems: "center",
+//       justifyContent: "center",
+//     },
+//     container: {
+//       overflowX: "auto",
+//     },
+//     table: {
+//       tableLayout: "auto",
+//     },
+//     tableCell: {
+//       padding: theme.spacing(1.3),
+//       textAlign: "center",
+//     },
+//   },
+// }));
 
 // For one in x cubes formatting
 const formatNumberWithCommas = (number) => {
@@ -236,9 +319,72 @@ const gearOptions = gearType.map((option) => {
 });
 
 export default function PotentialTable() {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const classes = useStyles();
-  const history = useHistory();
+  // CSS
+  const styles = {
+    paper: {
+      padding: theme.spacing(0.5),
+      margin: "0 5px",
+      textAlign: "center",
+      backgroundColor: "#D6E4FF",
+      height: "90%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+    },
+    box: {
+      padding: "10px",
+      boxSizing: "border-box",
+      [theme.breakpoints.down("sm")]: {
+        flex: "0 0 100%",
+      },
+      [theme.breakpoints.up("sm")]: {
+        flex: "0 1 50%",
+      },
+    },
+    container_wrap: {
+      padding: "0px",
+      display: "flex",
+      justifyContent: "space-between",
+      [theme.breakpoints.down("sm")]: {
+        flexWrap: "wrap",
+      },
+      // [theme.breakpoints.up("sm")]: {},
+    },
+    container: {
+      padding: "0px",
+      display: "flex",
+      justifyContent: "space-between",
+      // [theme.breakpoints.down("sm")]: {
+      //   flexWrap: "wrap",
+      // },
+      // [theme.breakpoints.up("sm")]: {},
+    },
+    textBuffer: {
+      marginTop: "0px",
+      marginRight: "0px",
+      marginBottom: "0px",
+      marginLeft: "15px",
+      textAlign: "left",
+    },
+    table: {
+      width: "100%",
+    },
+    tableCell: {
+      textAlign: "center",
+    },
+    cellContent: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    cellContentHighlight: {
+      color: "magenta",
+      fontWeight: "bold",
+    },
+  };
+
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
+  const navigate = useNavigate();
 
   const [inputValue, setInputValue] = React.useState("");
   const [lineOneInputValue, setLineOneInputValue] = React.useState("");
@@ -1397,13 +1543,13 @@ export default function PotentialTable() {
   }, [inputValue]);
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Paper
         elevation={2}
         aria-label="Acknowledge"
         onClick={(event) => event.stopPropagation()}
         onFocus={(event) => event.stopPropagation()}
-        style={{
+        sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -1414,27 +1560,12 @@ export default function PotentialTable() {
       >
         <FormGroup>
           <FormControlLabel
-            control={
-              <Switch
-                color="primary"
-                checked={switchChecked}
-                onChange={toggleSwitch}
-              />
-            }
+            control={<Switch checked={switchChecked} onChange={toggleSwitch} />}
             label="v225 and above"
           />
         </FormGroup>
-        <Container
-          className={classes.container}
-          style={isMobile ? { flexWrap: "wrap" } : {}}
-        >
-          <Box
-            style={{
-              padding: "10px",
-              flex: isMobile ? "0 0 100%" : "0 1 50%",
-              boxSizing: "border-box",
-            }}
-          >
+        <Container sx={styles.container_wrap} disableGutters>
+          <Box sx={styles.box}>
             <Autocomplete
               id="grouped-demo"
               inputValue={inputValue}
@@ -1456,50 +1587,40 @@ export default function PotentialTable() {
             />
           </Box>
           {inputValue === "Glove" ? (
-            <Box
-              style={{
-                padding: "10px",
-                flex: isMobile ? "0 0 100%" : "0 1 50%",
-                boxSizing: "border-box",
-              }}
-            >
+            <Box sx={styles.box}>
               <Grid container>
                 <Grid item xs={6}>
-                  {/* <Paper className={classes.paper}>
-                    16% Crit -&gt; 1 in 43 Equality
+                  <Paper sx={styles.paper}>
+                    16% Crit -&gt; 1 in {switchChecked ? 36 : 43} Equality
                   </Paper>
                 </Grid>
                 <Grid item xs={6}>
-                  <Paper className={classes.paper}>
-                    24% Crit -&gt; 1 in 1000 Equality v225
-                  </Paper>*/}
-                </Grid> 
+                  <Paper sx={styles.paper}>
+                    24% Crit -&gt; 1 in {switchChecked ? 1000 : 1331} Equality
+                  </Paper>
+                </Grid>
               </Grid>
             </Box>
           ) : inputValue === "Hat" ? (
-            <Box
-              style={{
-                padding: "10px",
-                flex: isMobile ? "0 0 100%" : "0 1 50%",
-                boxSizing: "border-box",
-              }}
-            >
+            <Box sx={styles.box}>
               <Grid container>
                 <Grid item xs={6}>
-                  <Paper className={classes.paper}>
-                    At least 3s CDR -&gt; 1 in 44 Equality
+                  <Paper sx={styles.paper}>
+                    At least 3s CDR -&gt; 1 in {switchChecked ? 37 : 44}{" "}
+                    Equality
                   </Paper>
                 </Grid>
                 <Grid item xs={6}>
-                  <Paper className={classes.paper}>
-                    At least 4s CDR -&gt; 1 in 157 Equality
+                  <Paper sx={styles.paper}>
+                    At least 4s CDR -&gt; 1 in {switchChecked ? 129 : 157}{" "}
+                    Equality
                   </Paper>
                 </Grid>
               </Grid>
             </Box>
           ) : null}
         </Container>
-        <Container className={classes.container}>
+        <Container sx={styles.container} disableGutters>
           {inputValue === "" ? (
             <Box
               style={{
@@ -1546,24 +1667,15 @@ export default function PotentialTable() {
             </Box>
           ) : (
             <Container
-              className={classes.container}
-              style={{
+              sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
               }}
+              disableGutters
             >
-              <Container
-                className={classes.container}
-                style={isMobile ? { flexWrap: "wrap" } : {}}
-              >
-                <Box
-                  style={{
-                    padding: "10px",
-                    flex: isMobile ? "0 0 100%" : "0 1 50%",
-                    boxSizing: "border-box",
-                  }}
-                >
+              <Container sx={styles.container_wrap} disableGutters>
+                <Box sx={styles.box}>
                   <Typography align="center">{`I want a combination of`}</Typography>
                   <TextField
                     id="outlined-basic"
@@ -1596,12 +1708,12 @@ export default function PotentialTable() {
                     )}
                   />
                 </Box>
-                {isMobile &&
+                {matches &&
                   !(xOneInputValue === 0 || typeOneInputValue === "") && (
                     <ButtonBase
                       focusRipple
                       centerRipple
-                      style={{ flexBasis: "100%" }}
+                      sx={{ flexBasis: "100%" }}
                       onClick={handleToggleExpand}
                     >
                       {secondOptionExpand ? <ExpandLess /> : <ExpandMore />}
@@ -1611,17 +1723,11 @@ export default function PotentialTable() {
                 {!(xOneInputValue === 0 || typeOneInputValue === "") && (
                   <Collapse
                     in={secondOptionExpand}
-                    style={{
-                      flex: isMobile ? "0 0 100%" : "0 1 50%",
+                    sx={{
+                      flex: matches ? "0 0 100%" : "0 1 50%",
                     }}
                   >
-                    <Box
-                      style={{
-                        padding: "10px",
-                        flex: isMobile ? "0 0 100%" : "0 1 50%",
-                        boxSizing: "border-box",
-                      }}
-                    >
+                    <Box sx={styles.box}>
                       <Typography align="center">{`as well as (leave blank if not required)`}</Typography>
                       <TextField
                         id="outlined-basic"
@@ -1666,17 +1772,9 @@ export default function PotentialTable() {
               >
                 <Button
                   variant="outlined"
-                  color="primary"
                   size="large"
                   fullWidth
                   onClick={() => {
-                    // clearRows();
-                    // addIfMoreThanStat(
-                    //   xOneInputValue,
-                    //   typeOneInputValue,
-                    //   xTwoInputValue,
-                    //   typeTwoInputValue
-                    // );
                     newProbCalc();
                   }}
                 >
@@ -1700,24 +1798,28 @@ export default function PotentialTable() {
         }}
       >
         <TableContainer>
-          <Table className={classes.table}>
+          <StyledTable>
             <TableHead>
               <TableRow>
-                <TableCell className={classes.tableCell}>Cube Type</TableCell>
-                <TableCell className={classes.tableCell}>
+                <StyledTableCell>Cube Type</StyledTableCell>
+                <StyledTableCell>
                   Probability&nbsp;(%)
-                  <div className={classes.boldText}>(Updated)</div>
-                </TableCell>
-                <TableCell className={classes.tableCell}>
+                  <StyledTableCellContentWord>
+                    (Updated)
+                  </StyledTableCellContentWord>
+                </StyledTableCell>
+                <StyledTableCell>
                   Probability&nbsp;(1&nbsp;in&nbsp;x)
-                  <div className={classes.boldText}>(Updated)</div>
-                </TableCell>
+                  <StyledTableCellContentWord>
+                    (Updated)
+                  </StyledTableCellContentWord>
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell className={classes.tableCell}>
-                  <div className={classes.cellContent}>
+                <StyledTableCell>
+                  <StyledTableCellContent>
                     <span>
                       {switchChecked ? "Regular\u00a0Cube" : "Red\u00a0Cube"}
                     </span>
@@ -1734,13 +1836,13 @@ export default function PotentialTable() {
                         alt="Red Cube"
                       />
                     )}
-                  </div>
-                </TableCell>
-                <TableCell className={classes.tableCell}>
+                  </StyledTableCellContent>
+                </StyledTableCell>
+                <StyledTableCell>
                   {(redProbability * 100).toPrecision(DECIMAL_PRECISION)}
                   &nbsp;%
-                </TableCell>
-                <TableCell className={classes.tableCell}>
+                </StyledTableCell>
+                <StyledTableCell>
                   One in{" "}
                   {redCubeNumber !== 0 ? (
                     <b>{formatNumberWithCommas(redCubeNumber)}</b>
@@ -1748,11 +1850,11 @@ export default function PotentialTable() {
                     "Infinite"
                   )}{" "}
                   cubes
-                </TableCell>
+                </StyledTableCell>
               </TableRow>
               <TableRow>
-                <TableCell className={classes.tableCell}>
-                  <div className={classes.cellContent}>
+                <StyledTableCell>
+                  <StyledTableCellContent>
                     <span>
                       {switchChecked ? "Choice\u00a0Cube" : "Black\u00a0Cube"}
                     </span>
@@ -1769,13 +1871,13 @@ export default function PotentialTable() {
                         alt="Black Cube"
                       />
                     )}
-                  </div>
-                </TableCell>
-                <TableCell className={classes.tableCell}>
+                  </StyledTableCellContent>
+                </StyledTableCell>
+                <StyledTableCell>
                   {(blackProbability * 100).toPrecision(DECIMAL_PRECISION)}
                   &nbsp;%
-                </TableCell>
-                <TableCell className={classes.tableCell}>
+                </StyledTableCell>
+                <StyledTableCell>
                   One in{" "}
                   {blackCubeNumber !== 0 ? (
                     <b>{formatNumberWithCommas(blackCubeNumber)}</b>
@@ -1783,20 +1885,20 @@ export default function PotentialTable() {
                     "Infinite"
                   )}{" "}
                   cubes
-                </TableCell>
+                </StyledTableCell>
               </TableRow>
               <TableRow>
-                <TableCell className={classes.tableCell}>
-                  <div className={classes.cellContent}>
+                <StyledTableCell>
+                  <StyledTableCellContent>
                     <span>Equality&nbsp;Cube</span>
                     <img height="25px" src={equalityCubeIcon} />
-                  </div>
-                </TableCell>
-                <TableCell className={classes.tableCell}>
+                  </StyledTableCellContent>
+                </StyledTableCell>
+                <StyledTableCell>
                   {(equalityProbability * 100).toPrecision(DECIMAL_PRECISION)}
                   &nbsp;%
-                </TableCell>
-                <TableCell className={classes.tableCell}>
+                </StyledTableCell>
+                <StyledTableCell>
                   One in{" "}
                   {equalityCubeNumber !== 0 ? (
                     <b>{formatNumberWithCommas(equalityCubeNumber)}</b>
@@ -1804,20 +1906,20 @@ export default function PotentialTable() {
                     "Infinite"
                   )}{" "}
                   cubes
-                </TableCell>
+                </StyledTableCell>
               </TableRow>
               <TableRow>
-                <TableCell className={classes.tableCell}>
-                  <div className={classes.cellContent}>
+                <StyledTableCell>
+                  <StyledTableCellContent>
                     <span>Hexa Cube</span>
                     <img height="25px" src={hexaCubeIcon} />
-                  </div>
-                </TableCell>
-                <TableCell className={classes.tableCell}>
+                  </StyledTableCellContent>
+                </StyledTableCell>
+                <StyledTableCell>
                   {(hexaProbability * 100).toPrecision(DECIMAL_PRECISION)}
                   &nbsp;%
-                </TableCell>
-                <TableCell className={classes.tableCell}>
+                </StyledTableCell>
+                <StyledTableCell>
                   One in{" "}
                   {hexaCubeNumber !== 0 ? (
                     <b>{formatNumberWithCommas(hexaCubeNumber)}</b>
@@ -1825,25 +1927,21 @@ export default function PotentialTable() {
                     "Infinite"
                   )}{" "}
                   cubes
-                </TableCell>
+                </StyledTableCell>
               </TableRow>
             </TableBody>
-          </Table>
+          </StyledTable>
         </TableContainer>
       </Paper>
-      <Paper>
-        <Typography align="left" className={classes.textBuffer}>
+      <Paper sx={{ textAlign: "center" }}>
+        <Typography sx={styles.textBuffer}>
           1. All equality cube lines shown here assume that they have the same
           rate as rolling the first prime line of a red cube.
         </Typography>
-        <Typography align="left" className={classes.textBuffer}>
+        <Typography sx={styles.textBuffer}>
           2. Hexacube lines assume that the first line is the first line of a
           red cube, line 2/4 is a second line, and lines 3/5/6 are third lines.
         </Typography>
-        {/* <Typography align="left" className={classes.textBuffer}>
-          3. Hexacube numbers might are slightly over estimate since it does not
-          account for combinations without the first line.
-        </Typography> */}
         <WhiteTextTypography color="textPrimary">
           This coding project is a prime example of why you need UI/UX designers
           and why I do backend
@@ -1880,6 +1978,6 @@ export default function PotentialTable() {
           https://github.com/hehai123/cube_calc
         </Typography>
       </Paper>
-    </>
+    </ThemeProvider>
   );
 }
