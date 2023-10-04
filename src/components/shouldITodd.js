@@ -17,6 +17,7 @@ import {
   TableCell,
   Table,
   Paper,
+  Box,
   Typography,
 } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -330,52 +331,54 @@ export default function ShouldITodd() {
         <Typography variant="h2">DAWN PENDANT TODD PAGE</Typography>
         <img height="96px" src={daybreakPendantIcon} />
       </Paper>
-      <TextField
-        required
-        id="outlined-required"
-        label="Number of Trials"
-        defaultValue="1000"
-        variant="standard"
-        onChange={(e) => setNumTrials(Number(e.target.value))}
-      />
-      <TextField
-        required
-        id="outlined-disabled"
-        label="Cost of Main Item"
-        defaultValue="20000000000"
-        variant="standard"
-        onChange={(e) => setMainCost(Number(e.target.value))}
-      />
-      <TextField
-        required
-        id="outlined-disabled"
-        label="Level of Main Item"
-        defaultValue="140"
-        variant="standard"
-        onChange={(e) => setEquipLevel(Number(e.target.value))}
-      />
-      <TextField
-        required
-        id="outlined-disabled"
-        label="Cost of Junk 20* Item"
-        defaultValue="4000000000"
-        variant="standard"
-        onChange={(e) => setJunkCost(Number(e.target.value))}
-      />
-      <TextField
-        required
-        id="outlined-disabled"
-        label="Meso Price/B"
-        defaultValue="16.5"
-        variant="standard"
-        onChange={(e) => setMesoPrice(Number(e.target.value))}
-      />
+      <Box sx={{ py: 1 }}>
+        <TextField
+          required
+          id="outlined-required"
+          label="Number of Trials"
+          defaultValue="1000"
+          variant="standard"
+          onChange={(e) => setNumTrials(Number(e.target.value))}
+        />
+        <TextField
+          required
+          id="outlined-disabled"
+          label="Cost of Main Item"
+          defaultValue="20000000000"
+          variant="standard"
+          onChange={(e) => setMainCost(Number(e.target.value))}
+        />
+        <TextField
+          required
+          id="outlined-disabled"
+          label="Level of Main Item"
+          defaultValue="140"
+          variant="standard"
+          onChange={(e) => setEquipLevel(Number(e.target.value))}
+        />
+        <TextField
+          required
+          id="outlined-disabled"
+          label="Cost of Junk 20* Item"
+          defaultValue="4000000000"
+          variant="standard"
+          onChange={(e) => setJunkCost(Number(e.target.value))}
+        />
+        <TextField
+          required
+          id="outlined-disabled"
+          label="Meso Price/B"
+          defaultValue="16.5"
+          variant="standard"
+          onChange={(e) => setMesoPrice(Number(e.target.value))}
+        />
+      </Box>
 
       <Button variant="contained" onClick={() => runSimulation()}>
         Run Simulation
       </Button>
 
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ mt: 1 }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
