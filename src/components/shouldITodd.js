@@ -335,6 +335,7 @@ export default function ShouldITodd() {
         id="outlined-required"
         label="Number of Trials"
         defaultValue="1000"
+        variant="standard"
         onChange={(e) => setNumTrials(Number(e.target.value))}
       />
       <TextField
@@ -342,6 +343,7 @@ export default function ShouldITodd() {
         id="outlined-disabled"
         label="Cost of Main Item"
         defaultValue="20000000000"
+        variant="standard"
         onChange={(e) => setMainCost(Number(e.target.value))}
       />
       <TextField
@@ -349,6 +351,7 @@ export default function ShouldITodd() {
         id="outlined-disabled"
         label="Level of Main Item"
         defaultValue="140"
+        variant="standard"
         onChange={(e) => setEquipLevel(Number(e.target.value))}
       />
       <TextField
@@ -356,6 +359,7 @@ export default function ShouldITodd() {
         id="outlined-disabled"
         label="Cost of Junk 20* Item"
         defaultValue="4000000000"
+        variant="standard"
         onChange={(e) => setJunkCost(Number(e.target.value))}
       />
       <TextField
@@ -363,14 +367,11 @@ export default function ShouldITodd() {
         id="outlined-disabled"
         label="Meso Price/B"
         defaultValue="16.5"
+        variant="standard"
         onChange={(e) => setMesoPrice(Number(e.target.value))}
       />
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => runSimulation()}
-      >
+      <Button variant="contained" onClick={() => runSimulation()}>
         Run Simulation
       </Button>
 
