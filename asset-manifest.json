@@ -1,26 +1,18 @@
 {
   "files": {
-    "main.css": "/cube_calc/static/css/main.5739ad41.chunk.css",
-    "main.js": "/cube_calc/static/js/main.a230abe5.chunk.js",
-    "main.js.map": "/cube_calc/static/js/main.a230abe5.chunk.js.map",
-    "runtime-main.js": "/cube_calc/static/js/runtime-main.5cfc9915.js",
-    "runtime-main.js.map": "/cube_calc/static/js/runtime-main.5cfc9915.js.map",
-    "static/js/2.b5e5b13b.chunk.js": "/cube_calc/static/js/2.b5e5b13b.chunk.js",
-    "static/js/2.b5e5b13b.chunk.js.map": "/cube_calc/static/js/2.b5e5b13b.chunk.js.map",
-    "static/js/3.c274ea7a.chunk.js": "/cube_calc/static/js/3.c274ea7a.chunk.js",
-    "static/js/3.c274ea7a.chunk.js.map": "/cube_calc/static/js/3.c274ea7a.chunk.js.map",
+    "main.css": "/cube_calc/static/css/main.073c9b0a.css",
+    "main.js": "/cube_calc/static/js/main.709dc9f7.js",
+    "static/js/787.7b89a554.chunk.js": "/cube_calc/static/js/787.7b89a554.chunk.js",
+    "static/media/daybreakPendant.png": "/cube_calc/static/media/daybreakPendant.2fe1f0306d86f947a116.png",
+    "static/media/choice_clean.png": "/cube_calc/static/media/choice_clean.2a4ccfb67a4dcc2d5dbc.png",
+    "static/media/regular_clean.png": "/cube_calc/static/media/regular_clean.9c9582f74babfc883f14.png",
     "index.html": "/cube_calc/index.html",
-    "static/css/main.5739ad41.chunk.css.map": "/cube_calc/static/css/main.5739ad41.chunk.css.map",
-    "static/js/2.b5e5b13b.chunk.js.LICENSE.txt": "/cube_calc/static/js/2.b5e5b13b.chunk.js.LICENSE.txt",
-    "static/media/choice_clean.png": "/cube_calc/static/media/choice_clean.2a4ccfb6.png",
-    "static/media/daybreakPendant.2fe1f030.png": "/cube_calc/static/media/daybreakPendant.2fe1f030.png",
-    "static/media/logo.6ce24c58.svg": "/cube_calc/static/media/logo.6ce24c58.svg",
-    "static/media/regular_clean.png": "/cube_calc/static/media/regular_clean.9c9582f7.png"
+    "main.073c9b0a.css.map": "/cube_calc/static/css/main.073c9b0a.css.map",
+    "main.709dc9f7.js.map": "/cube_calc/static/js/main.709dc9f7.js.map",
+    "787.7b89a554.chunk.js.map": "/cube_calc/static/js/787.7b89a554.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.5cfc9915.js",
-    "static/js/2.b5e5b13b.chunk.js",
-    "static/css/main.5739ad41.chunk.css",
-    "static/js/main.a230abe5.chunk.js"
+    "static/css/main.073c9b0a.css",
+    "static/js/main.709dc9f7.js"
   ]
 }
