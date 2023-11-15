@@ -1,6 +1,22 @@
 //15 cores to lvl lv1 is purposely left out
 
 let choice = "cores";
+const skillPercentagesFourth = [0.0981]; //names[4]
+const skillPercentagesFifth = [0.17, 0.1236, 0.083, 0.0728]; //names[0],names[1],names[2],names[3]
+const skillPercentagesSixth = [0.08]; //names[5]
+const twentyIed = 1.0142; //dmg increase percentage
+const twentyBoss = 1.0266; //dmg increase percentage
+const thirtyIedThirtyBoss = 1.0577; //dmg increase percentage after first two are applied, put in 50 boss 24 ied on one side and 20 boss on the other
+const fourthBaseline = [2589]; //total skill% done
+const fourthDmgIncreasePerLevel = [69]; //total skill% increase per lvl
+var names = [
+  "Micro Missiles",
+  "Mecha Carrier",
+  "Big Mech",
+  "Small Ass Turret",
+  "Splash-F",
+  "Origin",
+];
 
 const coresRequiredFourth = [
   15, 18, 20, 23, 25, 28, 30, 33, 100, 40, 45, 50, 55, 60, 65, 70, 75, 80, 175,
@@ -61,23 +77,7 @@ const baselineSixth = [
 const dmgIncreaseFourth = [[]];
 const dmgIncreaseFifth = [];
 const dmgIncreaseSixth = [];
-var names = [
-  "Micro Missiles",
-  "Mecha Carrier",
-  "Big Mech",
-  "Small Ass Turret",
-  "Splash-F",
-  "Origin",
-];
 const fullArray = [[], [], [], [], [], []];
-const skillPercentagesFourth = [0.0981]; //names[4]
-const skillPercentagesFifth = [0.17, 0.1236, 0.083, 0.0728]; //names[0],names[1],names[2],names[3]
-const skillPercentagesSixth = [0.08]; //names[5]
-const twentyIed = 1.0142; //dmg increase percentage
-const twentyBoss = 1.0266; //dmg increase percentage
-const thirtyIedThirtyBoss = 1.0577; //dmg increase percentage after first two are applied, put in 50 boss 24 ied on one side and 20 boss on the other
-const fourthBaseline = [2589]; //total skill% done
-const fourthDmgIncreasePerLevel = [69]; //total skill% increase per lvl
 
 //Fifth Job Calcs
 
