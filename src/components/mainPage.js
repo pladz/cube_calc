@@ -13,18 +13,6 @@ import PercentageGraphs from "./percentageGraphs";
 import { Link, useNavigate } from "react-router-dom";
 import ShouldITodd from "./shouldITodd";
 
-// const useStyles = makeStyles((theme) => ({
-//   menuButton: {
-//     marginRight: theme.spacing(2),
-//   },
-//   title: {
-//     flexGrow: 1,
-//   },
-//   button: {
-//     width: "120px",
-//   },
-// }));
-
 const MainPage = () => {
   // const classes = useStyles();
   const navigate = useNavigate();
@@ -47,10 +35,6 @@ const MainPage = () => {
   const handleOpen = () => {
     setOpen(!open);
   };
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

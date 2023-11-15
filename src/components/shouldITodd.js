@@ -1,15 +1,8 @@
 import React, { useEffect } from "react";
-// import { makeStyles, withStyles } from "@material-ui/core/styles";
-// import makeStyles from "@mui/styles/makeStyles";
-// import withStyles from "@mui/styles/withStyles";
-// import { makeStyles, withStyles } from "@mui/material";
-import { ThemeProvider, createTheme, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import {
   TextField,
   Button,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
   TableContainer,
   TableHead,
   TableBody,
@@ -20,77 +13,11 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
-import {
-  ExpandMore,
-  Clear,
-  Add,
-  DoubleArrow,
-  HelpOutline,
-} from "@mui/icons-material";
 import daybreakPendantIcon from "./icons/daybreakPendant.png";
 
 import { useNavigate } from "react-router-dom";
 
-//CSS
-// const useStyles = makeStyles((theme) => ({
-//   avatar: {
-//     width: theme.spacing(15),
-//     height: theme.spacing(15),
-//     margin: theme.spacing(1),
-//   },
-//   title: {
-//     color: "tomato",
-//   },
-//   subtitle: {
-//     color: "tan",
-//     marginBottom: "3rem",
-//   },
-//   typedContainer: {
-//     position: "absolute",
-//     top: "50%",
-//     left: "50%",
-//     transform: "translate(-50%,-50%)",
-//     width: "100vw",
-//     textAlign: "center",
-//     zIndex: 1,
-//   },
-//   flex: {
-//     display: "flex",
-//   },
-//   cubesAccordion: {
-//     width: "100%",
-//   },
-//   buffer: {
-//     marginTop: "10px",
-//     marginRight: "0px",
-//     marginBottom: "10px",
-//     marginLeft: "0px",
-//   },
-//   textBuffer: {
-//     marginTop: "0px",
-//     marginRight: "0px",
-//     marginBottom: "0px",
-//     marginLeft: "15px",
-//   },
-//   button: {
-//     width: 24,
-//     height: 24,
-//     padding: 0,
-//   },
-//   parent: {
-//     display: "flex",
-//     flexWrap: "wrap",
-//     justifyContent: "center",
-//   },
-//   boxes: {
-//     flex: "1 1 150px" /*  Stretching: */,
-//     margin: "5px",
-//   },
-// }));
-
 export default function ShouldITodd() {
-  // const classes = useStyles();
   const navigate = useNavigate();
   const [numTrials, setNumTrials] = React.useState(0);
   const [mainCost, setMainCost] = React.useState(0);
@@ -183,8 +110,6 @@ export default function ShouldITodd() {
     let sixteenTodds = 0;
     let seventeenTodds = 0;
     let eighteenTodds = 0;
-
-    let sixtee;
 
     for (let i = numTrials; i >= 0; i--) {
       let sixteenCycle = simulateOneCycle(16);

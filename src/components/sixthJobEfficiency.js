@@ -75,7 +75,9 @@ const skillPercentagesFifth = [0.17, 0.1236, 0.083, 0.0728]; //names[0],names[1]
 const skillPercentagesSixth = [0.08]; //names[5]
 const twentyIed = 1.0142; //dmg increase percentage
 const twentyBoss = 1.0266; //dmg increase percentage
-const thirtyIedThirtyBoss = 1.0577; //dmg increase percentage after first two are applied
+const thirtyIedThirtyBoss = 1.0577; //dmg increase percentage after first two are applied, put in 50 boss 24 ied on one side and 20 boss on the other
+const fourthBaseline = [2589]; //total skill% done
+const fourthDmgIncreasePerLevel = [69]; //total skill% increase per lvl
 
 //Fifth Job Calcs
 
@@ -95,9 +97,6 @@ for (let i = 0; i < skillPercentagesFifth.length; i++) {
   }
   fullArray[i] = tempArr;
 }
-
-const fourthBaseline = [2589]; //total skill% done
-const fourthDmgIncreasePerLevel = [69]; //total skill% increase per lvl
 
 //Fourth Job Calcs
 
