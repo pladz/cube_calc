@@ -80,7 +80,6 @@ import {
   uniqueWeaponLines,
   uniqueSecondaryLines,
   uniqueEmblemLines,
-  uniqueHeartLines,
 } from "./uniqueLines";
 import {
   pclegendHatLines,
@@ -106,7 +105,6 @@ import {
   pcuniqueWeaponLines,
   pcuniqueSecondaryLines,
   pcuniqueEmblemLines,
-  pcuniqueHeartLines,
 } from "./pcuniqueLines";
 
 import purpleCubeIcon from "./icons/purple_clean.png";
@@ -547,7 +545,7 @@ export default function PotentialTable() {
         break;
       case "Heart":
         curLines = legendHeartLines.concat(pclegendHeartLines);
-        curSubLines = uniqueHeartLines.concat(pcuniqueHeartLines);
+        curSubLines = uniqueAccessoryLines.concat(pcuniqueAccessoryLines);
         break;
       case "Weapon":
         curLines = legendWeaponLines.concat(pclegendWeaponLines);
@@ -563,7 +561,7 @@ export default function PotentialTable() {
         break;
       default:
         curLines = legendHatLines;
-        curSubLines = uniqueHeartLines
+        curSubLines = uniqueHatLines
         break;
     }
 
@@ -1577,7 +1575,7 @@ export default function PotentialTable() {
         legendLines = legendHeartLines;
         uniqueLines = uniqueAccessoryLines;
         pcLegendLines = pclegendHeartLines;
-        pcUniqueLines = pcuniqueHeartLines;
+        pcUniqueLines = pcuniqueAccessoryLines;
         break;
       case "Weapon":
         legendLines = legendWeaponLines;
