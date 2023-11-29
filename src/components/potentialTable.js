@@ -33,30 +33,30 @@ import {
 } from "@mui/material";
 // import Autocomplete from "@mui/material/Autocomplete";
 import { ExpandMore, HelpOutline, ExpandLess } from "@mui/icons-material";
-import {
-  hatLines,
-  topLines,
-  bottomLines,
-  shoeLines,
-  gloveLines,
-  capeShoulderBeltLines,
-  accessoryLines,
-  heartLines,
-  weaponLines,
-  secondaryLines,
-  emblemLines,
-} from "./lines";
-import {
-  hatSubLines,
-  topSubLines,
-  bottomShoeSubLines,
-  gloveSubLines,
-  capeShoulderBeltSubLines,
-  accessorySubLines,
-  weaponSubLines,
-  secondarySubLines,
-  emblemSubLines,
-} from "./subLines";
+// import {
+//   hatLines,
+//   topLines,
+//   bottomLines,
+//   shoeLines,
+//   gloveLines,
+//   capeShoulderBeltLines,
+//   accessoryLines,
+//   heartLines,
+//   weaponLines,
+//   secondaryLines,
+//   emblemLines,
+// } from "./lines";
+// import {
+//   hatSubLines,
+//   topSubLines,
+//   bottomShoeSubLines,
+//   gloveSubLines,
+//   capeShoulderBeltSubLines,
+//   accessorySubLines,
+//   weaponSubLines,
+//   secondarySubLines,
+//   emblemSubLines,
+// } from "./subLines";
 import {
   legendHatLines,
   legendTopLines,
@@ -81,6 +81,31 @@ import {
   uniqueSecondaryLines,
   uniqueEmblemLines,
 } from "./uniqueLines";
+import {
+  pclegendHatLines,
+  pclegendTopLines,
+  pclegendBottomLines,
+  pclegendShoeLines,
+  pclegendGloveLines,
+  pclegendCapeShoulderBeltLines,
+  pclegendAccessoryLines,
+  pcpclegendHeartLines,
+  pclegendWeaponLines,
+  pclegendSecondaryLines,
+  pclegendEmblemLines,
+  pclegendHeartLines,
+} from "./pclegendLines";
+import {
+  pcuniqueHatLines,
+  pcuniqueTopLines,
+  pcuniquebottomShoeLines,
+  pcuniqueGloveLines,
+  pcuniqueCapeShoulderBeltLines,
+  pcuniqueAccessoryLines,
+  pcuniqueWeaponLines,
+  pcuniqueSecondaryLines,
+  pcuniqueEmblemLines,
+} from "./pcuniqueLines";
 
 import purpleCubeIcon from "./icons/purple_clean.png";
 import blackCubeIcon from "./icons/black_clean.png";
@@ -407,6 +432,8 @@ export default function PotentialTable() {
 
   const [legendLineOp, setLegendLineOp] = useState([]);
   const [uniqueLineOp, setUniqueLineOp] = useState([]);
+  const [pcLegendLineOp, setPcLegendLineOp] = useState([]);
+  const [pcUniqueLineOp, setPcUniqueLineOp] = useState([]);
   const [acceptAS1, setAcceptAS1] = useState(false);
   const [acceptAS2, setAcceptAS2] = useState(false);
 
@@ -441,11 +468,13 @@ export default function PotentialTable() {
   const [blackProbability, setBlackProbability] = useState(0);
   const [redProbability, setRedProbability] = useState(0);
   const [equalityProbability, setEqualityProbability] = useState(0);
+  const [purpleProbability, setPurpleProbability] = useState(0);
 
   const [hexaCubeNumber, setHexaCubeNumber] = useState(0);
   const [blackCubeNumber, setBlackCubeNumber] = useState(0);
   const [redCubeNumber, setRedCubeNumber] = useState(0);
   const [equalityCubeNumber, setEqualityCubeNumber] = useState(0);
+  const [purpleCubeNumber, setPurpleCubeNumber] = useState(0);
 
   //table
   const [rows, setRows] = React.useState([]);
@@ -480,118 +509,61 @@ export default function PotentialTable() {
 
     switch (title) {
       case "Hat":
-        curLines = hatLines;
-        curSubLines = hatSubLines;
+        curLines = legendHatLines.concat(pclegendHatLines);
+        curSubLines = uniqueHatLines.concat(pcuniqueHatLines);
         break;
       case "Top":
-        curLines = topLines;
-        curSubLines = topSubLines;
+      case "Overall":
+        curLines = legendTopLines.concat(pclegendTopLines);
+        curSubLines = uniqueTopLines.concat(pcuniqueTopLines);
         break;
       case "Bottom":
-        curLines = bottomLines;
-        curSubLines = bottomShoeSubLines;
-        break;
-      case "Overall":
-        curLines = topLines;
-        curSubLines = topSubLines;
+        curLines = legendBottomLines.concat(pclegendBottomLines);
+        curSubLines = uniquebottomShoeLines.concat(pcuniquebottomShoeLines);
         break;
       case "Shoe":
-        curLines = shoeLines;
-        curSubLines = bottomShoeSubLines;
+        curLines = legendShoeLines.concat(pclegendShoeLines);
+        curSubLines = uniquebottomShoeLines.concat(pcuniquebottomShoeLines);
         break;
       case "Glove":
-        curLines = gloveLines;
-        curSubLines = gloveSubLines;
+        curLines = legendGloveLines.concat(pclegendGloveLines);
+        curSubLines = uniqueGloveLines.concat(pcuniqueGloveLines);
         break;
       case "Cape":
       case "Shoulder":
       case "Belt":
-        curLines = capeShoulderBeltLines;
-        curSubLines = capeShoulderBeltSubLines;
+        curLines = legendCapeShoulderBeltLines.concat(pclegendCapeShoulderBeltLines);
+        curSubLines = uniqueCapeShoulderBeltLines.concat(pcuniqueCapeShoulderBeltLines);
         break;
       case "Ring":
       case "Earring":
       case "Pendant":
       case "Face":
       case "Eye":
-        curLines = accessoryLines;
-        curSubLines = accessorySubLines;
+        curLines = legendAccessoryLines.concat(pclegendAccessoryLines);
+        curSubLines = uniqueAccessoryLines.concat(pcuniqueAccessoryLines);
         break;
       case "Heart":
-        curLines = heartLines;
-        curSubLines = accessorySubLines;
-        // curSubLines = heartSubLines;
+        curLines = legendHeartLines.concat(pclegendHeartLines);
+        curSubLines = uniqueAccessoryLines.concat(pcuniqueAccessoryLines);
         break;
       case "Weapon":
-        curLines = weaponLines;
-        curSubLines = weaponSubLines;
+        curLines = legendWeaponLines.concat(pclegendWeaponLines);
+        curSubLines = uniqueWeaponLines.concat(pcuniqueWeaponLines);
         break;
       case "Secondary":
-        curLines = secondaryLines;
-        curSubLines = secondarySubLines;
+        curLines = legendSecondaryLines.concat(pclegendSecondaryLines);
+        curSubLines = uniqueSecondaryLines.concat(pcuniqueSecondaryLines);
         break;
       case "Emblem":
-        curLines = emblemLines;
-        curSubLines = emblemSubLines;
+        curLines = legendEmblemLines.concat(pclegendEmblemLines);
+        curSubLines = uniqueEmblemLines.concat(pcuniqueEmblemLines);
         break;
       default:
-        curLines = hatLines;
+        curLines = legendHatLines;
+        curSubLines = uniqueHatLines
         break;
     }
-
-    setLineOptions(
-      curLines.map((option) => {
-        const stat = option.stat;
-        const prime = option.prime;
-        const red1 = option.red1;
-        const black1 = option.black1;
-        const red2 = option.red2;
-        const black2 = option.black2;
-        const red3 = option.red3;
-        const black3 = option.black3;
-        const type = option.type;
-        const value = option.value;
-
-        return {
-          stat: stat,
-          type: type,
-          value: value,
-          prime: prime,
-          red1: red1,
-          black1: black1,
-          red2: red2,
-          black2: black2,
-          red3: red3,
-          black3: black3,
-          ...option,
-        };
-      })
-    );
-
-    setSubLineOptions(
-      curLines.concat(curSubLines).map((option) => {
-        const stat = option.stat;
-        const prime = option.prime;
-        const red2 = option.red2;
-        const black2 = option.black2;
-        const red3 = option.red3;
-        const black3 = option.black3;
-        const type = option.type;
-        const value = option.value;
-
-        return {
-          stat: stat,
-          type: type,
-          value: value,
-          prime: prime,
-          red2: red2,
-          black2: black2,
-          red3: red3,
-          black3: black3,
-          ...option,
-        };
-      })
-    );
 
     let types = curLines
       .concat(curSubLines)
@@ -604,9 +576,8 @@ export default function PotentialTable() {
       })
       .filter((option) => !switchChecked || option.type !== "DEF");
 
-    let result = types.filter(function ({ type }) {
-      return !this.has(type) && this.add(type);
-    }, new Set());
+      // Get unique types
+      const result = Array.from(new Set(types.map(item => item.type))).map(type => types.find(item => item.type === type));
 
     setTypeOptions(result);
   }
@@ -738,6 +709,7 @@ export default function PotentialTable() {
     const red3 = 100; // 1 in 100 chance of being a legendary line for red cube 3rd line
     const black2 = 5;
     const black3 = 20;
+    const purple2 = 501;
     const specialLines = [
       "DR",
       "IED",
@@ -811,20 +783,40 @@ export default function PotentialTable() {
     }
 
     // Remove line options if option limit is reached
-    legendLineOp.forEach((line) => {
-      if (specialLinesToRemove.includes(line.type)) {
-        return;
-      }
-      tempLines.push({ ...line });
-    });
-
-    if (lineNumber === 2 || lineNumber === 3) {
-      uniqueLineOp.forEach((line) => {
+    if (cubeType === "Purple") {
+      pcLegendLineOp.forEach((line) => {
         if (specialLinesToRemove.includes(line.type)) {
           return;
         }
-        tempLines2.push({ ...line });
+        tempLines.push({ ...line });
       });
+    }
+    else {
+      legendLineOp.forEach((line) => {
+        if (specialLinesToRemove.includes(line.type)) {
+          return;
+        }
+        tempLines.push({ ...line });
+      });
+    }
+
+    if (lineNumber === 2 || lineNumber === 3) {
+      if (cubeType === "Purple") {
+        pcUniqueLineOp.forEach((line) => {
+          if (specialLinesToRemove.includes(line.type)) {
+            return;
+          }
+          tempLines2.push({ ...line });
+        });
+      }
+      else {
+        uniqueLineOp.forEach((line) => {
+          if (specialLinesToRemove.includes(line.type)) {
+            return;
+          }
+          tempLines2.push({ ...line });
+        });
+      }
     }
 
     // Remove def lines if toggle v225 is on
@@ -853,12 +845,16 @@ export default function PotentialTable() {
             mappedLines.push({ ...line, totalWeight: totalWeights * red2 });
           } else if (cubeType === "Black") {
             mappedLines.push({ ...line, totalWeight: totalWeights * black2 });
-          }
+          } else if (cubeType === "Purple") {
+            mappedLines.push({ ...line, totalWeight: totalWeights * purple2 });
+          } 
         } else if (lineNumber === 3) {
           if (cubeType === "Red") {
             mappedLines.push({ ...line, totalWeight: totalWeights * red3 });
           } else if (cubeType === "Black") {
             mappedLines.push({ ...line, totalWeight: totalWeights * black3 });
+          } else if (cubeType === "Purple") {
+            mappedLines.push({ ...line, totalWeight: totalWeights * purple2 });
           }
         }
       }
@@ -888,6 +884,12 @@ export default function PotentialTable() {
                 weight: line.weight * (black2 - 1),
                 totalWeight: totalWeights2 * black2,
               });
+            } else if (cubeType === "Purple") {
+              mappedLines.push({
+                ...line,
+                weight: line.weight * (purple2 - 1),
+                totalWeight: totalWeights2 * purple2,
+              });
             }
           } else if (lineNumber === 3) {
             if (cubeType === "Red") {
@@ -901,6 +903,12 @@ export default function PotentialTable() {
                 ...line,
                 weight: line.weight * (black3 - 1),
                 totalWeight: totalWeights2 * black3,
+              });
+            } else if (cubeType === "Purple") {
+              mappedLines.push({
+                ...line,
+                weight: line.weight * (purple2 - 1),
+                totalWeight: totalWeights2 * purple2,
               });
             }
           }
@@ -924,6 +932,10 @@ export default function PotentialTable() {
         if (lineNumber === 2) {
           multiplier = black2;
         } else multiplier = black3;
+      } else if (cubeType === "Purple") {
+        if (lineNumber === 2) {
+          multiplier = purple2;
+        } else multiplier = purple2;
       }
 
       junkWeight =
@@ -1348,10 +1360,37 @@ export default function PotentialTable() {
     setBlackCubeNumber((1 / totalProbability).toFixed(CUBE_DECIMAL));
   };
 
+  const newPurpleCalc = () => {
+    let totalProbability = 0;
+    const currentLines = [];
+    const line1 = potentialLineFormat(currentLines, "Purple", 1);
+
+    for (const l1 of line1) {
+      const addedLine1 = l1.type;
+      currentLines.push(addedLine1);
+
+      const line2 = potentialLineFormat(currentLines, "Purple", 2);
+      for (const l2 of line2) {
+        const addedLine2 = l2.type;
+        currentLines.push(addedLine2);
+        const line3 = potentialLineFormat(currentLines, "Purple", 3);
+        for (const l3 of line3) {
+          totalProbability += cubeProbabiltyCalc(l1, l2, l3);
+        }
+        currentLines.splice(currentLines.indexOf(addedLine2), 1);
+      }
+      currentLines.splice(currentLines.indexOf(addedLine1), 1);
+    }
+
+    setPurpleProbability(totalProbability);
+    setPurpleCubeNumber((1 / totalProbability).toFixed(CUBE_DECIMAL));
+  };
+
   const newProbCalc = () => {
     newHexaAndRedCalc();
     newEqualityCalc();
     newBlackCalc();
+    newPurpleCalc();
   };
 
   const toggleSwitch = () => {
@@ -1480,33 +1519,47 @@ export default function PotentialTable() {
   useEffect(() => {
     let legendLines = [];
     let uniqueLines = [];
+    let pcLegendLines = [];
+    let pcUniqueLines = [];
     switch (inputValue) {
       case "Hat":
         legendLines = legendHatLines;
         uniqueLines = uniqueHatLines;
+        pcLegendLines = pclegendHatLines;
+        pcUniqueLines = pcuniqueHatLines;
         break;
       case "Top":
       case "Overall":
         legendLines = legendTopLines;
         uniqueLines = uniqueTopLines;
+        pcLegendLines = pclegendTopLines;
+        pcUniqueLines = pcuniqueTopLines;
         break;
       case "Bottom":
         legendLines = legendBottomLines;
         uniqueLines = uniquebottomShoeLines;
+        pcLegendLines = pclegendBottomLines;
+        pcUniqueLines = pcuniquebottomShoeLines;
         break;
       case "Shoe":
         legendLines = legendShoeLines;
         uniqueLines = uniquebottomShoeLines;
+        pcLegendLines = pclegendShoeLines;
+        pcUniqueLines = pcuniquebottomShoeLines;
         break;
       case "Glove":
         legendLines = legendGloveLines;
         uniqueLines = uniqueGloveLines;
+        pcLegendLines = pclegendGloveLines;
+        pcUniqueLines = pcuniqueGloveLines;
         break;
       case "Cape":
       case "Shoulder":
       case "Belt":
         legendLines = legendCapeShoulderBeltLines;
         uniqueLines = uniqueCapeShoulderBeltLines;
+        pcLegendLines = pclegendCapeShoulderBeltLines;
+        pcUniqueLines = pcuniqueCapeShoulderBeltLines;
         break;
       case "Ring":
       case "Earring":
@@ -1515,31 +1568,45 @@ export default function PotentialTable() {
       case "Eye":
         legendLines = legendAccessoryLines;
         uniqueLines = uniqueAccessoryLines;
+        pcLegendLines = pclegendAccessoryLines;
+        pcUniqueLines = pcuniqueAccessoryLines;
         break;
       case "Heart":
         legendLines = legendHeartLines;
         uniqueLines = uniqueAccessoryLines;
+        pcLegendLines = pclegendHeartLines;
+        pcUniqueLines = pcuniqueAccessoryLines;
         break;
       case "Weapon":
         legendLines = legendWeaponLines;
         uniqueLines = uniqueWeaponLines;
+        pcLegendLines = pclegendWeaponLines;
+        pcUniqueLines = pcuniqueWeaponLines;
         break;
       case "Secondary":
         legendLines = legendSecondaryLines;
         uniqueLines = uniqueSecondaryLines;
+        pcLegendLines = pclegendSecondaryLines;
+        pcUniqueLines = pcuniqueSecondaryLines;
         break;
       case "Emblem":
         legendLines = legendEmblemLines;
         uniqueLines = uniqueEmblemLines;
+        pcLegendLines = pclegendEmblemLines;
+        pcUniqueLines = pcuniqueEmblemLines;
         break;
       default:
         legendLines = legendHatLines;
         uniqueLines = uniqueHatLines;
+        pcLegendLines = pclegendHatLines;
+        pcUniqueLines = pcuniqueHatLines;
         break;
     }
 
     setLegendLineOp(legendLines);
     setUniqueLineOp(uniqueLines);
+    setPcLegendLineOp(pcLegendLines);
+    setPcUniqueLineOp(pcUniqueLines);
   }, [inputValue]);
 
   return (
@@ -1923,6 +1990,27 @@ export default function PotentialTable() {
                   One in{" "}
                   {hexaCubeNumber !== 0 ? (
                     <b>{formatNumberWithCommas(hexaCubeNumber)}</b>
+                  ) : (
+                    "Infinite"
+                  )}{" "}
+                  cubes
+                </StyledTableCell>
+              </TableRow>
+              <TableRow>
+                <StyledTableCell>
+                  <StyledTableCellContent>
+                    <span>Purple Cube</span>
+                    <img height="25px" src={purpleCubeIcon} />
+                  </StyledTableCellContent>
+                </StyledTableCell>
+                <StyledTableCell>
+                  {(purpleProbability * 100).toPrecision(DECIMAL_PRECISION)}
+                  &nbsp;%
+                </StyledTableCell>
+                <StyledTableCell>
+                  One in{" "}
+                  {purpleCubeNumber !== 0 ? (
+                    <b>{formatNumberWithCommas(purpleCubeNumber)}</b>
                   ) : (
                     "Infinite"
                   )}{" "}
