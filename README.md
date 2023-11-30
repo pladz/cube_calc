@@ -44,3 +44,7 @@ This simulation can:
 21/9/23
 
 - Added toggle option to reflect cube lines changes for v225: Def lines removed
+
+29/11/23
+
+- Added probability calculations for purple cube
