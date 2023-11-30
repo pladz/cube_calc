@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/cube_calc" element={<MainPage />} />
-        {/* <Route path="/stats_calc" element={<MainStatsEqui />} /> */}
+        <Route path="/stats_calc" element={<MainStatsEqui />} />
         {/* <Route path="/todd_calc" element={<ShouldITodd />} /> */}
       </Routes>
     </BrowserRouter>

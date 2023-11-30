@@ -674,7 +674,8 @@ const MainStatsEqui = () => {
       name: "Weapon",
       starforce: 22,
       set: "Fafnir",
-      setOptions: ["Fafnir", "Absolabs", "Genesis"],
+      setOptions: ["Others", "Fafnir", "Absolabs", "Genesis"],
+      equipType: "Others",
       potential: {
         potentialLines: [],
         firstLine: { type: "STR", value: 12 },
@@ -683,82 +684,66 @@ const MainStatsEqui = () => {
         str: {
           name: "STR",
           total: 0,
-          sources: [
-            { name: "Base", value: 150 },
-            { name: "Flame", value: 0 },
-            { name: "Scrolling", value: 0 },
-            { name: "Starforce", value: 0 },
-          ],
+          base: 150,
+          flame: 0,
+          scrolling: 0,
+          starforce: 0,
         },
         dex: {
           name: "DEX",
           total: 0,
-          sources: [
-            { name: "Base", value: 150 },
-            { name: "Flame", value: 0 },
-            { name: "Scrolling", value: 0 },
-            { name: "Starforce", value: 0 },
-          ],
+          base: 150,
+          flame: 15,
+          scrolling: 0,
+          starforce: 0,
         },
         int: {
           name: "INT",
           total: 0,
-          sources: [
-            { name: "Base", value: 150 },
-            { name: "Flame", value: 0 },
-            { name: "Scrolling", value: 0 },
-            { name: "Starforce", value: 0 },
-          ],
+          base: 150,
+          flame: 0,
+          scrolling: 0,
+          starforce: 0,
         },
         luk: {
           name: "LUK",
           total: 0,
-          sources: [
-            { name: "Base", value: 150 },
-            { name: "Flame", value: 0 },
-            { name: "Scrolling", value: 0 },
-            { name: "Starforce", value: 0 },
-          ],
+          base: 150,
+          flame: 0,
+          scrolling: 0,
+          starforce: 0,
         },
         hp: {
           name: "MaxHP",
           total: 0,
-          sources: [
-            { name: "Base", value: 150 },
-            { name: "Flame", value: 0 },
-            { name: "Scrolling", value: 0 },
-            { name: "Starforce", value: 0 },
-          ],
+          base: 150,
+          flame: 0,
+          scrolling: 0,
+          starforce: 0,
         },
         mp: {
           name: "MaxMP",
           total: 0,
-          sources: [
-            { name: "Base", value: 150 },
-            { name: "Flame", value: 0 },
-            { name: "Scrolling", value: 0 },
-            { name: "Starforce", value: 0 },
-          ],
+          base: 150,
+          flame: 0,
+          scrolling: 0,
+          starforce: 0,
         },
         ied: {
           name: "Ignore Monster Defense",
           total: 0,
-          sources: [
-            { name: "Base", value: 5 },
-            { name: "Flame", value: 0 },
-            { name: "Scrolling", value: 0 },
-            { name: "Starforce", value: 0 },
-          ],
+          base: 150,
+          flame: 0,
+          scrolling: 0,
+          starforce: 0,
         },
         as: {
           name: "All Stats",
           total: 6,
-          sources: [
-            { name: "Base", value: 0 },
-            { name: "Flame", value: 6 },
-            { name: "Scrolling", value: 0 },
-            { name: "Starforce", value: 0 },
-          ],
+          base: 150,
+          flame: 0,
+          scrolling: 0,
+          starforce: 0,
         },
       },
     },
@@ -821,6 +806,26 @@ const MainStatsEqui = () => {
       )
     );
     console.log(fieldId);
+  };
+
+  const updateStarforce = (equipmentId, newStarforce) => {
+    setEquipStats((prevEquipStats) =>
+      prevEquipStats.map((equipment) =>
+        equipment.id === equipmentId
+          ? { ...equipment, starforce: newStarforce }
+          : equipment
+      )
+    );
+  };
+
+  const updateEquipType = (equipmentId, newEquipType) => {
+    setEquipStats((prevEquipType) =>
+      prevEquipType.map((equipment) =>
+        equipment.id === equipmentId
+          ? { ...equipment, equipType: newEquipType }
+          : equipment
+      )
+    );
   };
 
   const renderInputFields = (fields, onFieldChange) => {
@@ -915,7 +920,7 @@ const MainStatsEqui = () => {
         </Tabs>
       </Paper>
       <Paper
-        style={{
+        sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -969,7 +974,11 @@ const MainStatsEqui = () => {
 
         {tabState === 5 && (
           <div key={5} style={{ width: "95%" }}>
-            <EquipTable equipStats={equipStats} />
+            <EquipTable
+              equipStats={equipStats}
+              updateStarforce={updateStarforce}
+              updateEquipType={updateEquipType}
+            />
           </div>
         )}
       </Paper>

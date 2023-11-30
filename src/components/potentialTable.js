@@ -1659,8 +1659,9 @@ export default function PotentialTable() {
                     60% BOSS % 9 ATK
                   </Typography>
                   <Typography gutterBottom>
-                    5. Take note that AllStat filters already filter for the stat you want.
-                    eg. Putting in 33% Str will also return 12%Str/12%Str/9%AS combinations
+                    5. Take note that AllStat filters already filter for the
+                    stat you want. eg. Putting in 33% Str will also return
+                    12%Str/12%Str/9%AS combinations
                   </Typography>
                 </DialogContent>
               </Dialog>
