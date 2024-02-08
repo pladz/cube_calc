@@ -25,11 +25,10 @@ import {
   Button,
   ButtonBase,
   Container,
-  Switch,
-  FormGroup,
-  FormControlLabel,
   Autocomplete,
   useMediaQuery,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 // import Autocomplete from "@mui/material/Autocomplete";
 import { ExpandMore, HelpOutline, ExpandLess } from "@mui/icons-material";
@@ -384,6 +383,15 @@ export default function PotentialTable() {
       // },
       // [theme.breakpoints.up("sm")]: {},
     },
+    toggleButtonGroup: {
+      marginTop: "5px",
+      [theme.breakpoints.down("sm")]: {
+        // flex: "0 0 100%",
+      },
+      [theme.breakpoints.up("sm")]: {
+        // flex: "0 1 50%",
+      },
+    },
     textBuffer: {
       marginTop: "0px",
       marginRight: "0px",
@@ -496,7 +504,7 @@ export default function PotentialTable() {
     setSecondOptionExpand((secondOptionExpand) => !secondOptionExpand);
   };
 
-  const [switchChecked, setSwitchChecked] = useState(true);
+  const [toggleValue, setToggleValue] = useState("v229");
 
   const safeParseInt = (value) => {
     const num = parseInt(value);
@@ -532,8 +540,12 @@ export default function PotentialTable() {
       case "Cape":
       case "Shoulder":
       case "Belt":
-        curLines = legendCapeShoulderBeltLines.concat(pclegendCapeShoulderBeltLines);
-        curSubLines = uniqueCapeShoulderBeltLines.concat(pcuniqueCapeShoulderBeltLines);
+        curLines = legendCapeShoulderBeltLines.concat(
+          pclegendCapeShoulderBeltLines
+        );
+        curSubLines = uniqueCapeShoulderBeltLines.concat(
+          pcuniqueCapeShoulderBeltLines
+        );
         break;
       case "Ring":
       case "Earring":
@@ -561,7 +573,7 @@ export default function PotentialTable() {
         break;
       default:
         curLines = legendHatLines;
-        curSubLines = uniqueHatLines
+        curSubLines = uniqueHatLines;
         break;
     }
 
@@ -574,10 +586,12 @@ export default function PotentialTable() {
           type: type,
         };
       })
-      .filter((option) => !switchChecked || option.type !== "DEF");
+      .filter((option) => toggleValue === "pre_v225" || option.type !== "DEF");
 
-      // Get unique types
-      const result = Array.from(new Set(types.map(item => item.type))).map(type => types.find(item => item.type === type));
+    // Get unique types
+    const result = Array.from(new Set(types.map((item) => item.type))).map(
+      (type) => types.find((item) => item.type === type)
+    );
 
     setTypeOptions(result);
   }
@@ -778,7 +792,9 @@ export default function PotentialTable() {
       );
       specialLinesToRemove.push("Chance of being invincibile");
     }
-    if (switchChecked) {
+
+    // Remove def lines if pre_v225 is selected
+    if (toggleValue !== "pre_v225") {
       specialLinesToRemove.push("DEF");
     }
 
@@ -790,8 +806,7 @@ export default function PotentialTable() {
         }
         tempLines.push({ ...line });
       });
-    }
-    else {
+    } else {
       legendLineOp.forEach((line) => {
         if (specialLinesToRemove.includes(line.type)) {
           return;
@@ -808,8 +823,7 @@ export default function PotentialTable() {
           }
           tempLines2.push({ ...line });
         });
-      }
-      else {
+      } else {
         uniqueLineOp.forEach((line) => {
           if (specialLinesToRemove.includes(line.type)) {
             return;
@@ -818,8 +832,6 @@ export default function PotentialTable() {
         });
       }
     }
-
-    // Remove def lines if toggle v225 is on
 
     const totalWeights = lineWeightSum(tempLines);
     const usefulWeight = usefulLineWeightSum(tempLines, specialLinesFiltered);
@@ -847,7 +859,7 @@ export default function PotentialTable() {
             mappedLines.push({ ...line, totalWeight: totalWeights * black2 });
           } else if (cubeType === "Purple") {
             mappedLines.push({ ...line, totalWeight: totalWeights * purple2 });
-          } 
+          }
         } else if (lineNumber === 3) {
           if (cubeType === "Red") {
             mappedLines.push({ ...line, totalWeight: totalWeights * red3 });
@@ -890,6 +902,12 @@ export default function PotentialTable() {
                 weight: line.weight * (purple2 - 1),
                 totalWeight: totalWeights2 * purple2,
               });
+            } else if (cubeType === "Hexa") {
+              mappedLines.push({
+                ...line,
+                weight: line.weight,
+                totalWeight: totalWeights2,
+              });
             }
           } else if (lineNumber === 3) {
             if (cubeType === "Red") {
@@ -910,6 +928,12 @@ export default function PotentialTable() {
                 weight: line.weight * (purple2 - 1),
                 totalWeight: totalWeights2 * purple2,
               });
+            } else if (cubeType === "Hexa") {
+              mappedLines.push({
+                ...line,
+                weight: line.weight,
+                totalWeight: totalWeights2,
+              });
             }
           }
         }
@@ -923,7 +947,7 @@ export default function PotentialTable() {
       junkWeight = totalWeights - usefulWeight;
       junkTotalWeight = totalWeights;
     } else if (lineNumber === 2 || lineNumber === 3) {
-      let multiplier;
+      let multiplier = 1;
       if (cubeType === "Red") {
         if (lineNumber === 2) {
           multiplier = red2;
@@ -933,9 +957,7 @@ export default function PotentialTable() {
           multiplier = black2;
         } else multiplier = black3;
       } else if (cubeType === "Purple") {
-        if (lineNumber === 2) {
-          multiplier = purple2;
-        } else multiplier = purple2;
+        multiplier = purple2;
       }
 
       junkWeight =
@@ -944,6 +966,11 @@ export default function PotentialTable() {
           (multiplier - 1) *
           (totalWeights * multiplier);
       junkTotalWeight = totalWeights * totalWeights2 * multiplier ** 2;
+
+      if (cubeType === "Hexa") {
+        junkWeight = totalWeights2 - usefulWeight2;
+        junkTotalWeight = totalWeights2;
+      }
     }
 
     mappedLines.push({
@@ -1196,23 +1223,29 @@ export default function PotentialTable() {
     return { criteriaMet, addedLine };
   };
 
-  const newHexaAndRedCalc = () => {
+  const newHexaCalc = () => {
     let totalProbability = 0;
-    let redProbability = 0;
     let currentLines = [];
     const data = {};
 
-    const line1 = potentialLineFormat(currentLines, "Red", 1);
+    // Calculate based on old hexa prime rates (100, 10, 1, 10, 1, 1) if it's below v229. Else use (100, 0, 0, 0, 0, 0) for prime rates
+    let cubeType = "Red";
+    if (toggleValue === "v229") {
+      cubeType = "Hexa";
+    }
 
+    const line1 = potentialLineFormat(currentLines, cubeType, 1);
+
+    // Calculate probability for first 3 lines of hexa cube
     for (const l1 of line1) {
       const addedLine1 = l1.type;
       currentLines.push(addedLine1);
-      const line2 = potentialLineFormat(currentLines, "Red", 2);
+      const line2 = potentialLineFormat(currentLines, cubeType, 2);
 
       for (const l2 of line2) {
         const addedLine2 = l2.type;
         currentLines.push(addedLine2);
-        const line3 = potentialLineFormat(currentLines, "Red", 3);
+        const line3 = potentialLineFormat(currentLines, cubeType, 3);
 
         for (const l3 of line3) {
           totalProbability += hexaFirst3LinesCalc(l1, l2, l3, data);
@@ -1221,8 +1254,6 @@ export default function PotentialTable() {
       }
       currentLines.splice(currentLines.indexOf(addedLine1), 1);
     }
-
-    redProbability = totalProbability;
 
     for (const [key, value] of Object.entries(data)) {
       const lineComponents = key.split(", ");
@@ -1236,7 +1267,7 @@ export default function PotentialTable() {
         currentLines.push(line.type);
       }
 
-      const line4 = potentialLineFormat(currentLines, "Red", 2);
+      const line4 = potentialLineFormat(currentLines, cubeType, 2);
 
       for (const l4 of line4) {
         const result4 = hexaSingleLineCalc(l4, lines);
@@ -1246,7 +1277,7 @@ export default function PotentialTable() {
         }
         const addedLine4 = l4.type;
         currentLines.push(addedLine4);
-        const line5 = potentialLineFormat(currentLines, "Red", 3);
+        const line5 = potentialLineFormat(currentLines, cubeType, 3);
 
         for (const l5 of line5) {
           const result5 = hexaSingleLineCalc(l5, lines);
@@ -1259,7 +1290,7 @@ export default function PotentialTable() {
 
           const addedLine5 = l5.type;
           currentLines.push(addedLine5);
-          const line6 = potentialLineFormat(currentLines, "Red", 3);
+          const line6 = potentialLineFormat(currentLines, cubeType, 3);
 
           for (const l6 of line6) {
             const result6 = hexaSingleLineCalc(l6, lines);
@@ -1301,8 +1332,6 @@ export default function PotentialTable() {
       currentLines = [];
     }
 
-    setRedProbability(redProbability);
-    setRedCubeNumber((1 / redProbability).toFixed(CUBE_DECIMAL));
     setHexaProbability(totalProbability);
     setHexaCubeNumber((1 / totalProbability).toFixed(CUBE_DECIMAL));
   };
@@ -1331,6 +1360,33 @@ export default function PotentialTable() {
 
     setEqualityProbability(totalProbability);
     setEqualityCubeNumber((1 / totalProbability).toFixed(CUBE_DECIMAL));
+  };
+
+  const newRedCalc = () => {
+    let totalProbability = 0;
+    const currentLines = [];
+    const line1 = potentialLineFormat(currentLines, "Red", 1);
+
+    for (const l1 of line1) {
+      const addedLine1 = l1.type;
+      currentLines.push(addedLine1);
+
+      const line2 = potentialLineFormat(currentLines, "Red", 2);
+      for (const l2 of line2) {
+        const addedLine2 = l2.type;
+        currentLines.push(addedLine2);
+
+        const line3 = potentialLineFormat(currentLines, "Red", 3);
+        for (const l3 of line3) {
+          totalProbability += cubeProbabiltyCalc(l1, l2, l3);
+        }
+        currentLines.splice(currentLines.indexOf(addedLine2), 1);
+      }
+      currentLines.splice(currentLines.indexOf(addedLine1), 1);
+    }
+
+    setRedProbability(totalProbability);
+    setRedCubeNumber((1 / totalProbability).toFixed(CUBE_DECIMAL));
   };
 
   const newBlackCalc = () => {
@@ -1387,20 +1443,23 @@ export default function PotentialTable() {
   };
 
   const newProbCalc = () => {
-    newHexaAndRedCalc();
+    newHexaCalc();
     newEqualityCalc();
+    newRedCalc();
     newBlackCalc();
     newPurpleCalc();
   };
 
-  const toggleSwitch = () => {
-    setSwitchChecked((prev) => !prev);
+  const handleToggle = (event, selectedToggleValue) => {
+    if (selectedToggleValue !== null) {
+      setToggleValue(selectedToggleValue);
+    }
   };
 
   useEffect(() => {
     updateLineOptions(inputValue);
     newProbCalc();
-  }, [switchChecked]);
+  }, [toggleValue]);
   //============================================================= END ===============================================================
 
   function clearRows() {
@@ -1625,12 +1684,18 @@ export default function PotentialTable() {
           margin: "10px auto",
         }}
       >
-        <FormGroup>
-          <FormControlLabel
-            control={<Switch checked={switchChecked} onChange={toggleSwitch} />}
-            label="v225 and above"
-          />
-        </FormGroup>
+        <ToggleButtonGroup
+          size="small"
+          color="warning"
+          value={toggleValue}
+          exclusive
+          onChange={handleToggle}
+          sx={styles.toggleButtonGroup}
+        >
+          <ToggleButton value="pre_v225">Pre v225</ToggleButton>
+          <ToggleButton value="v225">v225</ToggleButton>
+          <ToggleButton value="v229">v229</ToggleButton>
+        </ToggleButtonGroup>
         <Container sx={styles.container_wrap} disableGutters>
           <Box sx={styles.box}>
             <Autocomplete
@@ -1658,12 +1723,14 @@ export default function PotentialTable() {
               <Grid container>
                 <Grid item xs={6}>
                   <Paper sx={styles.paper}>
-                    16% Crit -&gt; 1 in {switchChecked ? 36 : 43} Equality
+                    16% Crit -&gt; 1 in {toggleValue !== "pre_v225" ? 36 : 43}{" "}
+                    Equality
                   </Paper>
                 </Grid>
                 <Grid item xs={6}>
                   <Paper sx={styles.paper}>
-                    24% Crit -&gt; 1 in {switchChecked ? 1000 : 1331} Equality
+                    24% Crit -&gt; 1 in{" "}
+                    {toggleValue !== "pre_v225" ? 1000 : 1331} Equality
                   </Paper>
                 </Grid>
               </Grid>
@@ -1673,14 +1740,14 @@ export default function PotentialTable() {
               <Grid container>
                 <Grid item xs={6}>
                   <Paper sx={styles.paper}>
-                    At least 3s CDR -&gt; 1 in {switchChecked ? 37 : 44}{" "}
-                    Equality
+                    At least 3s CDR -&gt; 1 in{" "}
+                    {toggleValue !== "pre_v225" ? 37 : 44} Equality
                   </Paper>
                 </Grid>
                 <Grid item xs={6}>
                   <Paper sx={styles.paper}>
-                    At least 4s CDR -&gt; 1 in {switchChecked ? 129 : 157}{" "}
-                    Equality
+                    At least 4s CDR -&gt; 1 in{" "}
+                    {toggleValue !== "pre_v225" ? 129 : 157} Equality
                   </Paper>
                 </Grid>
               </Grid>
@@ -1889,9 +1956,11 @@ export default function PotentialTable() {
                 <StyledTableCell>
                   <StyledTableCellContent>
                     <span>
-                      {switchChecked ? "Regular\u00a0Cube" : "Red\u00a0Cube"}
+                      {toggleValue !== "pre_v225"
+                        ? "Regular\u00a0Cube"
+                        : "Red\u00a0Cube"}
                     </span>
-                    {switchChecked ? (
+                    {toggleValue !== "pre_v225" ? (
                       <img
                         style={{ height: "25px" }}
                         src={regularCubeIcon}
@@ -1924,9 +1993,11 @@ export default function PotentialTable() {
                 <StyledTableCell>
                   <StyledTableCellContent>
                     <span>
-                      {switchChecked ? "Choice\u00a0Cube" : "Black\u00a0Cube"}
+                      {toggleValue !== "pre_v225"
+                        ? "Choice\u00a0Cube"
+                        : "Black\u00a0Cube"}
                     </span>
-                    {switchChecked ? (
+                    {toggleValue !== "pre_v225" ? (
                       <img
                         style={{ height: "25px" }}
                         src={choiceCubeIcon}
@@ -2029,7 +2100,9 @@ export default function PotentialTable() {
         </Typography>
         <Typography sx={styles.textBuffer}>
           2. Hexacube lines assume that the first line is the first line of a
-          red cube, line 2/4 is a second line, and lines 3/5/6 are third lines.
+          red cube, line 2/4 is a second line, and lines 3/5/6 are third lines
+          for <b>v228</b> and below. In <b>v229</b>, prime line is assumed to
+          appear only in the first line.
         </Typography>
         <WhiteTextTypography color="textPrimary">
           This coding project is a prime example of why you need UI/UX designers

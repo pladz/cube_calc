@@ -48,3 +48,8 @@ This simulation can:
 29/11/23
 
 - Added probability calculations for purple cube
+
+9/2/24
+
+- Added toggle option for v229
+- Prime rates for the hexa cube used in v229 are as follows: (100%, 0%, 0%, 0%, 0%, 0%)
