@@ -1,16 +1,21 @@
 import { TextField } from "@mui/material";
 import { useState } from "react";
 
-const SimpleInputField = ({ fieldData, onFieldChange }) => {
+const SimpleInputField = ({
+  fieldData,
+  onFieldChange,
+  variant,
+  fullWidth = true,
+}) => {
   const [error, setError] = useState(false);
 
   return (
     <TextField
       key={fieldData.id}
       label={fieldData.name}
-      variant="outlined"
+      variant={variant || "outlined"}
       margin="normal"
-      fullWidth
+      fullWidth={fullWidth}
       type="number"
       value={fieldData.value}
       inputProps={{
