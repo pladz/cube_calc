@@ -724,6 +724,8 @@ export default function PotentialTable() {
     const black2 = 5;
     const black3 = 20;
     const purple2 = 501;
+    const hexa2 = Infinity; // 1 in infinity, no chance of line being a prime/legendary line
+    const hexa3 = Infinity;
     const specialLines = [
       "DR",
       "IED",
@@ -859,6 +861,8 @@ export default function PotentialTable() {
             mappedLines.push({ ...line, totalWeight: totalWeights * black2 });
           } else if (cubeType === "Purple") {
             mappedLines.push({ ...line, totalWeight: totalWeights * purple2 });
+          } else if (cubeType === "Hexa") {
+            mappedLines.push({ ...line, totalWeight: totalWeights * hexa2 });
           }
         } else if (lineNumber === 3) {
           if (cubeType === "Red") {
@@ -867,6 +871,8 @@ export default function PotentialTable() {
             mappedLines.push({ ...line, totalWeight: totalWeights * black3 });
           } else if (cubeType === "Purple") {
             mappedLines.push({ ...line, totalWeight: totalWeights * purple2 });
+          } else if (cubeType === "Hexa") {
+            mappedLines.push({ ...line, totalWeight: totalWeights * hexa3 });
           }
         }
       }
@@ -903,11 +909,19 @@ export default function PotentialTable() {
                 totalWeight: totalWeights2 * purple2,
               });
             } else if (cubeType === "Hexa") {
-              mappedLines.push({
-                ...line,
-                weight: line.weight,
-                totalWeight: totalWeights2,
-              });
+              if (hexa2 !== Infinity) {
+                mappedLines.push({
+                  ...line,
+                  weight: line.weight * (hexa2 - 1),
+                  totalWeight: totalWeights2 * hexa2,
+                });
+              } else {
+                mappedLines.push({
+                  ...line,
+                  weight: line.weight,
+                  totalWeight: totalWeights2,
+                });
+              }
             }
           } else if (lineNumber === 3) {
             if (cubeType === "Red") {
@@ -929,11 +943,19 @@ export default function PotentialTable() {
                 totalWeight: totalWeights2 * purple2,
               });
             } else if (cubeType === "Hexa") {
-              mappedLines.push({
-                ...line,
-                weight: line.weight,
-                totalWeight: totalWeights2,
-              });
+              if (hexa3 !== Infinity) {
+                mappedLines.push({
+                  ...line,
+                  weight: line.weight * (hexa3 - 1),
+                  totalWeight: totalWeights2 * hexa3,
+                });
+              } else {
+                mappedLines.push({
+                  ...line,
+                  weight: line.weight,
+                  totalWeight: totalWeights2,
+                });
+              }
             }
           }
         }
@@ -958,6 +980,10 @@ export default function PotentialTable() {
         } else multiplier = black3;
       } else if (cubeType === "Purple") {
         multiplier = purple2;
+      } else if (cubeType === "Hexa") {
+        if (lineNumber === 2) {
+          multiplier = hexa2;
+        } else multiplier = hexa3;
       }
 
       junkWeight =
@@ -967,7 +993,7 @@ export default function PotentialTable() {
           (totalWeights * multiplier);
       junkTotalWeight = totalWeights * totalWeights2 * multiplier ** 2;
 
-      if (cubeType === "Hexa") {
+      if (cubeType === "Hexa" && (hexa2 === Infinity || hexa3 === Infinity)) {
         junkWeight = totalWeights2 - usefulWeight2;
         junkTotalWeight = totalWeights2;
       }
@@ -2101,8 +2127,11 @@ export default function PotentialTable() {
         <Typography sx={styles.textBuffer}>
           2. Hexacube lines assume that the first line is the first line of a
           red cube, line 2/4 is a second line, and lines 3/5/6 are third lines
-          for <b>v228</b> and below. In <b>v229</b>, prime line is assumed to
-          appear only in the first line.
+          for <b>v228</b> and below.{" "}
+          <span style={{ color: "magenta" }}>
+            In <b>v229</b>, prime line is assumed to appear only in the first
+            line.
+          </span>
         </Typography>
         <WhiteTextTypography color="textPrimary">
           This coding project is a prime example of why you need UI/UX designers

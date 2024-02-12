@@ -52,4 +52,4 @@ This simulation can:
 9/2/24
 
 - Added toggle option for v229
-- Prime rates for the hexa cube used in v229 are as follows: (100%, 0%, 0%, 0%, 0%, 0%)
+- Prime rates for the hexa cube calculation used in v229 are as follows: 100%, 0%, 0%, 0%, 0%, 0%
