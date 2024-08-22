@@ -745,18 +745,18 @@ export default function PotentialTable() {
       );
       specialLinesToRemove.push("Decent Skill");
     }
-    if (dRCount === 2) {
-      specialLinesFiltered.splice(specialLinesFiltered.indexOf("DR"), 1);
-      specialLinesToRemove.push("DR");
-    }
-    if (iedCount === 2) {
-      specialLinesFiltered.splice(specialLinesFiltered.indexOf("IED"), 1);
-      specialLinesToRemove.push("IED");
-    }
-    if (bossCount === 2) {
-      specialLinesFiltered.splice(specialLinesFiltered.indexOf("BOSS"), 1);
-      specialLinesToRemove.push("BOSS");
-    }
+    // if (dRCount === 2) {
+    //   specialLinesFiltered.splice(specialLinesFiltered.indexOf("DR"), 1);
+    //   specialLinesToRemove.push("DR");
+    // }
+    // if (iedCount === 2) {
+    //   specialLinesFiltered.splice(specialLinesFiltered.indexOf("IED"), 1);
+    //   specialLinesToRemove.push("IED");
+    // }
+    // if (bossCount === 2) {
+    //   specialLinesFiltered.splice(specialLinesFiltered.indexOf("BOSS"), 1);
+    //   specialLinesToRemove.push("BOSS");
+    // }
     if (invincibilityCount === 1) {
       specialLinesFiltered.splice(
         specialLinesFiltered.indexOf("Invincibility Time"),
@@ -2053,13 +2053,13 @@ export default function PotentialTable() {
         <Typography>
           Updated to reflect the potential lines changes in the{" "}
           <a
-            href="http://www.maplesea.com/updates/view/v225_patch_notes"
+            href="http://www.maplesea.com/updates/view/v235_Patch_Notes/"
             target="_blank"
             rel="noreferrer"
           >
-            Energize v225 using KMS cube rates
+            Lotus Remastered v235 using KMS cube rates
           </a>{" "}
-          patch for MapleSEA.
+          patch for MapleSEA. (aka 3 Line Boss/IED/DR is back)
         </Typography>
         <Typography>
           NaN input bug, CSS, Cube Rates for shitty lines fixed by

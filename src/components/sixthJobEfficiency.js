@@ -1,29 +1,62 @@
 //15 cores to lvl lv1 is purposely left out
 
+//change to "solErda if you want to see order based on limited solErda instead of cores"
 let choice = "cores";
-const skillPercentagesFourth = [0.0981]; //names[4]
-const skillPercentagesFifth = [0.17, 0.1236, 0.083, 0.0728]; //names[0],names[1],names[2],names[3]
-const skillPercentagesSixth = [0.08]; //names[5]
+
+// this is how much your 4th job skill does in your BA, mine is 9.81%
+const skillPercentagesFourth = [0.0905, 0.304]; //names[4] 
+
+// this is how much your 5th job skill does in your BA, follow the order in the names thing below
+// in my case, my micro missiles does 17%
+// mecha carrier does 12.36% and so on...
+// the order matters just make sure its the same order as the names array below
+const skillPercentagesFifth = [0.159, 0.1116, 0.0647, 0.0576]; //names[0],names[1],names[2],names[3]
+
+// this is how much your origin skill does in your BA (lv 1 origin skill)
+const skillPercentagesSixth = [0.0782]; //names[5]
+
+// this is how much 20 ied gives you (mine gives me 1.42% fd), use the GMS spreadsheet to get or just leave as mine
 const twentyIed = 1.0142; //dmg increase percentage
+
+// this is how much 20 boss gives you (mine gives me 1.266% fd), use the GMS spreadsheet to get or just leave as mine
 const twentyBoss = 1.0266; //dmg increase percentage
-const thirtyIedThirtyBoss = 1.0577; //dmg increase percentage after first two are applied, put in 50 boss 24 ied on one side and 20 boss on the other
-const fourthBaseline = [2589]; //total skill% done
-const fourthDmgIncreasePerLevel = [69]; //total skill% increase per lvl
+
+// this is how much 50 boss + 50 ied gives you
+// funnily enough the thing actually stacks fully additively
+const thirtyIedThirtyBoss = 1.0577;
+
+// this is the total dmg% your fourth job skill does at lv 1 mastery
+// just multiply the hit count by the dmg numbers and add them up
+// for me my 4th job does 338% x6 dmg and 187% x 3 dmg at lv 1, which is 2589%
+const fourthBaseline = [2589, 7810]; //total skill% done
+
+// this is the total dmg% your fourth job skill increases by 1 level
+// just multiply the hit count by the dmg numbers and add them up FOR THE INCREASE
+// for me my 4th job increases by 8% x6 dmg and 7% x 3 dmg per level, which is 69% (nice)
+const fourthDmgIncreasePerLevel = [69, 55]; //total skill% increase per lvl
+
+// fill in fifth job skill names based on the order you keyed in the FD just now for fifth job
+// fourth job skill should replace Splash-F
+// origin skill is origin obviously
 var names = [
   "Micro Missiles",
   "Mecha Carrier",
   "Big Mech",
   "Small Ass Turret",
   "Splash-F",
+  "Homing Missiles",
   "Origin",
 ];
+
+//if you have read until here just press run
 
 const coresRequiredFourth = [
   15, 18, 20, 23, 25, 28, 30, 33, 100, 40, 45, 50, 55, 60, 65, 70, 75, 80, 175,
   85, 90, 95, 100, 105, 110, 115, 120, 125, 250
 ]
 const coresRequiredFifth = [
-  23, 27, 30, 34, 38, 42, 45, 49, 150, 60, 68, 75, 83, 90, 98, 105, 113, 120, 263, 128, 135, 143, 150, 158, 165, 173, 180, 188, 375
+  75, 23, 27, 30, 34, 38, 42, 45, 49, 150, 60, 68, 75, 83, 90, 98, 105, 113, 120,
+  263, 128, 135, 143, 150, 158, 165, 173, 180, 188, 375
 ]
 const coresRequiredSixth = [
   30, 35, 40, 45, 50, 55, 60, 65, 200, 80, 90, 100, 110, 120, 130, 140, 150,
@@ -55,36 +88,35 @@ if (choice === "cores") {
 }
 
 
-const baselineFourth = [[]];
+const baselineFourth = [[],[]];
 const baselineFifth = [
-  1.11, 1.00900900900901, 1.00892857142857, 1.00884955752212, 1.00877192982456,
-  1.00869565217391, 1.00862068965517, 1.00854700854701, 1.00847457627119,
-  1.05042016806723, 1.008, 1.00793650793651, 1.00787401574803, 1.0078125,
-  1.00709219858156, 1.00704225352113, 1.00699300699301, 1.00694444444444,
-  1.00689655172414, 1.00684931506849, 1.00680272108844, 1.00675675675676,
-  1.0077519379845, 1.00769230769231, 1.00763358778626, 1.00757575757576,
-  1.00751879699248, 1.04477611940298, 1.00714285714286, 1.0738255033557
+  0.11, 0.00900900900901, 0.00892857142857, 0.00884955752212, 0.00877192982456,
+  0.00869565217391, 0.00862068965517, 0.00854700854701, 0.00847457627119,
+  0.05042016806723, 0.008, 0.00793650793651, 0.00787401574803, 0.0078125,
+  0.0077519379845, 0.00769230769231, 0.00763358778626, 0.00757575757576,
+  0.00751879699248, 0.04477611940298, 0.00714285714286, 0.00709219858156,
+  0.00704225352113, 0.00699300699301, 0.00694444444444, 0.00689655172414,
+  0.00684931506849, 0.00680272108844, 0.00675675675676, 0.0738255033557
 ];
 const baselineSixth = [
-  1.03333333333333, 1.03225806451613, 1.03125, 1.03030303030303, 1.02941176470588,
-  1.02857142857143, 1.02777777777778, 1.02702702702703, 1.02631578947368,
-  1.02564102564103, 1.025, 1.02439024390244, 1.02380952380952, 1.02325581395349,
-  1.02272727272727, 1.02222222222222, 1.02173913043478, 1.02127659574468,
-  1.02083333333333, 1.02040816326531, 1.02, 1.01960784313725, 1.01923076923077,
-  1.0188679245283, 1.01851851851852, 1.01818181818182, 1.01785714285714, 
-  1.01754385964912, 1.01724137931034, 1.01694915254237
+  0.03333333333333, 0.03225806451613, 0.03125, 0.03030303030303, 0.02941176470588,
+  0.02857142857143, 0.02777777777778, 0.02702702702703, 0.02631578947368,
+  0.02564102564103, 0.025, 0.02439024390244, 0.02380952380952, 0.02325581395349,
+  0.02272727272727, 0.02222222222222, 0.02173913043478, 0.02127659574468,
+  0.02083333333333, 0.02040816326531, 0.02, 0.01960784313725, 0.01923076923077,
+  0.0188679245283, 0.01851851851852, 0.01818181818182, 0.01785714285714, 
+  0.01754385964912, 0.01724137931034, 0.01694915254237
 ];
-const dmgIncreaseFourth = [[]];
+const dmgIncreaseFourth = [[], []];
 const dmgIncreaseFifth = [];
 const dmgIncreaseSixth = [];
-const fullArray = [[], [], [], [], [], []];
+const fullArray = [[], [], [], [], [], [], []];
 
 //Fifth Job Calcs
 
 for (let i = 0; i < requiredFifth.length; i++) {
     dmgIncreaseFifth.push(
-      (baselineFifth[i + 1] /
-        baselineFifth[i] /
+      ( baselineFifth[i] /
         requiredFifth[i])
     );
 }
@@ -102,7 +134,7 @@ for (let i = 0; i < skillPercentagesFifth.length; i++) {
 
 for (let i = 0; i < 30; i++) {
   for (let j = 0; j < fourthBaseline.length; j++) {
-    baselineFourth[0].push(
+    baselineFourth[j].push(
       fourthBaseline[j] + fourthDmgIncreasePerLevel[j] * i
     );
   }
@@ -111,8 +143,8 @@ for (let i = 0; i < 30; i++) {
 for (let i = 0; i < requiredFourth.length; i++) {
   for (let j = 0; j < baselineFourth.length; j++) {
     dmgIncreaseFourth[j].push(
-      (baselineFourth[j][i + 1] /
-        baselineFourth[j][i] /
+      (((baselineFourth[j][i + 1] /
+        baselineFourth[j][i]) - 1) /
         requiredFourth[i]) *
         skillPercentagesFourth[j]
     );
@@ -136,8 +168,7 @@ for (
 
 for (let i = 0; i < requiredSixth.length; i++) {
     dmgIncreaseSixth.push(
-      (baselineSixth[i + 1] /
-        baselineSixth[i] /
+      (baselineSixth[i+1] /
         requiredSixth[i])
     );
 }
@@ -160,10 +191,10 @@ for (
   }
 }
 
-
+//Made by Pladz
 
 var sum = 0;
-var pointers = [0, 0, 0, 0, 0, 0];
+var pointers = [0, 0, 0, 0, 0, 0, 0];
 var curValue = [
   fullArray[0][0],
   fullArray[1][0],
@@ -171,6 +202,7 @@ var curValue = [
   fullArray[3][0],
   fullArray[4][0],
   fullArray[5][0],
+  fullArray[6][0],
 ];
 var outputArray = [];
 var finalArray = [];
@@ -181,7 +213,7 @@ for (let i = 0; i < fullArray.length; i++) {
 }
 
 totalRuns += fullArray.length;
-const checkPosition = [0, 0, 0, 0, 0, 0];
+const checkPosition = [0, 0, 0, 0, 0, 0, 0];
 
 for (let i = 0; i < totalRuns; i++) {
   var max = 0;
@@ -200,12 +232,12 @@ for (let i = 0; i < totalRuns; i++) {
     checkPosition[position] = 1;
   }
   pointers[position] = pointers[position] + 1;
-  if (position == 4) {
+  if (position == 4 || position == 5 ) {
     outputArray.push(names[position] + " : " + (pointers[position] + 1));
-  } else if (position == 5) {
+  } else if (position == 6) {
     outputArray.push(names[position] + " : " + (pointers[position] + 1));
   } else {
-    outputArray.push(names[position] + " : " + (pointers[position] + 1));
+    outputArray.push(names[position] + " : " + (pointers[position]));
   }
   curValue[position] = fullArray[position][pointers[position]];
 }
