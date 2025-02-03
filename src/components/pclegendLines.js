@@ -189,7 +189,7 @@ export const pclegendBottomLines = [
   },
   {
     stat: "12% Luk",
-    type: "Luk",
+    type: "LUK",
     value: 12,
     weight: 2,
   },
